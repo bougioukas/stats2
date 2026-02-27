@@ -1,9 +1,143 @@
-# Introduction
+# Basic data structures in R {#sec-introduction}
 
 
+## Atomic Vectors
 
-See @knuth84 for additional discussion of literate programming.
+- Numeric vectors
 
 ```{r}
-1 + 1
+# numeric vector
+a <- c(2, 5, 4)         # c stands for `concatenate' function
+a
+class(a)
 ```
+
+<br>
+
+
+```{r}
+# quickly create a vector of consecutive numbers with the colon operator
+a <- 20:100
+a
+```
+
+<br>
+
+
+```{r}
+# For more general sequences we can use the `seq()` function
+a <- seq(from = 20, to = 100, by = 0.5)  # explicitly named arguments
+a
+```
+
+<br>
+
+```{r}
+# positional matching: match the arguments in the order that they appeared
+seq(20, 100, 0.5)
+```
+
+<br>
+
+- Logical vector
+
+```{r}
+b <- c(TRUE, FALSE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE)
+b
+class(b)
+```
+
+
+
+<br>
+
+- Character/string vector
+
+```{r}
+d <- c("Male", "Male", "Male", "Female", "Female", "Female")
+d
+
+class(d)
+```
+
+
+<br>
+
+- Factor vector
+
+
+```{r}
+# a factor variable is a special kind of character vector
+
+f <- as.factor(d)  
+f  
+
+class(f)
+```
+
+
+
+<br>
+
+- Date vector
+
+
+```{r}
+# also dates are objects with their own class
+
+g <- as.Date(c("2020-02-18", "2020-05-27"))
+g
+class(g)
+```
+
+
+
+
+## Matrix (2-dimensional atomic vector)
+
+
+```{r}
+a <- c(2, 1, 4, 5, 3, 7) # numeric vector with six elements
+
+
+# Matrices are constructed column-wise starting in the “upper left” corner 
+# and running down the columns
+A <- matrix(a, nrow=2, ncol=3)
+A
+```
+
+
+
+
+
+## Data frame (generic vector or list)
+
+```{r}
+# build data frames using vectors
+
+patientID <- c(1, 2, 3, 4, 5, 6, 7, 8)
+
+age <- c(25, 30, 28, 22, 31, 45, 37, 43)
+
+weight <- c(94, 83, 71, 87, 94, 73, 89, 74)
+
+diabetes <- c("Type 1", "Type 2", "Type 1", "Type 1",
+              "Type 2", "Type 1", "Type 1", "Type 2")
+
+```
+
+<br>
+
+```{r}
+# create the dataframe
+dat <- data.frame(patientID, age, weight, diabetes) # insert all the variables
+dat
+```
+
+
+
+```{r}
+typeof(dat)
+class(dat)
+```
+

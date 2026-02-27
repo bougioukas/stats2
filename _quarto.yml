@@ -12,7 +12,7 @@ book:
   favicon: images/cover.avif
   chapters:
     - index.qmd
-    #- intro.qmd
+    - intro.qmd
     #- summary.qmd
     - presentations.qmd
     - references.qmd

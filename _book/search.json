@@ -10,13 +10,53 @@
     ]
   },
   {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "1  Basic data structures in R",
+    "section": "",
+    "text": "1.1 Atomic Vectors\n# numeric vector\na &lt;- c(2, 5, 4)         # c stands for `concatenate' function\na\n\n[1] 2 5 4\n\nclass(a)\n\n[1] \"numeric\"\n# quickly create a vector of consecutive numbers with the colon operator\na &lt;- 20:100\na\n\n [1]  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38\n[20]  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54  55  56  57\n[39]  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72  73  74  75  76\n[58]  77  78  79  80  81  82  83  84  85  86  87  88  89  90  91  92  93  94  95\n[77]  96  97  98  99 100\n# For more general sequences we can use the `seq()` function\na &lt;- seq(from = 20, to = 100, by = 0.5)  # explicitly named arguments\na\n\n  [1]  20.0  20.5  21.0  21.5  22.0  22.5  23.0  23.5  24.0  24.5  25.0  25.5\n [13]  26.0  26.5  27.0  27.5  28.0  28.5  29.0  29.5  30.0  30.5  31.0  31.5\n [25]  32.0  32.5  33.0  33.5  34.0  34.5  35.0  35.5  36.0  36.5  37.0  37.5\n [37]  38.0  38.5  39.0  39.5  40.0  40.5  41.0  41.5  42.0  42.5  43.0  43.5\n [49]  44.0  44.5  45.0  45.5  46.0  46.5  47.0  47.5  48.0  48.5  49.0  49.5\n [61]  50.0  50.5  51.0  51.5  52.0  52.5  53.0  53.5  54.0  54.5  55.0  55.5\n [73]  56.0  56.5  57.0  57.5  58.0  58.5  59.0  59.5  60.0  60.5  61.0  61.5\n [85]  62.0  62.5  63.0  63.5  64.0  64.5  65.0  65.5  66.0  66.5  67.0  67.5\n [97]  68.0  68.5  69.0  69.5  70.0  70.5  71.0  71.5  72.0  72.5  73.0  73.5\n[109]  74.0  74.5  75.0  75.5  76.0  76.5  77.0  77.5  78.0  78.5  79.0  79.5\n[121]  80.0  80.5  81.0  81.5  82.0  82.5  83.0  83.5  84.0  84.5  85.0  85.5\n[133]  86.0  86.5  87.0  87.5  88.0  88.5  89.0  89.5  90.0  90.5  91.0  91.5\n[145]  92.0  92.5  93.0  93.5  94.0  94.5  95.0  95.5  96.0  96.5  97.0  97.5\n[157]  98.0  98.5  99.0  99.5 100.0\n# positional matching: match the arguments in the order that they appeared\nseq(20, 100, 0.5)\n\n  [1]  20.0  20.5  21.0  21.5  22.0  22.5  23.0  23.5  24.0  24.5  25.0  25.5\n [13]  26.0  26.5  27.0  27.5  28.0  28.5  29.0  29.5  30.0  30.5  31.0  31.5\n [25]  32.0  32.5  33.0  33.5  34.0  34.5  35.0  35.5  36.0  36.5  37.0  37.5\n [37]  38.0  38.5  39.0  39.5  40.0  40.5  41.0  41.5  42.0  42.5  43.0  43.5\n [49]  44.0  44.5  45.0  45.5  46.0  46.5  47.0  47.5  48.0  48.5  49.0  49.5\n [61]  50.0  50.5  51.0  51.5  52.0  52.5  53.0  53.5  54.0  54.5  55.0  55.5\n [73]  56.0  56.5  57.0  57.5  58.0  58.5  59.0  59.5  60.0  60.5  61.0  61.5\n [85]  62.0  62.5  63.0  63.5  64.0  64.5  65.0  65.5  66.0  66.5  67.0  67.5\n [97]  68.0  68.5  69.0  69.5  70.0  70.5  71.0  71.5  72.0  72.5  73.0  73.5\n[109]  74.0  74.5  75.0  75.5  76.0  76.5  77.0  77.5  78.0  78.5  79.0  79.5\n[121]  80.0  80.5  81.0  81.5  82.0  82.5  83.0  83.5  84.0  84.5  85.0  85.5\n[133]  86.0  86.5  87.0  87.5  88.0  88.5  89.0  89.5  90.0  90.5  91.0  91.5\n[145]  92.0  92.5  93.0  93.5  94.0  94.5  95.0  95.5  96.0  96.5  97.0  97.5\n[157]  98.0  98.5  99.0  99.5 100.0\nb &lt;- c(TRUE, FALSE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE)\nb\n\n[1]  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE\n\nclass(b)\n\n[1] \"logical\"\nd &lt;- c(\"Male\", \"Male\", \"Male\", \"Female\", \"Female\", \"Female\")\nd\n\n[1] \"Male\"   \"Male\"   \"Male\"   \"Female\" \"Female\" \"Female\"\n\nclass(d)\n\n[1] \"character\"\n# a factor variable is a special kind of character vector\n\nf &lt;- as.factor(d)  \nf  \n\n[1] Male   Male   Male   Female Female Female\nLevels: Female Male\n\nclass(f)\n\n[1] \"factor\"\n# also dates are objects with their own class\n\ng &lt;- as.Date(c(\"2020-02-18\", \"2020-05-27\"))\ng\n\n[1] \"2020-02-18\" \"2020-05-27\"\n\nclass(g)\n\n[1] \"Date\"",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Basic data structures in R</span>"
+    ]
+  },
+  {
+    "objectID": "intro.html#atomic-vectors",
+    "href": "intro.html#atomic-vectors",
+    "title": "1  Basic data structures in R",
+    "section": "",
+    "text": "Numeric vectors\n\n\n\n\n\n\n\n\n\n\nLogical vector\n\n\n\n\nCharacter/string vector\n\n\n\n\nFactor vector\n\n\n\n\nDate vector",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Basic data structures in R</span>"
+    ]
+  },
+  {
+    "objectID": "intro.html#matrix-2-dimensional-atomic-vector",
+    "href": "intro.html#matrix-2-dimensional-atomic-vector",
+    "title": "1  Basic data structures in R",
+    "section": "1.2 Matrix (2-dimensional atomic vector)",
+    "text": "1.2 Matrix (2-dimensional atomic vector)\n\na &lt;- c(2, 1, 4, 5, 3, 7) # numeric vector with six elements\n\n\n# Matrices are constructed column-wise starting in the “upper left” corner \n# and running down the columns\nA &lt;- matrix(a, nrow=2, ncol=3)\nA\n\n     [,1] [,2] [,3]\n[1,]    2    4    3\n[2,]    1    5    7",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Basic data structures in R</span>"
+    ]
+  },
+  {
+    "objectID": "intro.html#data-frame-generic-vector-or-list",
+    "href": "intro.html#data-frame-generic-vector-or-list",
+    "title": "1  Basic data structures in R",
+    "section": "1.3 Data frame (generic vector or list)",
+    "text": "1.3 Data frame (generic vector or list)\n\n# build data frames using vectors\n\npatientID &lt;- c(1, 2, 3, 4, 5, 6, 7, 8)\n\nage &lt;- c(25, 30, 28, 22, 31, 45, 37, 43)\n\nweight &lt;- c(94, 83, 71, 87, 94, 73, 89, 74)\n\ndiabetes &lt;- c(\"Type 1\", \"Type 2\", \"Type 1\", \"Type 1\",\n              \"Type 2\", \"Type 1\", \"Type 1\", \"Type 2\")\n\n\n\n# create the dataframe\ndat &lt;- data.frame(patientID, age, weight, diabetes) # insert all the variables\ndat\n\n  patientID age weight diabetes\n1         1  25     94   Type 1\n2         2  30     83   Type 2\n3         3  28     71   Type 1\n4         4  22     87   Type 1\n5         5  31     94   Type 2\n6         6  45     73   Type 1\n7         7  37     89   Type 1\n8         8  43     74   Type 2\n\n\n\ntypeof(dat)\n\n[1] \"list\"\n\nclass(dat)\n\n[1] \"data.frame\"",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Basic data structures in R</span>"
+    ]
+  },
+  {
     "objectID": "presentations.html",
     "href": "presentations.html",
-    "title": "1  Presentations",
+    "title": "2  Presentations",
     "section": "",
     "text": "Lecture 1: Intro and data structures\n\n\n\n\npsy-400-1_introR",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Presentations</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Presentations</span>"
     ]
   }
 ]
