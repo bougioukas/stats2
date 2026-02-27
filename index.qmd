@@ -1,9 +1,18 @@
 # Preface {.unnumbered}
 
-This is a Quarto book.
+This course introduces postgraduate students to advanced statistical methods used in the quantitative social, educational, and behavioral sciences. Students will learn:
 
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
+- Data management in R.
 
-```{r}
-1 + 1
-```
+- Analysis of Variance (ANOVA) Designs.
+
+- Multiple Linear Regression. Interaction between variables.
+
+- Mediation and Path Analysis.
+
+- Factor Analysis.
+
+- Principles of Evidence Synthesis (Systematic reviews and Meta-analysis).
+
+
+{{< qrcode https://stats2r.netlify.app/ width=100 height=100 colorDark='#0011bb' >}}

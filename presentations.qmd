@@ -1,0 +1,7 @@
+# Presentations
+
+-   **Lecture 1: Intro and data structures**
+
+![psy-400-1_introR](presentations/psy-400-1_introR.pdf){width="60%" height="400"}
+
+     

@@ -2,20 +2,43 @@ project:
   type: book
 
 book:
-  title: "stats2"
-  author: "Norah Jones"
-  date: "2/27/2026"
+  title: "Statistics II"
+  subtitle: "1st Edition"
+  author: 
+    - name: "Konstantinos I. Bougioukas, PhD"
+      orcid: "0000-0002-6533-1391"
+  date: today
+  cover-image: images/cover.avif
+  favicon: images/cover.avif
   chapters:
     - index.qmd
-    - intro.qmd
-    - summary.qmd
+    #- intro.qmd
+    #- summary.qmd
+    - presentations.qmd
     - references.qmd
+
+  page-footer: 
+    right: "Built with [Quarto](https://quarto.org/)^®^"
+    left: "&copy; Copyright 2025-26, Konstantinos I. Bougioukas. License: [Creative Commons Attribution-NonCommercial-NoDerivs 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/)."
+  back-to-top-navigation: true
 
 bibliography: references.bib
 
+
 format:
   html:
-    theme: cosmo
+    theme:
+      light: [cosmo, custom.scss]
+    grid:
+      sidebar-width: 270px
+      body-width: 840px
+      margin-width: 250px
+    fontsize: 1.15em
+    linestretch: 1.5
+    toc-title: "On this page"
+    link-external-newwindow: true
+    number-depth: 3
+    html-math-method: mathjax
   pdf:
     documentclass: scrreprt
 
