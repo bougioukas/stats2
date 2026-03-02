@@ -5,36 +5,24 @@
 
 You can download the complete R script from here:
 
-<a href="https://osf.io/download/9zqmt/" download="psy400_1.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a>
+<a href="https://osf.io/download/pyc9q/" download="psy400_1.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a>
 :::
-
 
 ::: {.callout-tip appearance="simple"}
 ## Get the Data Shock index
 
 You can download the Excel dataset **shock_index** from here:
 
-<a href="https://osf.io/download/enj2h/" download="shock_index.xlsx"> 
-  <button type="button" class="btn btn-success"> 
-    <i class="bi bi-file-earmark-excel"></i> Download Excel Data 
-  </button> 
-</a>
+<a href="https://osf.io/download/enj2h/" download="shock_index.xlsx"> <button type="button" class="btn btn-success"> <i class="bi bi-file-earmark-excel"></i> Download Excel Data </button> </a>
 :::
-
 
 ::: {.callout-tip appearance="simple"}
 ## Get the Data cholesterol
 
 You can download the Excel dataset **cholesterol** from here:
 
-<a href="https://osf.io/download/fv26s/" download="cholesterol.xlsx"> 
-  <button type="button" class="btn btn-success"> 
-    <i class="bi bi-file-earmark-excel"></i> Download Excel Data 
-  </button> 
-</a>
+<a href="https://osf.io/download/fv26s/" download="cholesterol.xlsx"> <button type="button" class="btn btn-success"> <i class="bi bi-file-earmark-excel"></i> Download Excel Data </button> </a>
 :::
-
-
 
 We will use the `tidyverse` package, a comprehensive suite of R packages designed for data manipulation, transformation, and visualization tasks, all of which work together in harmony.
 
