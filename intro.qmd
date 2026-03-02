@@ -3,11 +3,10 @@
 ::: {.callout-tip appearance="simple"}
 ## Get the Code
 
-You can download the complete R script here:
+You can download the complete R script from here:
 
 <a href="https://osf.io/download/nzv38/" download="psy400_0.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a>
 :::
-
 
 ## Atomic Vectors
 

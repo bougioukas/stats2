@@ -2,14 +2,38 @@
 
 ::: {.callout-tip appearance="simple"}
 ## Get the Code
-You can download the complete R script here:
 
-<a href="https://osf.io/download/9zqmt/" download="psy400_1.R">
-  <button type="button" class="btn btn-primary">
-    <i class="bi bi-download"></i> Download R Script
-  </button>
+You can download the complete R script from here:
+
+<a href="https://osf.io/download/9zqmt/" download="psy400_1.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a>
+:::
+
+
+::: {.callout-tip appearance="simple"}
+## Get the Data Shock index
+
+You can download the Excel dataset **shock_index** from here:
+
+<a href="https://osf.io/download/enj2h/" download="shock_index.xlsx"> 
+  <button type="button" class="btn btn-success"> 
+    <i class="bi bi-file-earmark-excel"></i> Download Excel Data 
+  </button> 
 </a>
 :::
+
+
+::: {.callout-tip appearance="simple"}
+## Get the Data cholesterol
+
+You can download the Excel dataset **cholesterol** from here:
+
+<a href="https://osf.io/download/fv26s/" download="cholesterol.xlsx"> 
+  <button type="button" class="btn btn-success"> 
+    <i class="bi bi-file-earmark-excel"></i> Download Excel Data 
+  </button> 
+</a>
+:::
+
 
 
 We will use the `tidyverse` package, a comprehensive suite of R packages designed for data manipulation, transformation, and visualization tasks, all of which work together in harmony.
@@ -22,13 +46,11 @@ We will use the `tidyverse` package, a comprehensive suite of R packages designe
 library(tidyverse)
 ```
 
-
 <br>
 
 ## Import dataset
 
 If the dataset is saved in the subfolder named “data” of our RStudio project, we can read it with the `read_excel()` function from `readxl` package as follows:
-
 
 ```{r}
 #| warning: false 
@@ -48,7 +70,6 @@ dat
 
 ```
 
-
 <br>
 
 It’s crucial to ensure that the column names are consistent with the naming conventions in R. This can be achieved by using the `clean_names()` function from the `janitor` package, which standardizes column names by converting them to lowercase, removing special characters, and replacing spaces with underscores.
@@ -64,8 +85,6 @@ dat <- clean_names(dat)
 dat
 ```
 
-
-
 ## Converting to the appropriate data type
 
 We might have noticed that the categorical variable sex is coded as F (for females) and M (for males), so it is recognized of character type. We can use the `factor()` function to encode a variable as a factor:
@@ -76,16 +95,13 @@ dat$sex <- factor(dat$sex, levels = c("F", "M"), labels = c("female", "male"))
 dat
 ```
 
-
-
 ## Transforming data
-
 
 ### Subsetting observations (rows)
 
 Subsetting observations (rows) is a common data manipulation task in data analysis, allowing us to focus on specific subsets of data that meet particular criteria. This process involves selecting rows from a dataset based on conditions we specify.
 
-Just as we use square brackets `[row, column]` to select elements from matrices, we apply the same approach to select elements from a data frame.  By applying logical conditions, such as greater than (>), less than (<), equal to (==), or combinations of these, we can filter observations that meet specific criteria. For example, we can filter the data to find patients whose age is greater than 55, as follows:
+Just as we use square brackets `[row, column]` to select elements from matrices, we apply the same approach to select elements from a data frame. By applying logical conditions, such as greater than (\>), less than (\<), equal to (==), or combinations of these, we can filter observations that meet specific criteria. For example, we can filter the data to find patients whose age is greater than 55, as follows:
 
 ```{r}
 # select rows where age > 55
@@ -94,9 +110,7 @@ dat1
 
 ```
 
-
 Similarly, we can use the `which()` function that returns the indices where the condition `age > 55` is `TRUE`. However, in this case, the missing values are treated as `FALSE`, resulting in the exclusion of rows where age in the original data is NA.
-
 
 ```{r}
 dat2 <- dat[which(dat$age > 55), ]
@@ -113,7 +127,6 @@ dat3 <- dat[which(dat$age > 55 & dat$sex == "female"), ]
 dat3
 ```
 
-
 <br>
 
 The `dplyr` package also provides the `filter()` function for selecting observations. Selecting rows where age is greater than 55:
@@ -125,19 +138,16 @@ dat4 <- filter(dat, age > 55)
 dat4
 ```
 
-
 Selecting rows where age is greater than 55 and patient is female:
+
 ```{r}
 dat5 <- filter(dat, age > 55, sex == "female")
 dat5
 ```
 
-
-
 ### Subsetting variables (columns)
 
 When working with data frames, selecting specific variables (columns) for analysis is a common task. For instance, suppose we want to select only the `age`, and `heart_rate` variables from the data frame.
-
 
 Subsetting variables can be achieved by indexing the variables’ names within `[ ]`, as follows:
 
@@ -146,7 +156,6 @@ dat6 <- dat[ , c("age" , "heart_rate")]
 dat6
 ```
 
-
 By specifying the column indices, such as `c(2, 4)`, within brackets, we can select the data in columns 2, and 4 as follows:
 
 ```{r}
@@ -154,37 +163,27 @@ dat7 <- dat[ , c(2, 4)]
 dat7
 ```
 
-
-
 <br>
 
 In `select()` function we pass the data frame first and then the variables separated by commas. Quotes are optional for column names that don’t contain special characters or spaces.
-
 
 ```{r}
 dat8 <- select(dat, age, heart_rate)
 dat8
 ```
 
-
-
 Or we can exclude the variables `sex` and `sbp`.
+
 ```{r}
 dat9 <- select(dat, -c(sex, sbp))
 dat9
 ```
 
-
-
-
 ### Creating new variables
-
 
 Data analysis often involves creating new variables within data frames based on existing variables. This data transformation process involves adding new columns to a data frame derived from the values of one or more existing columns.
 
 Suppose we want to compute a new variable representing the ratio of heart rate to systolic blood pressure (HR/sbp), which we will call shock_index. We can achieve this by using the `mutate()` function from `dplyr` package, as follows:
-
-
 
 ```{r}
 dat10 <- mutate(dat, shock_index = heart_rate / sbp)
@@ -192,11 +191,7 @@ dat10 <- mutate(dat, shock_index = heart_rate / sbp)
 dat10
 ```
 
-
-
-Our next step involves categorizing the newly created shock_index variable based on the defined normal range (0.5 to 0.7 beats/mmHg 
- min). This can be done using the `case_when()` function from the `dplyr` package.
-
+Our next step involves categorizing the newly created shock_index variable based on the defined normal range (0.5 to 0.7 beats/mmHg min). This can be done using the `case_when()` function from the `dplyr` package.
 
 ```{r}
 # convert shock_index into a categorical variable 
@@ -210,7 +205,6 @@ dat11
 ```
 
 However, it’s important to keep in mind that transforming continuous variables into categories may simplify interpretation, but it often results in information loss.
-
 
 ## Using the native pipe operator in a sequence of commands
 
@@ -228,11 +222,9 @@ sub_dat <- dat |>
 
 ```
 
-
-
 ## Plots
 
-- **Basic plot**
+-   **Basic plot**
 
 ```{r}
 # Basic plot
@@ -248,7 +240,7 @@ plot(dat10$age, dat10$shock_index,
 
 <br>
 
-- **ggplot**
+-   **ggplot**
 
 ```{r}
 ggplot(dat10, aes(x = age, y = shock_index)) +
@@ -259,26 +251,18 @@ ggplot(dat10, aes(x = age, y = shock_index)) +
   )
 ```
 
-
-
-
-
 ## Reshaping data
 
 Reshaping data between “wide” and “long” formats in R is a common task in data transformation. For example, data were collected from four individuals, with total cholesterol (TCH) levels measured at baseline (week 0), as well as at 6 and 12 weeks following a 12-week dietary intervention. The data are stored in an Excel spreadsheet with the following structure:
-
 
 ```{r}
 dat_TCH <- read_excel("data/cholesterol.xlsx")
 dat_TCH
 ```
 
-
 We observe that the dataset is organized in what is commonly referred to as a “wide” format. This structure is particularly well-suited for a repeated measures design, also known as a longitudinal or within-subject design. In such designs, the same individuals are measured multiple times over a period, with each measurement representing a different time point.
 
-
-<br>
-First,  we add a column to the dataset that assigns a unique identifier to each row using the `rowid_to_column()` function:
+<br> First, we add a column to the dataset that assigns a unique identifier to each row using the `rowid_to_column()` function:
 
 ```{r}
 dat_TCH <- dat_TCH |> 
@@ -286,8 +270,7 @@ dat_TCH <- dat_TCH |>
 dat_TCH
 ```
 
--  **From wide to long format**
-
+-   **From wide to long format**
 
 ```{r}
 dat_TCH_long <- dat_TCH |> 
@@ -297,10 +280,7 @@ dat_TCH_long <- dat_TCH |>
 dat_TCH_long
 ```
 
-
-
-- **From long to wide format**
-
+-   **From long to wide format**
 
 ```{r}
 dat_TCH_wide <- dat_TCH_long |>
@@ -309,9 +289,3 @@ dat_TCH_wide <- dat_TCH_long |>
               values_from = total_cholesterol)
 dat_TCH_wide
 ```
-
-
-
-
-
-
