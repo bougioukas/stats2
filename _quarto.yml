@@ -13,8 +13,10 @@ book:
   chapters:
     - index.qmd
     - intro.qmd
+    - process.qmd
     #- summary.qmd
     - presentations.qmd
+    - data.qmd
     - references.qmd
 
   page-footer: 

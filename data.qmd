@@ -1,0 +1,61 @@
+# Data
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(here)
+
+library(fontawesome)
+
+
+library(readxl)
+shock_index <- read_excel(here("data", "shock_index.xlsx"))
+cholesterol <- read_excel(here("data", "cholesterol.xlsx"))
+```
+
+
+[All datasets](https://osf.io/c85yf/files/osfstorage)
+
+
+   
+
+-   **Dataset: shock_index**
+
+```{r}
+#| echo: false
+#| label: fig-shock_index
+#| fig-cap: Table with raw data.
+
+DT::datatable(shock_index, extensions = c('Scroller', 'Buttons'), rownames = FALSE,
+              options = list(deferRender = F, dom = 'Bt', scrollY = 452, scroller = TRUE, scrollX = T, pageLength = 10, buttons = 
+      list(list(
+        extend = 'excel',
+        filename = 'shock_index',
+        title = ""
+      )
+      )))
+
+```
+
+   
+
+-   **Dataset: cholesterol**
+
+```{r}
+#| echo: false
+#| label: fig-cholesterol
+#| fig-cap: Table with raw data.
+
+DT::datatable(cholesterol, extensions = c('Scroller', 'Buttons'), rownames = FALSE,
+              options = list(deferRender = F, dom = 'Bt', scrollY = 452, scroller = TRUE, scrollX = T, pageLength = 10, buttons = 
+      list(list(
+        extend = 'excel',
+        filename = 'cholesterol',
+        title = ""
+      )
+      )))
+
+```
+
+   

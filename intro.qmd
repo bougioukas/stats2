@@ -1,9 +1,17 @@
 # Basic data structures in R {#sec-introduction}
 
+::: {.callout-tip appearance="simple"}
+## Get the Code
+
+You can download the complete R script here:
+
+<a href="https://osf.io/download/nzv38/" download="psy400_0.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a>
+:::
+
 
 ## Atomic Vectors
 
-- Numeric vectors
+-   Numeric vectors
 
 ```{r}
 # numeric vector
@@ -14,7 +22,6 @@ class(a)
 
 <br>
 
-
 ```{r}
 # quickly create a vector of consecutive numbers with the colon operator
 a <- 20:100
@@ -22,7 +29,6 @@ a
 ```
 
 <br>
-
 
 ```{r}
 # For more general sequences we can use the `seq()` function
@@ -39,7 +45,7 @@ seq(20, 100, 0.5)
 
 <br>
 
-- Logical vector
+-   Logical vector
 
 ```{r}
 b <- c(TRUE, FALSE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE)
@@ -47,11 +53,9 @@ b
 class(b)
 ```
 
-
-
 <br>
 
-- Character/string vector
+-   Character/string vector
 
 ```{r}
 d <- c("Male", "Male", "Male", "Female", "Female", "Female")
@@ -60,11 +64,9 @@ d
 class(d)
 ```
 
-
 <br>
 
-- Factor vector
-
+-   Factor vector
 
 ```{r}
 # a factor variable is a special kind of character vector
@@ -75,12 +77,9 @@ f
 class(f)
 ```
 
-
-
 <br>
 
-- Date vector
-
+-   Date vector
 
 ```{r}
 # also dates are objects with their own class
@@ -90,11 +89,7 @@ g
 class(g)
 ```
 
-
-
-
 ## Matrix (2-dimensional atomic vector)
-
 
 ```{r}
 a <- c(2, 1, 4, 5, 3, 7) # numeric vector with six elements
@@ -106,9 +101,23 @@ A <- matrix(a, nrow=2, ncol=3)
 A
 ```
 
+In R, we can access rows, columns, or individual elements of a matrix using subscripts within brackets.
 
+```{r}
+# select the second row
+A[2, ]
+```
 
+```{r}
+# select the 2nd column
+A[ , 2]
+```
 
+```{r}
+# select the element in the 2nd row, 3rd column
+A[2, 3]
+
+```
 
 ## Data frame (generic vector or list)
 
@@ -134,10 +143,7 @@ dat <- data.frame(patientID, age, weight, diabetes) # insert all the variables
 dat
 ```
 
-
-
 ```{r}
 typeof(dat)
 class(dat)
 ```
-

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>References – Statistics II</title>
+<title>4&nbsp; Data – Statistics II</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,26 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -49,7 +30,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./data.html" rel="prev">
+<link href="./references.html" rel="next">
+<link href="./presentations.html" rel="prev">
 <link href="./images/cover.avif" rel="icon">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -89,6 +71,42 @@ div.csl-indent {
     "search-label": "Search"
   }
 }</script>
+<link href="site_libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+
+<script src="site_libs/datatables-binding-0.34.0/datatables.js"></script>
+
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+
+<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+
+<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+
+<script src="site_libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+
+<link href="site_libs/dt-ext-scroller-1.13.6/css/scroller.dataTables.min.css" rel="stylesheet">
+
+<script src="site_libs/dt-ext-scroller-1.13.6/js/dataTables.scroller.min.js"></script>
+
+<script src="site_libs/jszip-1.13.6/jszip.min.js"></script>
+
+<link href="site_libs/dt-ext-buttons-1.13.6/css/buttons.dataTables.min.css" rel="stylesheet">
+
+<script src="site_libs/dt-ext-buttons-1.13.6/js/dataTables.buttons.min.js"></script>
+
+<script src="site_libs/dt-ext-buttons-1.13.6/js/buttons.html5.min.js"></script>
+
+<script src="site_libs/dt-ext-buttons-1.13.6/js/buttons.colVis.min.js"></script>
+
+<script src="site_libs/dt-ext-buttons-1.13.6/js/buttons.print.min.js"></script>
+
+<link href="site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+
+<script src="site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+
 
 
 </head>
@@ -102,7 +120,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./references.html">References</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -153,13 +171,13 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./data.html" class="sidebar-item-text sidebar-link">
+  <a href="./data.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link active">
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
 </li>
@@ -176,7 +194,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">References</h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data</span></h1>
 </div>
 
 
@@ -193,9 +211,42 @@ div.csl-indent {
 </header>
 
 
-<div id="refs" role="list" style="display: none">
-
+<p><a href="https://osf.io/c85yf/files/osfstorage">All datasets</a></p>
+<p>&nbsp; &nbsp;</p>
+<ul>
+<li><strong>Dataset: shock_index</strong></li>
+</ul>
+<div class="cell">
+<div id="fig-shock_index" class="cell-output-display quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-shock_index-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="datatables html-widget html-fill-item" id="htmlwidget-006ccb2a4d0b38383ef1" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-006ccb2a4d0b38383ef1">{"x":{"filter":"none","vertical":false,"extensions":["Scroller","Buttons"],"data":[["M","F","F","M","F","F","M","M","F","M","F","F","F","M","F","M","M","F","M","M","M","F","M","F","M","F","F","M","F","F"],[54,47,58,null,60,57,54,null,53,58,49,55,57,52,50,48,56,54,59,56,48,52,55,57,58,48,55,59,48,51],[139,151,200,170,123,121,120,100,164,161,164,138,118,130,109,92,126,139,138,153,201,170,122,121,119,104,164,92,127,136],[85,84,100,56,55,90,84,92,72,102,90,70,89,106,142,122,107,61,85,85,104,57,56,90,87,93,69,119,109,60]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>sex<\/th>\n      <th>Age<\/th>\n      <th>SBP<\/th>\n      <th>HR<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"deferRender":false,"dom":"Bt","scrollY":452,"scroller":true,"scrollX":true,"pageLength":10,"buttons":[{"extend":"excel","filename":"shock_index","title":""}],"columnDefs":[{"className":"dt-right","targets":[1,2,3]},{"name":"sex","targets":0},{"name":"Age","targets":1},{"name":"SBP","targets":2},{"name":"HR","targets":3}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-shock_index-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.1: Table with raw data.
+</figcaption>
+</figure>
+</div>
+</div>
+<p>&nbsp; &nbsp;</p>
+<ul>
+<li><strong>Dataset: cholesterol</strong></li>
+</ul>
+<div class="cell">
+<div id="fig-cholesterol" class="cell-output-display quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cholesterol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="datatables html-widget html-fill-item" id="htmlwidget-0dc746cb29939fa3cc46" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-0dc746cb29939fa3cc46">{"x":{"filter":"none","vertical":false,"extensions":["Scroller","Buttons"],"data":[[6.42,6.76,6.56,4.8],[5.83,6.2,5.83,4.27],[5.75,6.13,5.71,4.15]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>week0<\/th>\n      <th>week6<\/th>\n      <th>week12<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"deferRender":false,"dom":"Bt","scrollY":452,"scroller":true,"scrollX":true,"pageLength":10,"buttons":[{"extend":"excel","filename":"cholesterol","title":""}],"columnDefs":[{"className":"dt-right","targets":[0,1,2]},{"name":"week0","targets":0},{"name":"week6","targets":1},{"name":"week12","targets":2}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cholesterol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.2: Table with raw data.
+</figcaption>
+</figure>
+</div>
+</div>
+<p>&nbsp; &nbsp;</p>
 
 
 
@@ -607,11 +658,14 @@ div.csl-indent {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./data.html" class="pagination-link" aria-label="Data">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data</span></span>
+      <a href="./presentations.html" class="pagination-link" aria-label="Presentations">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Presentations</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
