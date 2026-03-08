@@ -228,11 +228,11 @@ sub_dat <- dat |>
 
 -   **Basic plot**
 
-First, we will use the `plot()` function. In R, this is a basic function used to create graphs and visualize data. Since it is part of base R, we do not need to install any additional packages to use it. Note that `dat10$` tells R which dataset the variable belongs to and selects that specific column.
+First, we will use the `plot()` function. In R, this is a basic function used to create graphs and visualize data. Since it is part of base R, we do not need to install any additional packages to use it. 
 
 ```{r}
 # Basic plot
-plot(dat10$age, dat10$shock_index,
+plot(dat10$age, dat10$shock_index,           # <1>
      pch = 19,               # Point shape (19 is a solid circle)
      cex = 1.5,              # Point size
      xlab = "Age (years)",   # X-axis label
@@ -242,6 +242,8 @@ plot(dat10$age, dat10$shock_index,
      frame.plot = FALSE)     # Removes the top/right border for a cleaner look
 ```
 
+1. `dat10$` tells R which dataset the variable belongs to and selects that specific column.
+
 
 <br>
 
@@ -250,8 +252,8 @@ plot(dat10$age, dat10$shock_index,
 We can also use the `ggplot()` function from the `ggplot2` package to create a similar plot. Notably, `ggplot2` is one of the core packages included in the `tidyverse`, so it is loaded into an R session when we run the command `library(tidyverse)`.
 
 ```{r}
-ggplot(dat10, aes(x = age, y = shock_index)) +
-  geom_point(size = 2.5) +
+ggplot(dat10, aes(x = age, y = shock_index)) +    # <1>
+  geom_point(size = 2.5) +                        # <2>
   labs(title = "Age vs Shock Index",
     x = "Age (years)",
     y = "Shock Index"
@@ -259,9 +261,9 @@ ggplot(dat10, aes(x = age, y = shock_index)) +
 ```
 
 
-- `aes()` stands for aesthetic mappings. It defines how variables from the dataset are mapped to visual properties of the plot, such as x-axis position and y-axis position.
+1. `aes()` stands for aesthetic mappings. It defines how variables from the dataset are mapped to visual properties of the plot, such as x-axis position and y-axis position.
 
-- `geom_point()` is a geometry function that draws points on the plot.
+2. `geom_point()` is a geometry function that draws points on the plot.
 
 
 <br>
