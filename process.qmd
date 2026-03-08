@@ -45,6 +45,7 @@ If the dataset is saved in the subfolder named “data” of our RStudio project
 
 library(readxl)
 dat <- read_excel("data/shock_index.xlsx")
+dat
 ```
 
 <br>
@@ -89,6 +90,8 @@ dat
 
 Subsetting observations (rows) is a common data manipulation task in data analysis, allowing us to focus on specific subsets of data that meet particular criteria. This process involves selecting rows from a dataset based on conditions we specify.
 
+- **Basic way**
+
 Just as we use square brackets `[row, column]` to select elements from matrices, we apply the same approach to select elements from a data frame. By applying logical conditions, such as greater than (\>), less than (\<), equal to (==), or combinations of these, we can filter observations that meet specific criteria. For example, we can filter the data to find patients whose age is greater than 55, as follows:
 
 ```{r}
@@ -107,7 +110,7 @@ dat2
 
 <br>
 
-If our objective is to analyze data for female patients aged over 55, we can create a subset by incorporating the logical & operator to combine the conditions for age and sex.
+If our objective is to analyze data for female patients aged over 55, we can create a subset by incorporating the logical `&` operator to combine the conditions for age and sex.
 
 ```{r}
 # select rows where age > 55 and sex is female
@@ -116,6 +119,9 @@ dat3
 ```
 
 <br>
+
+
+- **Tidyverse way**
 
 The `dplyr` package also provides the `filter()` function for selecting observations. Selecting rows where age is greater than 55:
 
@@ -137,6 +143,9 @@ dat5
 
 When working with data frames, selecting specific variables (columns) for analysis is a common task. For instance, suppose we want to select only the `age`, and `heart_rate` variables from the data frame.
 
+
+- **Basic way**
+
 Subsetting variables can be achieved by indexing the variables’ names within `[ ]`, as follows:
 
 ```{r}
@@ -151,7 +160,10 @@ dat7 <- dat[ , c(2, 4)]
 dat7
 ```
 
+
 <br>
+
+- **Tidyverse way**
 
 In `select()` function we pass the data frame first and then the variables separated by commas. Quotes are optional for column names that don’t contain special characters or spaces.
 
@@ -210,6 +222,8 @@ sub_dat <- dat |>
 
 ```
 
+<br>
+
 ## Plots
 
 -   **Basic plot**
@@ -230,6 +244,8 @@ plot(dat10$age, dat10$shock_index,
 
 -   **ggplot**
 
+We can also use the `ggplot()` function from the `ggplot2` package to create a similar plot. Notably, `ggplot2` is one of the core packages included in the `tidyverse`, so it is loaded into an R session when we run the command `library(tidyverse)`.
+
 ```{r}
 ggplot(dat10, aes(x = age, y = shock_index)) +
   geom_point(size = 2.5) +
@@ -238,6 +254,15 @@ ggplot(dat10, aes(x = age, y = shock_index)) +
     y = "Shock Index"
   )
 ```
+
+
+- `aes()` stands for aesthetic mappings. It defines how variables from the dataset are mapped to visual properties of the plot, such as x-axis position and y-axis position.
+
+- `geom_point()` is a geometry function that draws points on the plot.
+
+
+<br>
+
 
 ## Reshaping data
 
