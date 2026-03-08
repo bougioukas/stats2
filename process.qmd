@@ -228,7 +228,7 @@ sub_dat <- dat |>
 
 -   **Basic plot**
 
-First, we will use the `plot()` function. In R, this is a basic function used to create graphs and visualize data. Since it is part of base R, you do not need to install any additional packages to use it. Note that `dat10$` tells R which dataset the variable belongs to and selects that specific column.
+First, we will use the `plot()` function. In R, this is a basic function used to create graphs and visualize data. Since it is part of base R, we do not need to install any additional packages to use it. Note that `dat10$` tells R which dataset the variable belongs to and selects that specific column.
 
 ```{r}
 # Basic plot
