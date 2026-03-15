@@ -5,3 +5,17 @@
 ![psy-400-1_introR](presentations/psy-400-1_introR.pdf){width="60%" height="400"}
 
      
+
+
+-   **Lectures 2 & 3: Data wrangling**
+
+![psy-400-2_data_wrangling](presentations/psy-400-2_data_wrangling.pdf){width="60%" height="400"}
+
+     
+
+
+-   **Lecture 4: Data visualization**
+
+![psy-400-3_data_visualization](presentations/psy-400-3_data_visualization.pdf){width="60%" height="400"}
+
+     
