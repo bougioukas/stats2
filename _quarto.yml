@@ -14,9 +14,10 @@ book:
     - index.qmd
     - intro.qmd
     - process.qmd
+    - nonparametric.qmd
     #- summary.qmd
     - presentations.qmd
-    - data.qmd
+    #- data.qmd
     - references.qmd
 
   page-footer: 

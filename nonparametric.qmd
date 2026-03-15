@@ -1,0 +1,186 @@
+# Non-parametric statistical tests in R {#sec-nonparamteric}
+
+::: {.callout-tip appearance="simple"}
+## Get the Code
+
+You can download the complete R script from here:
+
+<a href="https://osf.io/download/jznht/" download="psy400_2.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a>
+:::
+
+::: {.callout-tip appearance="simple"}
+## Get the Data maths
+
+You can download the Excel dataset **maths** from here:
+
+<a href="https://osf.io/download/pw8q9/" download="maths.xlsx"> <button type="button" class="btn btn-success"> <i class="bi bi-file-earmark-excel"></i> Download Excel Data </button> </a>
+:::
+
+::: {.callout-tip appearance="simple"}
+## Get the Data boxbreathing
+
+You can download the Excel dataset **boxbreathing** from here:
+
+<a href="https://osf.io/download/7fmbu/" download="boxbreathing.xlsx"> <button type="button" class="btn btn-success"> <i class="bi bi-file-earmark-excel"></i> Download Excel Data </button> </a>
+:::
+
+
+
+## INDEPENDENT SAMPLES
+
+In this lecture, the Wilcoxon-Mann-Whitney (WMW) test, also known as
+the Mann-Whitney U test or Wilcoxon Rank Sum test, is presented as a nonparametric method for comparing two independent samples. It is often used as an alternative to the independent samples t-test, particularly when the assumption of normality is violated or when dealing with small sample sizes.
+
+
+```{r}
+#| warning: false 
+
+# Required packages for this R script
+library(tidyverse)
+library(ggpubr)
+library(dlookr)
+library(readxl)
+```
+
+<br>
+
+### Research question
+
+A high school is pilot-testing a new curriculum for mathematics. To ensure the curriculum is equitable, the department head has collected the final exam scores from a small sample of students to test for significant differences in performance between male and female students.
+
+<br>
+
+### Import dataset
+
+If the dataset is saved in the subfolder named “data” of our RStudio project, we can read it with the `read_excel()` function from `readxl` package as follows:
+
+```{r}
+#| warning: false 
+
+dat_maths <- read_excel("data/maths.xlsx")
+dat_maths
+```
+
+<br>
+
+
+The dataset has 17 students (rows) and is organized in a “long” format. It includes two variables (columns): the character (`<chr>`) sex variable (independent variable) and the numeric (`<dbl>`) score variable (dependent variable).
+
+
+
+
+### Descriptive statistics and Q-Q plots
+
+
+```{r}
+# descriptive statistics using the package dlookr
+dat_maths |>
+  group_by(sex) |>
+  describe(score) |>
+  select(sex, n, na, mean, sd, p25, p50, p75, skewness, kurtosis)
+
+```
+
+<br>
+
+
+```{r}
+# Q_Q plots using the package ggpubr
+ggqqplot(dat_maths, "score", color = "sex", conf.int = FALSE) +
+  facet_wrap(~ sex) +
+  theme_light()
+```
+
+
+
+
+### Wilcoxon-Mann-Whitney test
+
+```{r}
+wilcox.test(score ~ sex, data = dat_maths)
+```
+
+The results indicated no statistically significant difference ($W = 43, p = 0.54$).
+
+
+<br>
+
+
+## DEPENDENT SAMPLES
+
+The Wilcoxon Signed-Rank test is a non-parametric statistical test used
+to compare two groups of paired observations. It assesses whether the paired differences are centered around zero by considering both
+the magnitudes and signs of the differences, using their signed ranks. This test is often preferred when the paired differences are not normally distributed or when sample sizes are small.
+
+
+
+### Research question
+
+Researchers aim to determine whether a specific breathing technique, Box Breathing, can reduce individuals’ heart rate, measured in beats per minute (BPM), immediately before they deliver a public speech. They measure the heart rates of 10 participants during a baseline stress period and again after the participants practice the breathing technique for five minutes.
+
+
+
+### Import dataset
+
+If the dataset is saved in the subfolder named “data” of our RStudio project, we can read it with the `read_excel()` function from `readxl` package as follows:
+
+```{r}
+dat_BPM <- read_excel("data/boxbreathing.xlsx")
+dat_BPM
+```
+
+The dataset has 10 participants and is organized in a “wide” format. It includes two columns with numeric (`<dbl>`): the baseline BPM and after the participants practice the breathing technique for five minutes.
+
+
+<br>
+
+First, we use the `mutate()` function to calculate the difference
+between the boxbreath and the baseline measurements of the BPM, as follows:
+
+```{r}
+dat_BPM <- dat_BPM |>
+  mutate(dif_BPM = boxbreath_BPM - baseline_BPM)
+
+dat_BPM
+```
+
+
+
+### Descriptive statistics and Q-Q plots
+
+
+```{r}
+# descriptive statistics using the package dlookr
+
+dat_BPM |>
+  dlookr::describe(dif_BPM, boxbreath_BPM, baseline_BPM) |>
+  select(described_variables, n, mean, sd, p25, p50, p75, skewness, kurtosis)
+
+```
+
+<br>
+
+```{r}
+# Q_Q plots using the package ggpubr
+ggqqplot(dat_BPM, "dif_BPM", conf.int = FALSE) +
+  theme_light()
+
+```
+
+
+
+### Wilcoxon Signed-Rank Test
+
+```{r}
+# Wilcoxon-Mann-Whitney test (non-parametric test)
+wilcox.test(dat_BPM$boxbreath_BPM, dat_BPM$baseline_BPM, paired = TRUE)
+```
+
+<br>
+
+```{r}
+# or use the differences
+wilcox.test(dat_BPM$dif_BPM)
+```
+
+The results indicated a statistically significant decrease in BPM ($V = 3, p = 0.009$). The median BPM (85) after the intervention was significantly lower than the baseline (94.5), suggesting the technique is an effective method for heart rate reduction.

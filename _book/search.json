@@ -110,23 +110,43 @@
     ]
   },
   {
-    "objectID": "presentations.html",
-    "href": "presentations.html",
-    "title": "3  Presentations",
+    "objectID": "nonparametric.html",
+    "href": "nonparametric.html",
+    "title": "3  Non-parametric statistical tests in R",
     "section": "",
-    "text": "Lecture 1: Intro and data structures\n\n\n\n\npsy-400-1_introR\n\n\n     \n\nLectures 2 & 3: Data wrangling\n\n\n\n\npsy-400-2_data_wrangling\n\n\n     \n\nLecture 4: Data visualization\n\n\n\n\npsy-400-3_data_visualization",
+    "text": "3.1 INDEPENDENT SAMPLES\nIn this lecture, the Wilcoxon-Mann-Whitney (WMW) test, also known as the Mann-Whitney U test or Wilcoxon Rank Sum test, is presented as a nonparametric method for comparing two independent samples. It is often used as an alternative to the independent samples t-test, particularly when the assumption of normality is violated or when dealing with small sample sizes.\n# Required packages for this R script\nlibrary(tidyverse)\nlibrary(ggpubr)\nlibrary(dlookr)\nlibrary(readxl)",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Presentations</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Non-parametric statistical tests in R</span>"
     ]
   },
   {
-    "objectID": "data.html",
-    "href": "data.html",
-    "title": "4  Data",
+    "objectID": "nonparametric.html#independent-samples",
+    "href": "nonparametric.html#independent-samples",
+    "title": "3  Non-parametric statistical tests in R",
     "section": "",
-    "text": "All datasets\n   \n\nDataset: shock_index\n\n\n\n\n\n\n\n\n\nFigure 4.1: Table with raw data.\n\n\n\n\n   \n\nDataset: cholesterol\n\n\n\n\n\n\n\n\n\nFigure 4.2: Table with raw data.",
+    "text": "3.1.1 Research question\nA high school is pilot-testing a new curriculum for mathematics. To ensure the curriculum is equitable, the department head has collected the final exam scores from a small sample of students to test for significant differences in performance between male and female students.\n\n\n\n3.1.2 Import dataset\nIf the dataset is saved in the subfolder named “data” of our RStudio project, we can read it with the read_excel() function from readxl package as follows:\n\ndat_maths &lt;- read_excel(\"data/maths.xlsx\")\ndat_maths\n\n# A tibble: 17 × 2\n   sex    score\n   &lt;chr&gt;  &lt;dbl&gt;\n 1 male      18\n 2 male      32\n 3 male      39\n 4 male      26\n 5 male      48\n 6 male      20\n 7 male      29\n 8 male      30\n 9 female    24\n10 female    35\n11 female    41\n12 female    34\n13 female    38\n14 female    31\n15 female    22\n16 female    27\n17 female    36\n\n\n\nThe dataset has 17 students (rows) and is organized in a “long” format. It includes two variables (columns): the character (&lt;chr&gt;) sex variable (independent variable) and the numeric (&lt;dbl&gt;) score variable (dependent variable).\n\n\n3.1.3 Descriptive statistics and Q-Q plots\n\n# descriptive statistics using the package dlookr\ndat_maths |&gt;\n  group_by(sex) |&gt;\n  describe(score) |&gt;\n  select(sex, n, na, mean, sd, p25, p50, p75, skewness, kurtosis)\n\n# A tibble: 2 × 10\n  sex        n    na  mean    sd   p25   p50   p75 skewness kurtosis\n  &lt;chr&gt;  &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 female     9     0  32    6.48  27    34    36     -0.351   -1.09 \n2 male       8     0  30.2  9.78  24.5  29.5  33.8    0.667    0.311\n\n\n\n\n# Q_Q plots using the package ggpubr\nggqqplot(dat_maths, \"score\", color = \"sex\", conf.int = FALSE) +\n  facet_wrap(~ sex) +\n  theme_light()\n\n\n\n\n\n\n\n\n\n\n3.1.4 Wilcoxon-Mann-Whitney test\n\nwilcox.test(score ~ sex, data = dat_maths)\n\n\n    Wilcoxon rank sum exact test\n\ndata:  score by sex\nW = 43, p-value = 0.5414\nalternative hypothesis: true location shift is not equal to 0\n\n\nThe results indicated no statistically significant difference (\\(W = 43, p = 0.54\\)).",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Data</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Non-parametric statistical tests in R</span>"
+    ]
+  },
+  {
+    "objectID": "nonparametric.html#dependent-samples",
+    "href": "nonparametric.html#dependent-samples",
+    "title": "3  Non-parametric statistical tests in R",
+    "section": "3.2 DEPENDENT SAMPLES",
+    "text": "3.2 DEPENDENT SAMPLES\nThe Wilcoxon Signed-Rank test is a non-parametric statistical test used to compare two groups of paired observations. It assesses whether the paired differences are centered around zero by considering both the magnitudes and signs of the differences, using their signed ranks. This test is often preferred when the paired differences are not normally distributed or when sample sizes are small.\n\n3.2.1 Research question\nResearchers aim to determine whether a specific breathing technique, Box Breathing, can reduce individuals’ heart rate, measured in beats per minute (BPM), immediately before they deliver a public speech. They measure the heart rates of 10 participants during a baseline stress period and again after the participants practice the breathing technique for five minutes.\n\n\n3.2.2 Import dataset\nIf the dataset is saved in the subfolder named “data” of our RStudio project, we can read it with the read_excel() function from readxl package as follows:\n\ndat_BPM &lt;- read_excel(\"data/boxbreathing.xlsx\")\ndat_BPM\n\n# A tibble: 10 × 2\n   baseline_BPM boxbreath_BPM\n          &lt;dbl&gt;         &lt;dbl&gt;\n 1           95            82\n 2           88            84\n 3          102            93\n 4           91            92\n 5           85            74\n 6           98            83\n 7          110           112\n 8           89            83\n 9           94            86\n10          105            98\n\n\nThe dataset has 10 participants and is organized in a “wide” format. It includes two columns with numeric (&lt;dbl&gt;): the baseline BPM and after the participants practice the breathing technique for five minutes.\n\nFirst, we use the mutate() function to calculate the difference between the boxbreath and the baseline measurements of the BPM, as follows:\n\ndat_BPM &lt;- dat_BPM |&gt;\n  mutate(dif_BPM = boxbreath_BPM - baseline_BPM)\n\ndat_BPM\n\n# A tibble: 10 × 3\n   baseline_BPM boxbreath_BPM dif_BPM\n          &lt;dbl&gt;         &lt;dbl&gt;   &lt;dbl&gt;\n 1           95            82     -13\n 2           88            84      -4\n 3          102            93      -9\n 4           91            92       1\n 5           85            74     -11\n 6           98            83     -15\n 7          110           112       2\n 8           89            83      -6\n 9           94            86      -8\n10          105            98      -7\n\n\n\n\n3.2.3 Descriptive statistics and Q-Q plots\n\n# descriptive statistics using the package dlookr\n\ndat_BPM |&gt;\n  dlookr::describe(dif_BPM, boxbreath_BPM, baseline_BPM) |&gt;\n  select(described_variables, n, mean, sd, p25, p50, p75, skewness, kurtosis)\n\n# A tibble: 3 × 9\n  described_variables     n  mean    sd   p25   p50   p75 skewness kurtosis\n  &lt;chr&gt;               &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 dif_BPM                10  -7    5.54 -10.5  -7.5  -4.5    0.383   -0.532\n2 boxbreath_BPM          10  88.7 10.6   83    85    92.8    1.11     1.75 \n3 baseline_BPM           10  95.7  8.03  89.5  94.5 101      0.510   -0.660\n\n\n\n\n# Q_Q plots using the package ggpubr\nggqqplot(dat_BPM, \"dif_BPM\", conf.int = FALSE) +\n  theme_light()\n\n\n\n\n\n\n\n\n\n\n3.2.4 Wilcoxon Signed-Rank Test\n\n# Wilcoxon-Mann-Whitney test (non-parametric test)\nwilcox.test(dat_BPM$boxbreath_BPM, dat_BPM$baseline_BPM, paired = TRUE)\n\n\n    Wilcoxon signed rank exact test\n\ndata:  dat_BPM$boxbreath_BPM and dat_BPM$baseline_BPM\nV = 3, p-value = 0.009766\nalternative hypothesis: true location shift is not equal to 0\n\n\n\n\n# or use the differences\nwilcox.test(dat_BPM$dif_BPM)\n\n\n    Wilcoxon signed rank exact test\n\ndata:  dat_BPM$dif_BPM\nV = 3, p-value = 0.009766\nalternative hypothesis: true location is not equal to 0\n\n\nThe results indicated a statistically significant decrease in BPM (\\(V = 3, p = 0.009\\)). The median BPM (85) after the intervention was significantly lower than the baseline (94.5), suggesting the technique is an effective method for heart rate reduction.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Non-parametric statistical tests in R</span>"
+    ]
+  },
+  {
+    "objectID": "presentations.html",
+    "href": "presentations.html",
+    "title": "4  Presentations",
+    "section": "",
+    "text": "Lecture 1: Intro and data structures\n\n\n\n\npsy-400-1_introR\n\n\n     \n\nLectures 2 & 3: Data wrangling\n\n\n\n\npsy-400-2_data_wrangling\n\n\n     \n\nLecture 4: Data visualization\n\n\n\n\npsy-400-3_data_visualization",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Presentations</span>"
     ]
   }
 ]
