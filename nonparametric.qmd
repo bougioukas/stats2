@@ -26,12 +26,6 @@ You can download the Excel dataset **boxbreathing** from here:
 
 
 
-## INDEPENDENT SAMPLES
-
-In this lecture, the Wilcoxon-Mann-Whitney (WMW) test, also known as
-the Mann-Whitney U test or Wilcoxon Rank Sum test, is presented as a nonparametric method for comparing two independent samples. It is often used as an alternative to the independent samples t-test, particularly when the assumption of normality is violated or when dealing with small sample sizes.
-
-
 ```{r}
 #| warning: false 
 
@@ -43,6 +37,14 @@ library(readxl)
 ```
 
 <br>
+
+## INDEPENDENT SAMPLES
+
+In this lecture, the Wilcoxon-Mann-Whitney (WMW) test, also known as
+the Mann-Whitney U test or Wilcoxon Rank Sum test, is presented as a nonparametric method for comparing two independent samples. It is often used as an alternative to the independent samples t-test, particularly when the assumption of normality is violated or when dealing with small sample sizes.
+
+
+
 
 ### Research question
 

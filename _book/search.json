@@ -114,7 +114,7 @@
     "href": "nonparametric.html",
     "title": "3  Non-parametric statistical tests in R",
     "section": "",
-    "text": "3.1 INDEPENDENT SAMPLES\nIn this lecture, the Wilcoxon-Mann-Whitney (WMW) test, also known as the Mann-Whitney U test or Wilcoxon Rank Sum test, is presented as a nonparametric method for comparing two independent samples. It is often used as an alternative to the independent samples t-test, particularly when the assumption of normality is violated or when dealing with small sample sizes.\n# Required packages for this R script\nlibrary(tidyverse)\nlibrary(ggpubr)\nlibrary(dlookr)\nlibrary(readxl)",
+    "text": "3.1 INDEPENDENT SAMPLES\nIn this lecture, the Wilcoxon-Mann-Whitney (WMW) test, also known as the Mann-Whitney U test or Wilcoxon Rank Sum test, is presented as a nonparametric method for comparing two independent samples. It is often used as an alternative to the independent samples t-test, particularly when the assumption of normality is violated or when dealing with small sample sizes.",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Non-parametric statistical tests in R</span>"
     ]
