@@ -5,7 +5,7 @@
 
 You can download the complete R script from here:
 
-<a href="https://osf.io/download/4rcpg/" download="psy400_2.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a>
+<a href="https://osf.io/download/cy62s/" download="psy400_2.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a>
 :::
 
 ::: {.callout-tip appearance="simple"}
