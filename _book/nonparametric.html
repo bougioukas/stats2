@@ -300,6 +300,8 @@ window.Quarto = {
 <p><a href="https://osf.io/download/7fmbu/" download="boxbreathing.xlsx"> <button type="button" class="btn btn-success"> <i class="bi bi-file-earmark-excel"></i> Download Excel Data </button> </a></p>
 </div>
 </div>
+<p><br></p>
+<p>First, we load the following R packages in our R session:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Required packages for this R script</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -314,7 +316,6 @@ window.Quarto = {
 <section id="research-question" class="level3" data-number="3.1.1">
 <h3 data-number="3.1.1" class="anchored" data-anchor-id="research-question"><span class="header-section-number">3.1.1</span> Research question</h3>
 <p>A high school is pilot-testing a new curriculum for mathematics. To ensure the curriculum is equitable, the department head has collected the final exam scores from a small sample of students to test for significant differences in performance between male and female students.</p>
-<p><br></p>
 </section>
 <section id="import-dataset" class="level3" data-number="3.1.2">
 <h3 data-number="3.1.2" class="anchored" data-anchor-id="import-dataset"><span class="header-section-number">3.1.2</span> Import dataset</h3>
@@ -367,8 +368,7 @@ window.Quarto = {
 <p><br></p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Q_Q plots using the package ggpubr</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggqqplot</span>(dat_maths, <span class="st">"score"</span>, <span class="at">color =</span> <span class="st">"sex"</span>, <span class="at">conf.int =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">facet.by =</span> <span class="st">"sex"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggqqplot</span>(dat_maths, <span class="st">"score"</span>, <span class="at">color =</span> <span class="st">"sex"</span>, <span class="at">conf.int =</span> <span class="cn">FALSE</span>, <span class="at">facet.by =</span> <span class="st">"sex"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -506,7 +506,7 @@ V = 3, p-value = 0.009766
 alternative hypothesis: true location is not equal to 0</code></pre>
 </div>
 </div>
-<p>The results indicated a statistically significant decrease in BPM (<span class="math inline">\(V = 3, p = 0.009\)</span>). The median BPM (85) after the intervention was significantly lower than the baseline (94.5), suggesting the technique is an effective method for heart rate reduction.</p>
+<p>The results indicated a statistically significant decrease in BPM (<span class="math inline">\(V = 3, p = 0.009\)</span>). The median BPM (85) after the intervention was significantly lower than the baseline (94.5), suggesting the technique is an effective method for relaxing.</p>
 
 
 </section>

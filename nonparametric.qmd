@@ -24,7 +24,9 @@ You can download the Excel dataset **boxbreathing** from here:
 <a href="https://osf.io/download/7fmbu/" download="boxbreathing.xlsx"> <button type="button" class="btn btn-success"> <i class="bi bi-file-earmark-excel"></i> Download Excel Data </button> </a>
 :::
 
+<br>
 
+First, we load the following R packages in our R session:
 
 ```{r}
 #| warning: false 
@@ -45,12 +47,10 @@ the Mann-Whitney U test or Wilcoxon Rank Sum test, is presented as a nonparametr
 
 
 
-
 ### Research question
 
 A high school is pilot-testing a new curriculum for mathematics. To ensure the curriculum is equitable, the department head has collected the final exam scores from a small sample of students to test for significant differences in performance between male and female students.
 
-<br>
 
 ### Import dataset
 
@@ -88,8 +88,7 @@ dat_maths |>
 
 ```{r}
 # Q_Q plots using the package ggpubr
-ggqqplot(dat_maths, "score", color = "sex", conf.int = FALSE,
-         facet.by = "sex")
+ggqqplot(dat_maths, "score", color = "sex", conf.int = FALSE, facet.by = "sex")
 ```
 
 
@@ -183,4 +182,4 @@ wilcox.test(dat_BPM$boxbreath_BPM, dat_BPM$baseline_BPM, paired = TRUE)
 wilcox.test(dat_BPM$dif_BPM)
 ```
 
-The results indicated a statistically significant decrease in BPM ($V = 3, p = 0.009$). The median BPM (85) after the intervention was significantly lower than the baseline (94.5), suggesting the technique is an effective method for heart rate reduction.
+The results indicated a statistically significant decrease in BPM ($V = 3, p = 0.009$). The median BPM (85) after the intervention was significantly lower than the baseline (94.5), suggesting the technique is an effective method for relaxing.
