@@ -230,7 +230,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#research-question-1" id="toc-research-question-1" class="nav-link" data-scroll-target="#research-question-1"><span class="header-section-number">3.2.1</span> Research question</a></li>
   <li><a href="#import-dataset-1" id="toc-import-dataset-1" class="nav-link" data-scroll-target="#import-dataset-1"><span class="header-section-number">3.2.2</span> Import dataset</a></li>
-  <li><a href="#descriptive-statistics-and-q-q-plots-1" id="toc-descriptive-statistics-and-q-q-plots-1" class="nav-link" data-scroll-target="#descriptive-statistics-and-q-q-plots-1"><span class="header-section-number">3.2.3</span> Descriptive statistics and Q-Q plots</a></li>
+  <li><a href="#descriptive-statistics-and-q-q-plot" id="toc-descriptive-statistics-and-q-q-plot" class="nav-link" data-scroll-target="#descriptive-statistics-and-q-q-plot"><span class="header-section-number">3.2.3</span> Descriptive statistics and Q-Q plot</a></li>
   <li><a href="#wilcoxon-signed-rank-test" id="toc-wilcoxon-signed-rank-test" class="nav-link" data-scroll-target="#wilcoxon-signed-rank-test"><span class="header-section-number">3.2.4</span> Wilcoxon Signed-Rank Test</a></li>
   </ul></li>
   </ul>
@@ -269,7 +269,7 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <p>You can download the complete R script from here:</p>
-<p><a href="https://osf.io/download/jznht/" download="psy400_2.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a></p>
+<p><a href="https://osf.io/download/4rcpg/" download="psy400_2.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a></p>
 </div>
 </div>
 <div class="callout callout-style-simple callout-tip callout-titled">
@@ -318,7 +318,7 @@ window.Quarto = {
 </section>
 <section id="import-dataset" class="level3" data-number="3.1.2">
 <h3 data-number="3.1.2" class="anchored" data-anchor-id="import-dataset"><span class="header-section-number">3.1.2</span> Import dataset</h3>
-<p>If the dataset is saved in the subfolder named “data” of our RStudio project, we can read it with the <code>read_excel()</code> function from <code>readxl</code> package as follows:</p>
+<p>If the dataset <em>maths</em> is saved in the subfolder named “data” of our RStudio project, we can read it with the <code>read_excel()</code> function from <code>readxl</code> package as follows:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dat_maths <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/maths.xlsx"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dat_maths</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -367,9 +367,8 @@ window.Quarto = {
 <p><br></p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Q_Q plots using the package ggpubr</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggqqplot</span>(dat_maths, <span class="st">"score"</span>, <span class="at">color =</span> <span class="st">"sex"</span>, <span class="at">conf.int =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> sex) <span class="sc">+</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggqqplot</span>(dat_maths, <span class="st">"score"</span>, <span class="at">color =</span> <span class="st">"sex"</span>, <span class="at">conf.int =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">facet.by =</span> <span class="st">"sex"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -405,7 +404,7 @@ alternative hypothesis: true location shift is not equal to 0</code></pre>
 </section>
 <section id="import-dataset-1" class="level3" data-number="3.2.2">
 <h3 data-number="3.2.2" class="anchored" data-anchor-id="import-dataset-1"><span class="header-section-number">3.2.2</span> Import dataset</h3>
-<p>If the dataset is saved in the subfolder named “data” of our RStudio project, we can read it with the <code>read_excel()</code> function from <code>readxl</code> package as follows:</p>
+<p>If the dataset <em>boxbreathing</em> is saved in the subfolder named “data” of our RStudio project, we can read it with the <code>read_excel()</code> function from <code>readxl</code> package as follows:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dat_BPM <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/boxbreathing.xlsx"</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dat_BPM</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -450,8 +449,8 @@ alternative hypothesis: true location shift is not equal to 0</code></pre>
 </div>
 </div>
 </section>
-<section id="descriptive-statistics-and-q-q-plots-1" class="level3" data-number="3.2.3">
-<h3 data-number="3.2.3" class="anchored" data-anchor-id="descriptive-statistics-and-q-q-plots-1"><span class="header-section-number">3.2.3</span> Descriptive statistics and Q-Q plots</h3>
+<section id="descriptive-statistics-and-q-q-plot" class="level3" data-number="3.2.3">
+<h3 data-number="3.2.3" class="anchored" data-anchor-id="descriptive-statistics-and-q-q-plot"><span class="header-section-number">3.2.3</span> Descriptive statistics and Q-Q plot</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># descriptive statistics using the package dlookr</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -470,8 +469,7 @@ alternative hypothesis: true location shift is not equal to 0</code></pre>
 <p><br></p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Q_Q plots using the package ggpubr</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggqqplot</span>(dat_BPM, <span class="st">"dif_BPM"</span>, <span class="at">conf.int =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggqqplot</span>(dat_BPM, <span class="st">"dif_BPM"</span>, <span class="at">conf.int =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">

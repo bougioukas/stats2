@@ -5,7 +5,7 @@
 
 You can download the complete R script from here:
 
-<a href="https://osf.io/download/jznht/" download="psy400_2.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a>
+<a href="https://osf.io/download/4rcpg/" download="psy400_2.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a>
 :::
 
 ::: {.callout-tip appearance="simple"}
@@ -52,7 +52,7 @@ A high school is pilot-testing a new curriculum for mathematics. To ensure the c
 
 ### Import dataset
 
-If the dataset is saved in the subfolder named “data” of our RStudio project, we can read it with the `read_excel()` function from `readxl` package as follows:
+If the dataset *maths* is saved in the subfolder named “data” of our RStudio project, we can read it with the `read_excel()` function from `readxl` package as follows:
 
 ```{r}
 #| warning: false 
@@ -86,9 +86,8 @@ dat_maths |>
 
 ```{r}
 # Q_Q plots using the package ggpubr
-ggqqplot(dat_maths, "score", color = "sex", conf.int = FALSE) +
-  facet_wrap(~ sex) +
-  theme_light()
+ggqqplot(dat_maths, "score", color = "sex", conf.int = FALSE,
+         facet.by = "sex")
 ```
 
 
@@ -122,7 +121,7 @@ Researchers aim to determine whether a specific breathing technique, Box Breathi
 
 ### Import dataset
 
-If the dataset is saved in the subfolder named “data” of our RStudio project, we can read it with the `read_excel()` function from `readxl` package as follows:
+If the dataset *boxbreathing* is saved in the subfolder named “data” of our RStudio project, we can read it with the `read_excel()` function from `readxl` package as follows:
 
 ```{r}
 dat_BPM <- read_excel("data/boxbreathing.xlsx")
@@ -146,7 +145,7 @@ dat_BPM
 
 
 
-### Descriptive statistics and Q-Q plots
+### Descriptive statistics and Q-Q plot
 
 
 ```{r}
@@ -162,8 +161,7 @@ dat_BPM |>
 
 ```{r}
 # Q_Q plots using the package ggpubr
-ggqqplot(dat_BPM, "dif_BPM", conf.int = FALSE) +
-  theme_light()
+ggqqplot(dat_BPM, "dif_BPM", conf.int = FALSE)
 
 ```
 
