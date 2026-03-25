@@ -1,0 +1,226 @@
+# One-way between-subjects Analysis of Variance (One-way ANOVA) in R {#sec-anovabetween}
+
+::: {.callout-tip appearance="simple"}
+## Get the Code
+
+You can download the complete R script from here:
+
+<a href="https://osf.io/download/ubf9g/" download="psy400_3.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a>
+:::
+
+::: {.callout-tip appearance="simple"}
+## Get the Data sat
+
+You can download the Excel dataset **sat** from here:
+
+<a href="https://osf.io/download/ru5jx/" download="sat.xlsx"> <button type="button" class="btn btn-success"> <i class="bi bi-file-earmark-excel"></i> Download Excel Data </button> </a>
+:::
+
+<br>
+
+First, we load the following R packages in our R session:
+
+```{r}
+#| warning: false 
+
+# Required packages for this R script
+library(tidyverse)
+library(rstatix)
+library(dlookr)
+library(readxl)
+```
+
+<br>
+
+
+## Introduction
+
+The one-way between-subjects analysis of variance (one-way ANOVA) is used to compare **more than two independent** (unrelated or unpaired) samples. We may think of it as an extension of Student’s t-test.
+
+Although, ANOVA can detect whether there are mean differences between groups, it does not identify which groups are different from the others. At first, we might consider to compare all groups in pairs with t-tests. However, this approach can lead to incorrect conclusions due to the multiple comparisons problem. Each additional t-test increases the likelihood of making at least one Type I error (false positive) across the set (often called a family) of comparisons.
+
+This is why, after an ANOVA test concludes that at least one difference exists between groups (omnibus analysis), we should perform statistical tests that account for the number of comparisons (post hoc tests). Some of the most commonly used post hoc tests include the Tukey test, Bonferroni correction, and Holm test.
+
+
+
+## Research question and anova assumptions
+
+A quaziexperimental study explored the effect of preparation time on SAT^[The SAT is used by a wide range of colleges and universities as part of the application process for college admission.] performance, with students having studied for different duration (zero, two, four, six, or eight months). The question of interest is whether the mean SAT score differs across these preparation times.
+
+
+### Hypothesis testing for the one-way ANOVA test
+
+::: {.callout-note icon="false"}
+## Null hypothesis and alternative hypothesis
+
+-   $H_0$: all group means are equal (the means of SAT in the five conditions are equal: $\mu_{1} = \mu_{2} = \mu_{3} = \mu_{4} = \mu_{5}$)
+-   $H_1$: at least one group mean differs from the others (there is at least one group with mean SAT score different from the others)
+:::
+
+
+### Assumptions
+
+A.  The dependent variable, satscore, should be approximately **normally** distributed for all groups. To increase the number of observations used in assessing normality, we often examine the residuals from the ANOVA model for the entire dataset using a normal quantile plot of the standardized residuals (Normal Q-Q plot).
+
+B.  The data in groups have similar **variance** (also named as homogeneity of variance or homoscedasticity).
+
+
+
+## Import dataset and process the data variables
+
+In this example, we have five study groups, each containing seven students. The groups contain students who have studied for either zero, two, four, six, or eight months prior to taking the SAT.
+
+If the dataset *sat* is saved in the subfolder named “data” of our RStudio project, we can read it with the `read_excel()` function from `readxl` package as follows:
+
+```{r}
+#| warning: false 
+
+dat_sat <- read_excel("data/sat.xlsx")
+dat_sat
+```
+
+<br>
+
+The dataset has 35 students (rows) and is organized in a “long” format. It includes two variables (columns): the study group (independent variable) and the satscore (dependent variable).
+
+
+We need to convert the study group variable from a numeric type to a factor (`<fct>`) using the `factor()` function.
+
+```{r}
+dat_sat$study_group <- factor(dat_sat$study_group,
+                              levels = c(0, 2, 4, 6, 8),
+                              labels = c("0 mo", "2 mo",
+                                         "4 mo", "6 mo",
+                                         "8 mo"))
+dat_sat
+```
+
+
+
+### Descriptive statistics and plots
+
+We use functions from the **_dplyr_** and **_dlookr_** packages to obtain summary statistics by study group:
+
+
+```{r}
+# descriptive statistics using the package dlookr
+dat_sat |>
+  group_by(study_group) |>
+  describe(satscore) |>
+  select(study_group, n, na, mean, sd, p25, p50, p75, skewness, kurtosis)
+
+```
+
+<br>
+
+A box plot is useful for visualizing the central tendency and dispersion of numerical data, especially when comparing distributions across multiple groups.
+
+```{r}
+ggplot(dat_sat, aes(x = study_group, y = satscore)) +
+  geom_boxplot(fill = "#B0C4DE", width = 0.4) +
+  stat_summary(fun = mean, geom = "point", 
+               shape = 15, size = 2.5, color = "deeppink")
+```
+
+The plot suggests that the mean SAT score (pink square) increases as the months progress, suggesting a positive association between time and SAT score improvement.
+
+
+
+## Define the ANOVA model
+
+First, we define the ANOVA model using the `aov()` function:
+
+```{r}
+anova_model <- aov(satscore ~ study_group, data = dat_sat)
+```
+
+It creates a model object that stores the mathematical association between groups and scores.
+
+
+## Check ANOVA Assumptions
+
+### Normality test and Q-Q plot
+
+We can conduct a Shapiro-Wilk test to assess the normality of the residuals from the ANOVA model:
+
+```{r}
+shapiro.test(residuals(anova_model))
+```
+
+The Shapiro-Wilk test of normality suggests normal distributions (p=0.56 \> 0.05; $H_o$ is not rejected).
+
+
+<br>
+
+We can also examine the normality assumption using a normal quantile plot (Q-Q plot) of the standardized residuals:
+
+```{r}
+plot(anova_model, 2)
+```
+
+The data points mostly fall along the diagonal line, indicating that the residuals are approximately normally distributed. Additionally, there are no extreme deviations or systematic patterns, suggesting that normality holds well.
+
+<br>
+
+
+
+### Equality of variances
+
+```{r}
+dat_sat |> 
+  levene_test(satscore ~ study_group)
+```
+
+Since p = 0.34 \> 0.05, the $H_0$ of the Levene's test is not rejected and the variances of the five conditions are comparable; in short, it appears that the assumption of homogeneity of variance is not violated.
+
+
+
+## Perform ANOVA test (omnibus analysis)
+
+The `summary()` is a generic function. When we give it an `aov` object, it calls a specific method (`summary.aov`) to create the ANOVA Table.
+
+```{r}
+summary(anova_model)
+```
+
+
+The F-statistic is calculated as follows:
+
+$$F=  \frac{Mean \ Square \ group}{Mean \ Square \ residuals} = \frac{57624}{1326} = 43.4$$
+
+Note that we compare this value to an F-distribution. The degrees of freedom (DF) in the numerator and the denominator are 4 and 30, respectively.
+
+The p-value is \< 0.001, so we reject $H_0$ of the ANOVA test. **There is at least one condition with mean SAT score which is different from the other means**.
+
+
+A significant one-way ANOVA is generally followed up by post-hoc tests to perform multiple pairwise comparisons between groups, while controlling for the overall error rate.
+
+
+
+## Conduct Post hoc tests
+
+Tukey’s test is appropriate when we want to make all possible pairwise comparisons between a large set of means, assuming the variances are equal. It is recommended for balanced groups and is robust to moderate imbalances in group sizes.
+
+
+```{r}
+TukeyHSD(anova_model)
+```
+
+For example, the mean difference between two months and zero months and is: 474.286 - 412.857 = 61.429, which is significant (p = 0.028).
+
+<br>
+
+We can also display the 95% family-wise confidence intervals for the differences in mean satscore between groups:
+
+
+```{r}
+plot(TukeyHSD(anova_model), las = 1)
+```
+
+ 
+
+::: content-box-green
+**Interpretation**
+
+An analysis of variance showed that the amount of preparation for the SAT in which students engaged appeared to significantly affect their performances on the test, F(4, 30) = 43.47, p \< 0.001. Post-hoc analyses with Tukey’s test, adjusting p-values for multiple comparisons, indicated that each additional two months of study up to six months was associated with significantly higher SAT scores. However, there was no significant difference in scores between the six month and eight month study groups.
+:::

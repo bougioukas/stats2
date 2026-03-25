@@ -15,6 +15,7 @@ book:
     - intro.qmd
     - process.qmd
     - nonparametric.qmd
+    - anovabetween.qmd
     #- summary.qmd
     - presentations.qmd
     #- data.qmd
@@ -26,7 +27,7 @@ book:
   back-to-top-navigation: true
 
 bibliography: references.bib
-
+reference-location: margin
 
 format:
   html:

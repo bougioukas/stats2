@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3&nbsp; Non-parametric statistical tests in R – Statistics II</title>
+<title>4&nbsp; One-way between-subjects Analysis of Variance (One-way ANOVA) in R – Statistics II</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,8 +65,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./anovabetween.html" rel="next">
-<link href="./process.html" rel="prev">
+<link href="./presentations.html" rel="next">
+<link href="./nonparametric.html" rel="prev">
 <link href="./images/cover.avif" rel="icon">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -139,7 +139,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar floating slimcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -148,7 +148,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./nonparametric.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Non-parametric statistical tests in R</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./anovabetween.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">One-way between-subjects Analysis of Variance (One-way ANOVA) in R</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -193,13 +193,13 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./nonparametric.html" class="sidebar-item-text sidebar-link active">
+  <a href="./nonparametric.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Non-parametric statistical tests in R</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./anovabetween.html" class="sidebar-item-text sidebar-link">
+  <a href="./anovabetween.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">One-way between-subjects Analysis of Variance (One-way ANOVA) in R</span></span></a>
   </div>
 </li>
@@ -225,29 +225,33 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#independent-samples" id="toc-independent-samples" class="nav-link active" data-scroll-target="#independent-samples"><span class="header-section-number">3.1</span> INDEPENDENT SAMPLES</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">4.1</span> Introduction</a></li>
+  <li><a href="#research-question-and-anova-assumptions" id="toc-research-question-and-anova-assumptions" class="nav-link" data-scroll-target="#research-question-and-anova-assumptions"><span class="header-section-number">4.2</span> Research question and anova assumptions</a>
   <ul class="collapse">
-  <li><a href="#research-question" id="toc-research-question" class="nav-link" data-scroll-target="#research-question"><span class="header-section-number">3.1.1</span> Research question</a></li>
-  <li><a href="#import-dataset" id="toc-import-dataset" class="nav-link" data-scroll-target="#import-dataset"><span class="header-section-number">3.1.2</span> Import dataset</a></li>
-  <li><a href="#descriptive-statistics-and-q-q-plots" id="toc-descriptive-statistics-and-q-q-plots" class="nav-link" data-scroll-target="#descriptive-statistics-and-q-q-plots"><span class="header-section-number">3.1.3</span> Descriptive statistics and Q-Q plots</a></li>
-  <li><a href="#wilcoxon-mann-whitney-test" id="toc-wilcoxon-mann-whitney-test" class="nav-link" data-scroll-target="#wilcoxon-mann-whitney-test"><span class="header-section-number">3.1.4</span> Wilcoxon-Mann-Whitney test</a></li>
+  <li><a href="#hypothesis-testing-for-the-one-way-anova-test" id="toc-hypothesis-testing-for-the-one-way-anova-test" class="nav-link" data-scroll-target="#hypothesis-testing-for-the-one-way-anova-test"><span class="header-section-number">4.2.1</span> Hypothesis testing for the one-way ANOVA test</a></li>
+  <li><a href="#assumptions" id="toc-assumptions" class="nav-link" data-scroll-target="#assumptions"><span class="header-section-number">4.2.2</span> Assumptions</a></li>
   </ul></li>
-  <li><a href="#dependent-samples" id="toc-dependent-samples" class="nav-link" data-scroll-target="#dependent-samples"><span class="header-section-number">3.2</span> DEPENDENT SAMPLES</a>
+  <li><a href="#import-dataset-and-process-the-data-variables" id="toc-import-dataset-and-process-the-data-variables" class="nav-link" data-scroll-target="#import-dataset-and-process-the-data-variables"><span class="header-section-number">4.3</span> Import dataset and process the data variables</a>
   <ul class="collapse">
-  <li><a href="#research-question-1" id="toc-research-question-1" class="nav-link" data-scroll-target="#research-question-1"><span class="header-section-number">3.2.1</span> Research question</a></li>
-  <li><a href="#import-dataset-1" id="toc-import-dataset-1" class="nav-link" data-scroll-target="#import-dataset-1"><span class="header-section-number">3.2.2</span> Import dataset</a></li>
-  <li><a href="#descriptive-statistics-and-q-q-plot" id="toc-descriptive-statistics-and-q-q-plot" class="nav-link" data-scroll-target="#descriptive-statistics-and-q-q-plot"><span class="header-section-number">3.2.3</span> Descriptive statistics and Q-Q plot</a></li>
-  <li><a href="#wilcoxon-signed-rank-test" id="toc-wilcoxon-signed-rank-test" class="nav-link" data-scroll-target="#wilcoxon-signed-rank-test"><span class="header-section-number">3.2.4</span> Wilcoxon Signed-Rank Test</a></li>
+  <li><a href="#descriptive-statistics-and-plots" id="toc-descriptive-statistics-and-plots" class="nav-link" data-scroll-target="#descriptive-statistics-and-plots"><span class="header-section-number">4.3.1</span> Descriptive statistics and plots</a></li>
   </ul></li>
+  <li><a href="#define-the-anova-model" id="toc-define-the-anova-model" class="nav-link" data-scroll-target="#define-the-anova-model"><span class="header-section-number">4.4</span> Define the ANOVA model</a></li>
+  <li><a href="#check-anova-assumptions" id="toc-check-anova-assumptions" class="nav-link" data-scroll-target="#check-anova-assumptions"><span class="header-section-number">4.5</span> Check ANOVA Assumptions</a>
+  <ul class="collapse">
+  <li><a href="#normality-test-and-q-q-plot" id="toc-normality-test-and-q-q-plot" class="nav-link" data-scroll-target="#normality-test-and-q-q-plot"><span class="header-section-number">4.5.1</span> Normality test and Q-Q plot</a></li>
+  <li><a href="#equality-of-variances" id="toc-equality-of-variances" class="nav-link" data-scroll-target="#equality-of-variances"><span class="header-section-number">4.5.2</span> Equality of variances</a></li>
+  </ul></li>
+  <li><a href="#perform-anova-test-omnibus-analysis" id="toc-perform-anova-test-omnibus-analysis" class="nav-link" data-scroll-target="#perform-anova-test-omnibus-analysis"><span class="header-section-number">4.6</span> Perform ANOVA test (omnibus analysis)</a></li>
+  <li><a href="#conduct-post-hoc-tests" id="toc-conduct-post-hoc-tests" class="nav-link" data-scroll-target="#conduct-post-hoc-tests"><span class="header-section-number">4.7</span> Conduct Post hoc tests</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-nonparamteric" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Non-parametric statistical tests in R</span></span></h1>
+<h1 class="title"><span id="sec-anovabetween" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">One-way between-subjects Analysis of Variance (One-way ANOVA) in R</span></span></h1>
 </div>
 
 
@@ -275,7 +279,7 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <p>You can download the complete R script from here:</p>
-<p><a href="https://osf.io/download/cy62s/" download="psy400_2.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a></p>
+<p><a href="https://osf.io/download/ubf9g/" download="psy400_3.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a></p>
 </div>
 </div>
 <div class="callout callout-style-simple callout-tip callout-titled">
@@ -284,26 +288,12 @@ window.Quarto = {
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Get the Data maths
+<span class="screen-reader-only">Tip</span>Get the Data sat
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>You can download the Excel dataset <strong>maths</strong> from here:</p>
-<p><a href="https://osf.io/download/pw8q9/" download="maths.xlsx"> <button type="button" class="btn btn-success"> <i class="bi bi-file-earmark-excel"></i> Download Excel Data </button> </a></p>
-</div>
-</div>
-<div class="callout callout-style-simple callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Get the Data boxbreathing
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>You can download the Excel dataset <strong>boxbreathing</strong> from here:</p>
-<p><a href="https://osf.io/download/7fmbu/" download="boxbreathing.xlsx"> <button type="button" class="btn btn-success"> <i class="bi bi-file-earmark-excel"></i> Download Excel Data </button> </a></p>
+<p>You can download the Excel dataset <strong>sat</strong> from here:</p>
+<p><a href="https://osf.io/download/ru5jx/" download="sat.xlsx"> <button type="button" class="btn btn-success"> <i class="bi bi-file-earmark-excel"></i> Download Excel Data </button> </a></p>
 </div>
 </div>
 <p><br></p>
@@ -311,212 +301,256 @@ window.Quarto = {
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Required packages for this R script</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstatix)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dlookr)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><br></p>
-<section id="independent-samples" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="independent-samples"><span class="header-section-number">3.1</span> INDEPENDENT SAMPLES</h2>
-<p>In this lecture, the Wilcoxon-Mann-Whitney (WMW) test, also known as the Mann-Whitney U test or Wilcoxon Rank Sum test, is presented as a nonparametric method for comparing two independent samples. It is often used as an alternative to the independent samples t-test, particularly when the assumption of normality is violated or when dealing with small sample sizes.</p>
-<section id="research-question" class="level3" data-number="3.1.1">
-<h3 data-number="3.1.1" class="anchored" data-anchor-id="research-question"><span class="header-section-number">3.1.1</span> Research question</h3>
-<p>A high school is pilot-testing a new curriculum for mathematics. To ensure the curriculum is equitable, the department head has collected the final exam scores from a small sample of students to test for significant differences in performance between male and female students.</p>
+<section id="introduction" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">4.1</span> Introduction</h2>
+<p>The one-way between-subjects analysis of variance (one-way ANOVA) is used to compare <strong>more than two independent</strong> (unrelated or unpaired) samples. We may think of it as an extension of Student’s t-test.</p>
+<p>Although, ANOVA can detect whether there are mean differences between groups, it does not identify which groups are different from the others. At first, we might consider to compare all groups in pairs with t-tests. However, this approach can lead to incorrect conclusions due to the multiple comparisons problem. Each additional t-test increases the likelihood of making at least one Type I error (false positive) across the set (often called a family) of comparisons.</p>
+<p>This is why, after an ANOVA test concludes that at least one difference exists between groups (omnibus analysis), we should perform statistical tests that account for the number of comparisons (post hoc tests). Some of the most commonly used post hoc tests include the Tukey test, Bonferroni correction, and Holm test.</p>
 </section>
-<section id="import-dataset" class="level3" data-number="3.1.2">
-<h3 data-number="3.1.2" class="anchored" data-anchor-id="import-dataset"><span class="header-section-number">3.1.2</span> Import dataset</h3>
-<p>If the dataset <em>maths</em> is saved in the subfolder named “data” of our RStudio project, we can read it with the <code>read_excel()</code> function from <code>readxl</code> package as follows:</p>
+<section id="research-question-and-anova-assumptions" class="level2 page-columns page-full" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="research-question-and-anova-assumptions"><span class="header-section-number">4.2</span> Research question and anova assumptions</h2>
+<p>A quaziexperimental study explored the effect of preparation time on SAT<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> performance, with students having studied for different duration (zero, two, four, six, or eight months). The question of interest is whether the mean SAT score differs across these preparation times.</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;The SAT is used by a wide range of colleges and universities as part of the application process for college admission.</p></div></div><section id="hypothesis-testing-for-the-one-way-anova-test" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="hypothesis-testing-for-the-one-way-anova-test"><span class="header-section-number">4.2.1</span> Hypothesis testing for the one-way ANOVA test</h3>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Null hypothesis and alternative hypothesis
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><span class="math inline">\(H_0\)</span>: all group means are equal (the means of SAT in the five conditions are equal: <span class="math inline">\(\mu_{1} = \mu_{2} = \mu_{3} = \mu_{4} = \mu_{5}\)</span>)</li>
+<li><span class="math inline">\(H_1\)</span>: at least one group mean differs from the others (there is at least one group with mean SAT score different from the others)</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="assumptions" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="assumptions"><span class="header-section-number">4.2.2</span> Assumptions</h3>
+<ol type="A">
+<li><p>The dependent variable, satscore, should be approximately <strong>normally</strong> distributed for all groups. To increase the number of observations used in assessing normality, we often examine the residuals from the ANOVA model for the entire dataset using a normal quantile plot of the standardized residuals (Normal Q-Q plot).</p></li>
+<li><p>The data in groups have similar <strong>variance</strong> (also named as homogeneity of variance or homoscedasticity).</p></li>
+</ol>
+</section>
+</section>
+<section id="import-dataset-and-process-the-data-variables" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="import-dataset-and-process-the-data-variables"><span class="header-section-number">4.3</span> Import dataset and process the data variables</h2>
+<p>In this example, we have five study groups, each containing seven students. The groups contain students who have studied for either zero, two, four, six, or eight months prior to taking the SAT.</p>
+<p>If the dataset <em>sat</em> is saved in the subfolder named “data” of our RStudio project, we can read it with the <code>read_excel()</code> function from <code>readxl</code> package as follows:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dat_maths <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/maths.xlsx"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dat_maths</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dat_sat <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/sat.xlsx"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dat_sat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 17 × 2
-   sex    score
-   &lt;chr&gt;  &lt;dbl&gt;
- 1 male      18
- 2 male      32
- 3 male      39
- 4 male      26
- 5 male      48
- 6 male      20
- 7 male      29
- 8 male      30
- 9 female    24
-10 female    35
-11 female    41
-12 female    34
-13 female    38
-14 female    31
-15 female    22
-16 female    27
-17 female    36</code></pre>
+<pre><code># A tibble: 35 × 2
+   study_group satscore
+         &lt;dbl&gt;    &lt;dbl&gt;
+ 1           0      370
+ 2           0      380
+ 3           0      420
+ 4           0      420
+ 5           0      430
+ 6           0      430
+ 7           0      440
+ 8           2      410
+ 9           2      430
+10           2      440
+# ℹ 25 more rows</code></pre>
 </div>
 </div>
 <p><br></p>
-<p>The dataset has 17 students (rows) and is organized in a “long” format. It includes two variables (columns): the character (<code>&lt;chr&gt;</code>) sex variable (independent variable) and the numeric (<code>&lt;dbl&gt;</code>) score variable (dependent variable).</p>
-</section>
-<section id="descriptive-statistics-and-q-q-plots" class="level3" data-number="3.1.3">
-<h3 data-number="3.1.3" class="anchored" data-anchor-id="descriptive-statistics-and-q-q-plots"><span class="header-section-number">3.1.3</span> Descriptive statistics and Q-Q plots</h3>
+<p>The dataset has 35 students (rows) and is organized in a “long” format. It includes two variables (columns): the study group (independent variable) and the satscore (dependent variable).</p>
+<p>We need to convert the study group variable from a numeric type to a factor (<code>&lt;fct&gt;</code>) using the <code>factor()</code> function.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># descriptive statistics using the package dlookr</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>dat_maths <span class="sc">|&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">describe</span>(score) <span class="sc">|&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(sex, n, na, mean, sd, p25, p50, p75, skewness, kurtosis)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dat_sat<span class="sc">$</span>study_group <span class="ot">&lt;-</span> <span class="fu">factor</span>(dat_sat<span class="sc">$</span>study_group,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"0 mo"</span>, <span class="st">"2 mo"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                                         <span class="st">"4 mo"</span>, <span class="st">"6 mo"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                                         <span class="st">"8 mo"</span>))</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>dat_sat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 10
-  sex        n    na  mean    sd   p25   p50   p75 skewness kurtosis
-  &lt;chr&gt;  &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
-1 female     9     0  32    6.48  27    34    36     -0.351   -1.09 
-2 male       8     0  30.2  9.78  24.5  29.5  33.8    0.667    0.311</code></pre>
+<pre><code># A tibble: 35 × 2
+   study_group satscore
+   &lt;fct&gt;          &lt;dbl&gt;
+ 1 0 mo             370
+ 2 0 mo             380
+ 3 0 mo             420
+ 4 0 mo             420
+ 5 0 mo             430
+ 6 0 mo             430
+ 7 0 mo             440
+ 8 2 mo             410
+ 9 2 mo             430
+10 2 mo             440
+# ℹ 25 more rows</code></pre>
+</div>
+</div>
+<section id="descriptive-statistics-and-plots" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="descriptive-statistics-and-plots"><span class="header-section-number">4.3.1</span> Descriptive statistics and plots</h3>
+<p>We use functions from the <strong><em>dplyr</em></strong> and <strong><em>dlookr</em></strong> packages to obtain summary statistics by study group:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># descriptive statistics using the package dlookr</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>dat_sat <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(study_group) <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">describe</span>(satscore) <span class="sc">|&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(study_group, n, na, mean, sd, p25, p50, p75, skewness, kurtosis)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 10
+  study_group     n    na  mean    sd   p25   p50   p75 skewness kurtosis
+  &lt;fct&gt;       &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 0 mo            7     0  413.  26.9   400   420   430   -0.999   -0.715
+2 2 mo            7     0  474.  47.9   435   480   515   -0.167   -2.04 
+3 4 mo            7     0  553.  28.7   535   540   560    1.61     2.40 
+4 6 mo            7     0  614.  38.2   585   620   645   -0.235   -1.72 
+5 8 mo            7     0  623.  36.4   615   630   645   -1.51     2.79 </code></pre>
 </div>
 </div>
 <p><br></p>
+<p>A box plot is useful for visualizing the central tendency and dispersion of numerical data, especially when comparing distributions across multiple groups.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Q_Q plots using the package ggpubr</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggqqplot</span>(dat_maths, <span class="st">"score"</span>, <span class="at">color =</span> <span class="st">"sex"</span>, <span class="at">conf.int =</span> <span class="cn">FALSE</span>, <span class="at">facet.by =</span> <span class="st">"sex"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dat_sat, <span class="fu">aes</span>(<span class="at">x =</span> study_group, <span class="at">y =</span> satscore)) <span class="sc">+</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"#B0C4DE"</span>, <span class="at">width =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">"point"</span>, </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">shape =</span> <span class="dv">15</span>, <span class="at">size =</span> <span class="fl">2.5</span>, <span class="at">color =</span> <span class="st">"deeppink"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="nonparametric_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="anovabetween_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+<p>The plot suggests that the mean SAT score (pink square) increases as the months progress, suggesting a positive association between time and SAT score improvement.</p>
 </section>
-<section id="wilcoxon-mann-whitney-test" class="level3" data-number="3.1.4">
-<h3 data-number="3.1.4" class="anchored" data-anchor-id="wilcoxon-mann-whitney-test"><span class="header-section-number">3.1.4</span> Wilcoxon-Mann-Whitney test</h3>
+</section>
+<section id="define-the-anova-model" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="define-the-anova-model"><span class="header-section-number">4.4</span> Define the ANOVA model</h2>
+<p>First, we define the ANOVA model using the <code>aov()</code> function:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(score <span class="sc">~</span> sex, <span class="at">data =</span> dat_maths)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>anova_model <span class="ot">&lt;-</span> <span class="fu">aov</span>(satscore <span class="sc">~</span> study_group, <span class="at">data =</span> dat_sat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>It creates a model object that stores the mathematical association between groups and scores.</p>
+</section>
+<section id="check-anova-assumptions" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="check-anova-assumptions"><span class="header-section-number">4.5</span> Check ANOVA Assumptions</h2>
+<section id="normality-test-and-q-q-plot" class="level3" data-number="4.5.1">
+<h3 data-number="4.5.1" class="anchored" data-anchor-id="normality-test-and-q-q-plot"><span class="header-section-number">4.5.1</span> Normality test and Q-Q plot</h3>
+<p>We can conduct a Shapiro-Wilk test to assess the normality of the residuals from the ANOVA model:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(<span class="fu">residuals</span>(anova_model))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-    Wilcoxon rank sum exact test
+    Shapiro-Wilk normality test
 
-data:  score by sex
-W = 43, p-value = 0.5414
-alternative hypothesis: true location shift is not equal to 0</code></pre>
+data:  residuals(anova_model)
+W = 0.97392, p-value = 0.5594</code></pre>
 </div>
 </div>
-<p>The results indicated no statistically significant difference (<span class="math inline">\(W = 43, p = 0.54\)</span>).</p>
+<p>The Shapiro-Wilk test of normality suggests normal distributions (p=0.56 &gt; 0.05; <span class="math inline">\(H_o\)</span> is not rejected).</p>
 <p><br></p>
-</section>
-</section>
-<section id="dependent-samples" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="dependent-samples"><span class="header-section-number">3.2</span> DEPENDENT SAMPLES</h2>
-<p>The Wilcoxon Signed-Rank test is a non-parametric statistical test used to compare two groups of paired observations. It assesses whether the paired differences are centered around zero by considering both the magnitudes and signs of the differences, using their signed ranks. This test is often preferred when the paired differences are not normally distributed or when sample sizes are small.</p>
-<section id="research-question-1" class="level3" data-number="3.2.1">
-<h3 data-number="3.2.1" class="anchored" data-anchor-id="research-question-1"><span class="header-section-number">3.2.1</span> Research question</h3>
-<p>Researchers aim to determine whether a specific breathing technique, Box Breathing, can reduce individuals’ heart rate, measured in beats per minute (BPM), immediately before they deliver a public speech. They measure the heart rates of 10 participants during a baseline stress period and again after the participants practice the breathing technique for five minutes.</p>
-</section>
-<section id="import-dataset-1" class="level3" data-number="3.2.2">
-<h3 data-number="3.2.2" class="anchored" data-anchor-id="import-dataset-1"><span class="header-section-number">3.2.2</span> Import dataset</h3>
-<p>If the dataset <em>boxbreathing</em> is saved in the subfolder named “data” of our RStudio project, we can read it with the <code>read_excel()</code> function from <code>readxl</code> package as follows:</p>
+<p>We can also examine the normality assumption using a normal quantile plot (Q-Q plot) of the standardized residuals:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dat_BPM <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/boxbreathing.xlsx"</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dat_BPM</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 2
-   baseline_BPM boxbreath_BPM
-          &lt;dbl&gt;         &lt;dbl&gt;
- 1           95            82
- 2           88            84
- 3          102            93
- 4           91            92
- 5           85            74
- 6           98            83
- 7          110           112
- 8           89            83
- 9           94            86
-10          105            98</code></pre>
-</div>
-</div>
-<p>The dataset has 10 participants and is organized in a “wide” format. It includes two columns with numeric (<code>&lt;dbl&gt;</code>): the baseline BPM and after the participants practice the breathing technique for five minutes.</p>
-<p><br></p>
-<p>First, we use the <code>mutate()</code> function to calculate the difference between the boxbreath and the baseline measurements of the BPM, as follows:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dat_BPM <span class="ot">&lt;-</span> dat_BPM <span class="sc">|&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dif_BPM =</span> boxbreath_BPM <span class="sc">-</span> baseline_BPM)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>dat_BPM</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 3
-   baseline_BPM boxbreath_BPM dif_BPM
-          &lt;dbl&gt;         &lt;dbl&gt;   &lt;dbl&gt;
- 1           95            82     -13
- 2           88            84      -4
- 3          102            93      -9
- 4           91            92       1
- 5           85            74     -11
- 6           98            83     -15
- 7          110           112       2
- 8           89            83      -6
- 9           94            86      -8
-10          105            98      -7</code></pre>
-</div>
-</div>
-</section>
-<section id="descriptive-statistics-and-q-q-plot" class="level3" data-number="3.2.3">
-<h3 data-number="3.2.3" class="anchored" data-anchor-id="descriptive-statistics-and-q-q-plot"><span class="header-section-number">3.2.3</span> Descriptive statistics and Q-Q plot</h3>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># descriptive statistics using the package dlookr</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>dat_BPM <span class="sc">|&gt;</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  dlookr<span class="sc">::</span><span class="fu">describe</span>(dif_BPM, boxbreath_BPM, baseline_BPM) <span class="sc">|&gt;</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(described_variables, n, mean, sd, p25, p50, p75, skewness, kurtosis)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 9
-  described_variables     n  mean    sd   p25   p50   p75 skewness kurtosis
-  &lt;chr&gt;               &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
-1 dif_BPM                10  -7    5.54 -10.5  -7.5  -4.5    0.383   -0.532
-2 boxbreath_BPM          10  88.7 10.6   83    85    92.8    1.11     1.75 
-3 baseline_BPM           10  95.7  8.03  89.5  94.5 101      0.510   -0.660</code></pre>
-</div>
-</div>
-<p><br></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Q_Q plots using the package ggpubr</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggqqplot</span>(dat_BPM, <span class="st">"dif_BPM"</span>, <span class="at">conf.int =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(anova_model, <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="nonparametric_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="anovabetween_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-</section>
-<section id="wilcoxon-signed-rank-test" class="level3" data-number="3.2.4">
-<h3 data-number="3.2.4" class="anchored" data-anchor-id="wilcoxon-signed-rank-test"><span class="header-section-number">3.2.4</span> Wilcoxon Signed-Rank Test</h3>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wilcoxon-Mann-Whitney test (non-parametric test)</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(dat_BPM<span class="sc">$</span>boxbreath_BPM, dat_BPM<span class="sc">$</span>baseline_BPM, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Wilcoxon signed rank exact test
-
-data:  dat_BPM$boxbreath_BPM and dat_BPM$baseline_BPM
-V = 3, p-value = 0.009766
-alternative hypothesis: true location shift is not equal to 0</code></pre>
-</div>
-</div>
+<p>The data points mostly fall along the diagonal line, indicating that the residuals are approximately normally distributed. Additionally, there are no extreme deviations or systematic patterns, suggesting that normality holds well.</p>
 <p><br></p>
+</section>
+<section id="equality-of-variances" class="level3" data-number="4.5.2">
+<h3 data-number="4.5.2" class="anchored" data-anchor-id="equality-of-variances"><span class="header-section-number">4.5.2</span> Equality of variances</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># or use the differences</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(dat_BPM<span class="sc">$</span>dif_BPM)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>dat_sat <span class="sc">|&gt;</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">levene_test</span>(satscore <span class="sc">~</span> study_group)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>
-    Wilcoxon signed rank exact test
+<pre><code># A tibble: 1 × 4
+    df1   df2 statistic     p
+  &lt;int&gt; &lt;int&gt;     &lt;dbl&gt; &lt;dbl&gt;
+1     4    30      1.18 0.340</code></pre>
+</div>
+</div>
+<p>Since p = 0.34 &gt; 0.05, the <span class="math inline">\(H_0\)</span> of the Levene’s test is not rejected and the variances of the five conditions are comparable; in short, it appears that the assumption of homogeneity of variance is not violated.</p>
+</section>
+</section>
+<section id="perform-anova-test-omnibus-analysis" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="perform-anova-test-omnibus-analysis"><span class="header-section-number">4.6</span> Perform ANOVA test (omnibus analysis)</h2>
+<p>The <code>summary()</code> is a generic function. When we give it an <code>aov</code> object, it calls a specific method (<code>summary.aov</code>) to create the ANOVA Table.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(anova_model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+study_group  4 230497   57624   43.47 4.53e-12 ***
+Residuals   30  39771    1326                     
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>The F-statistic is calculated as follows:</p>
+<p><span class="math display">\[F=  \frac{Mean \ Square \ group}{Mean \ Square \ residuals} = \frac{57624}{1326} = 43.4\]</span></p>
+<p>Note that we compare this value to an F-distribution. The degrees of freedom (DF) in the numerator and the denominator are 4 and 30, respectively.</p>
+<p>The p-value is &lt; 0.001, so we reject <span class="math inline">\(H_0\)</span> of the ANOVA test. <strong>There is at least one condition with mean SAT score which is different from the other means</strong>.</p>
+<p>A significant one-way ANOVA is generally followed up by post-hoc tests to perform multiple pairwise comparisons between groups, while controlling for the overall error rate.</p>
+</section>
+<section id="conduct-post-hoc-tests" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="conduct-post-hoc-tests"><span class="header-section-number">4.7</span> Conduct Post hoc tests</h2>
+<p>Tukey’s test is appropriate when we want to make all possible pairwise comparisons between a large set of means, assuming the variances are equal. It is recommended for balanced groups and is robust to moderate imbalances in group sizes.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">TukeyHSD</span>(anova_model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Tukey multiple comparisons of means
+    95% family-wise confidence level
 
-data:  dat_BPM$dif_BPM
-V = 3, p-value = 0.009766
-alternative hypothesis: true location is not equal to 0</code></pre>
+Fit: aov(formula = satscore ~ study_group, data = dat_sat)
+
+$study_group
+                diff        lwr       upr     p adj
+2 mo-0 mo  61.428571   4.976489 117.88065 0.0276464
+4 mo-0 mo 140.000000  83.547917 196.45208 0.0000005
+6 mo-0 mo 201.428571 144.976489 257.88065 0.0000000
+8 mo-0 mo 210.000000 153.547917 266.45208 0.0000000
+4 mo-2 mo  78.571429  22.119346 135.02351 0.0029552
+6 mo-2 mo 140.000000  83.547917 196.45208 0.0000005
+8 mo-2 mo 148.571429  92.119346 205.02351 0.0000002
+6 mo-4 mo  61.428571   4.976489 117.88065 0.0276464
+8 mo-4 mo  70.000000  13.547917 126.45208 0.0093239
+8 mo-6 mo   8.571429 -47.880654  65.02351 0.9917848</code></pre>
 </div>
 </div>
-<p>The results indicated a statistically significant decrease in BPM (<span class="math inline">\(V = 3, p = 0.009\)</span>). The median BPM (85) after the intervention was significantly lower than the baseline (94.5), suggesting the technique is an effective method for relaxing.</p>
+<p>For example, the mean difference between two months and zero months and is: 474.286 - 412.857 = 61.429, which is significant (p = 0.028).</p>
+<p><br></p>
+<p>We can also display the 95% family-wise confidence intervals for the differences in mean satscore between groups:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">TukeyHSD</span>(anova_model), <span class="at">las =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="anovabetween_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+<div class="content-box-green">
+<p><strong>Interpretation</strong></p>
+<p>An analysis of variance showed that the amount of preparation for the SAT in which students engaged appeared to significantly affect their performances on the test, F(4, 30) = 43.47, p &lt; 0.001. Post-hoc analyses with Tukey’s test, adjusting p-values for multiple comparisons, indicated that each additional two months of study up to six months was associated with significantly higher SAT scores. However, there was no significant difference in scores between the six month and eight month study groups.</p>
+</div>
 
 
 </section>
-</section>
+
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -926,13 +960,13 @@ alternative hypothesis: true location is not equal to 0</code></pre>
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./process.html" class="pagination-link" aria-label="Data processing, transformation and ploting in R">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data processing, transformation and ploting in R</span></span>
+      <a href="./nonparametric.html" class="pagination-link" aria-label="Non-parametric statistical tests in R">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Non-parametric statistical tests in R</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./anovabetween.html" class="pagination-link" aria-label="One-way between-subjects Analysis of Variance (One-way ANOVA) in R">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">One-way between-subjects Analysis of Variance (One-way ANOVA) in R</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./presentations.html" class="pagination-link" aria-label="Presentations">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Presentations</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
