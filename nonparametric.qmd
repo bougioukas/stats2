@@ -42,15 +42,11 @@ library(readxl)
 
 ## INDEPENDENT SAMPLES
 
-In this lecture, the Wilcoxon-Mann-Whitney (WMW) test, also known as
-the Mann-Whitney U test or Wilcoxon Rank Sum test, is presented as a nonparametric method for comparing two independent samples. It is often used as an alternative to the independent samples t-test, particularly when the assumption of normality is violated or when dealing with small sample sizes.
-
-
+In this lecture, the Wilcoxon-Mann-Whitney (WMW) test, also known as the Mann-Whitney U test or Wilcoxon Rank Sum test, is presented as a nonparametric method for comparing two independent samples. It is often used as an alternative to the independent samples t-test, particularly when the assumption of normality is violated or when dealing with small sample sizes.
 
 ### Research question
 
 A high school is pilot-testing a new curriculum for mathematics. To ensure the curriculum is equitable, the department head has collected the final exam scores from a small sample of students to test for significant differences in performance between male and female students.
-
 
 ### Import dataset
 
@@ -65,14 +61,9 @@ dat_maths
 
 <br>
 
-
 The dataset has 17 students (rows) and is organized in a “long” format. It includes two variables (columns): the character (`<chr>`) sex variable (independent variable) and the numeric (`<dbl>`) score variable (dependent variable).
 
-
-
-
 ### Descriptive statistics and Q-Q plots
-
 
 ```{r}
 # descriptive statistics using the package dlookr
@@ -85,14 +76,10 @@ dat_maths |>
 
 <br>
 
-
 ```{r}
 # Q_Q plots using the package ggpubr
 ggqqplot(dat_maths, "score", color = "sex", conf.int = FALSE, facet.by = "sex")
 ```
-
-
-
 
 ### Wilcoxon-Mann-Whitney test
 
@@ -102,23 +89,15 @@ wilcox.test(score ~ sex, data = dat_maths)
 
 The results indicated no statistically significant difference ($W = 43, p = 0.54$).
 
-
 <br>
-
 
 ## DEPENDENT SAMPLES
 
-The Wilcoxon Signed-Rank test is a non-parametric statistical test used
-to compare two groups of paired observations. It assesses whether the paired differences are centered around zero by considering both
-the magnitudes and signs of the differences, using their signed ranks. This test is often preferred when the paired differences are not normally distributed or when sample sizes are small.
-
-
+The Wilcoxon Signed-Rank test is a non-parametric statistical test used to compare two groups of paired observations. It assesses whether the paired differences are centered around zero by considering both the magnitudes and signs of the differences, using their signed ranks. This test is often preferred when the paired differences are not normally distributed or when sample sizes are small.
 
 ### Research question
 
 Researchers aim to determine whether a specific breathing technique, Box Breathing, can reduce individuals’ heart rate, measured in beats per minute (BPM), immediately before they deliver a public speech. They measure the heart rates of 10 participants during a baseline stress period and again after the participants practice the breathing technique for five minutes.
-
-
 
 ### Import dataset
 
@@ -129,13 +108,11 @@ dat_BPM <- read_excel("data/boxbreathing.xlsx")
 dat_BPM
 ```
 
-The dataset has 10 participants and is organized in a “wide” format. It includes two columns with numeric (`<dbl>`): the baseline BPM and after the participants practice the breathing technique for five minutes.
-
+The dataset has 10 participants and is organized in a “wide” format. It includes two columns with numeric (`<dbl>`) variables: baseline BPM (measured before the technique) and BPM after participants practiced the breathing technique for five minutes.
 
 <br>
 
-First, we use the `mutate()` function to calculate the difference
-between the boxbreath and the baseline measurements of the BPM, as follows:
+First, we use the `mutate()` function to calculate the difference between the boxbreath and the baseline measurements of the BPM, as follows:
 
 ```{r}
 dat_BPM <- dat_BPM |>
@@ -144,10 +121,7 @@ dat_BPM <- dat_BPM |>
 dat_BPM
 ```
 
-
-
 ### Descriptive statistics and Q-Q plot
-
 
 ```{r}
 # descriptive statistics using the package dlookr
@@ -165,8 +139,6 @@ dat_BPM |>
 ggqqplot(dat_BPM, "dif_BPM", conf.int = FALSE)
 
 ```
-
-
 
 ### Wilcoxon Signed-Rank Test
 

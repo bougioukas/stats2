@@ -6,16 +6,35 @@
 
      
 
-
 -   **Lectures 2 & 3: Data wrangling**
 
 ![psy-400-2_data_wrangling](presentations/psy-400-2_data_wrangling.pdf){width="60%" height="400"}
 
      
 
-
 -   **Lecture 4: Data visualization**
 
 ![psy-400-3_data_visualization](presentations/psy-400-3_data_visualization.pdf){width="60%" height="400"}
 
      
+
+
+-   **Lecture 5: Non-parametric statistical tests**
+
+![psy-400-4_non_parametric_tests](presentations/psy-400-4_non_parametric_tests.pdf){width="60%" height="400"}
+
+     
+
+
+-   **Lecture 6: One-way between-subjects ANOVA**
+
+![psy-400-5_anova1](presentations/psy-400-5_anova1.pdf){width="60%" height="400"}
+
+     
+
+
+
+
+
+
+
