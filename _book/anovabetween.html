@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./presentations.html" rel="next">
+<link href="./anovawithin.html" rel="next">
 <link href="./nonparametric.html" rel="prev">
 <link href="./images/cover.avif" rel="icon">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
@@ -205,8 +205,14 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./anovawithin.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">One-way within-subjects Analysis of Variance (Repeated one-way ANOVA) in R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./presentations.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Presentations</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Presentations</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -231,18 +237,16 @@ window.Quarto = {
   <li><a href="#hypothesis-testing-for-the-one-way-anova-test" id="toc-hypothesis-testing-for-the-one-way-anova-test" class="nav-link" data-scroll-target="#hypothesis-testing-for-the-one-way-anova-test"><span class="header-section-number">4.2.1</span> Hypothesis testing for the one-way ANOVA test</a></li>
   <li><a href="#assumptions" id="toc-assumptions" class="nav-link" data-scroll-target="#assumptions"><span class="header-section-number">4.2.2</span> Assumptions</a></li>
   </ul></li>
-  <li><a href="#import-dataset-and-process-the-data-variables" id="toc-import-dataset-and-process-the-data-variables" class="nav-link" data-scroll-target="#import-dataset-and-process-the-data-variables"><span class="header-section-number">4.3</span> Import dataset and process the data variables</a>
+  <li><a href="#import-dataset-and-process-the-data-variables" id="toc-import-dataset-and-process-the-data-variables" class="nav-link" data-scroll-target="#import-dataset-and-process-the-data-variables"><span class="header-section-number">4.3</span> Import dataset and process the data variables</a></li>
+  <li><a href="#descriptive-statistics-and-plots" id="toc-descriptive-statistics-and-plots" class="nav-link" data-scroll-target="#descriptive-statistics-and-plots"><span class="header-section-number">4.4</span> Descriptive statistics and plots</a></li>
+  <li><a href="#define-the-anova-model" id="toc-define-the-anova-model" class="nav-link" data-scroll-target="#define-the-anova-model"><span class="header-section-number">4.5</span> Define the ANOVA model</a></li>
+  <li><a href="#check-anova-assumptions" id="toc-check-anova-assumptions" class="nav-link" data-scroll-target="#check-anova-assumptions"><span class="header-section-number">4.6</span> Check ANOVA Assumptions</a>
   <ul class="collapse">
-  <li><a href="#descriptive-statistics-and-plots" id="toc-descriptive-statistics-and-plots" class="nav-link" data-scroll-target="#descriptive-statistics-and-plots"><span class="header-section-number">4.3.1</span> Descriptive statistics and plots</a></li>
+  <li><a href="#normality-test-and-q-q-plot" id="toc-normality-test-and-q-q-plot" class="nav-link" data-scroll-target="#normality-test-and-q-q-plot"><span class="header-section-number">4.6.1</span> Normality test and Q-Q plot</a></li>
+  <li><a href="#equality-of-variances" id="toc-equality-of-variances" class="nav-link" data-scroll-target="#equality-of-variances"><span class="header-section-number">4.6.2</span> Equality of variances</a></li>
   </ul></li>
-  <li><a href="#define-the-anova-model" id="toc-define-the-anova-model" class="nav-link" data-scroll-target="#define-the-anova-model"><span class="header-section-number">4.4</span> Define the ANOVA model</a></li>
-  <li><a href="#check-anova-assumptions" id="toc-check-anova-assumptions" class="nav-link" data-scroll-target="#check-anova-assumptions"><span class="header-section-number">4.5</span> Check ANOVA Assumptions</a>
-  <ul class="collapse">
-  <li><a href="#normality-test-and-q-q-plot" id="toc-normality-test-and-q-q-plot" class="nav-link" data-scroll-target="#normality-test-and-q-q-plot"><span class="header-section-number">4.5.1</span> Normality test and Q-Q plot</a></li>
-  <li><a href="#equality-of-variances" id="toc-equality-of-variances" class="nav-link" data-scroll-target="#equality-of-variances"><span class="header-section-number">4.5.2</span> Equality of variances</a></li>
-  </ul></li>
-  <li><a href="#perform-anova-test-omnibus-analysis" id="toc-perform-anova-test-omnibus-analysis" class="nav-link" data-scroll-target="#perform-anova-test-omnibus-analysis"><span class="header-section-number">4.6</span> Perform ANOVA test (omnibus analysis)</a></li>
-  <li><a href="#conduct-post-hoc-tests" id="toc-conduct-post-hoc-tests" class="nav-link" data-scroll-target="#conduct-post-hoc-tests"><span class="header-section-number">4.7</span> Conduct Post hoc tests</a></li>
+  <li><a href="#perform-anova-test-omnibus-analysis" id="toc-perform-anova-test-omnibus-analysis" class="nav-link" data-scroll-target="#perform-anova-test-omnibus-analysis"><span class="header-section-number">4.7</span> Perform ANOVA test (omnibus analysis)</a></li>
+  <li><a href="#conduct-post-hoc-tests" id="toc-conduct-post-hoc-tests" class="nav-link" data-scroll-target="#conduct-post-hoc-tests"><span class="header-section-number">4.8</span> Conduct Post hoc tests</a></li>
   </ul>
 </nav>
     </div>
@@ -393,8 +397,9 @@ window.Quarto = {
 # ℹ 25 more rows</code></pre>
 </div>
 </div>
-<section id="descriptive-statistics-and-plots" class="level3" data-number="4.3.1">
-<h3 data-number="4.3.1" class="anchored" data-anchor-id="descriptive-statistics-and-plots"><span class="header-section-number">4.3.1</span> Descriptive statistics and plots</h3>
+</section>
+<section id="descriptive-statistics-and-plots" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="descriptive-statistics-and-plots"><span class="header-section-number">4.4</span> Descriptive statistics and plots</h2>
 <p>We use functions from the <strong><em>dplyr</em></strong> and <strong><em>dlookr</em></strong> packages to obtain summary statistics by study group:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># descriptive statistics using the package dlookr</span></span>
@@ -430,19 +435,18 @@ window.Quarto = {
 </div>
 <p>The plot suggests that the mean SAT score (pink square) increases as the months progress, suggesting a positive association between time and SAT score improvement.</p>
 </section>
-</section>
-<section id="define-the-anova-model" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="define-the-anova-model"><span class="header-section-number">4.4</span> Define the ANOVA model</h2>
+<section id="define-the-anova-model" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="define-the-anova-model"><span class="header-section-number">4.5</span> Define the ANOVA model</h2>
 <p>First, we define the ANOVA model using the <code>aov()</code> function:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>anova_model <span class="ot">&lt;-</span> <span class="fu">aov</span>(satscore <span class="sc">~</span> study_group, <span class="at">data =</span> dat_sat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>It creates a model object that stores the mathematical association between groups and scores.</p>
 </section>
-<section id="check-anova-assumptions" class="level2" data-number="4.5">
-<h2 data-number="4.5" class="anchored" data-anchor-id="check-anova-assumptions"><span class="header-section-number">4.5</span> Check ANOVA Assumptions</h2>
-<section id="normality-test-and-q-q-plot" class="level3" data-number="4.5.1">
-<h3 data-number="4.5.1" class="anchored" data-anchor-id="normality-test-and-q-q-plot"><span class="header-section-number">4.5.1</span> Normality test and Q-Q plot</h3>
+<section id="check-anova-assumptions" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="check-anova-assumptions"><span class="header-section-number">4.6</span> Check ANOVA Assumptions</h2>
+<section id="normality-test-and-q-q-plot" class="level3" data-number="4.6.1">
+<h3 data-number="4.6.1" class="anchored" data-anchor-id="normality-test-and-q-q-plot"><span class="header-section-number">4.6.1</span> Normality test and Q-Q plot</h3>
 <p>We can conduct a Shapiro-Wilk test to assess the normality of the residuals from the ANOVA model:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(<span class="fu">residuals</span>(anova_model))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -470,8 +474,8 @@ W = 0.97392, p-value = 0.5594</code></pre>
 <p>The data points mostly fall along the diagonal line, indicating that the residuals are approximately normally distributed. Additionally, there are no extreme deviations or systematic patterns, suggesting that normality holds well.</p>
 <p><br></p>
 </section>
-<section id="equality-of-variances" class="level3" data-number="4.5.2">
-<h3 data-number="4.5.2" class="anchored" data-anchor-id="equality-of-variances"><span class="header-section-number">4.5.2</span> Equality of variances</h3>
+<section id="equality-of-variances" class="level3" data-number="4.6.2">
+<h3 data-number="4.6.2" class="anchored" data-anchor-id="equality-of-variances"><span class="header-section-number">4.6.2</span> Equality of variances</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>dat_sat <span class="sc">|&gt;</span> </span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">levene_test</span>(satscore <span class="sc">~</span> study_group)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -485,8 +489,8 @@ W = 0.97392, p-value = 0.5594</code></pre>
 <p>Since p = 0.34 &gt; 0.05, the <span class="math inline">\(H_0\)</span> of the Levene’s test is not rejected and the variances of the five conditions are comparable; in short, it appears that the assumption of homogeneity of variance is not violated.</p>
 </section>
 </section>
-<section id="perform-anova-test-omnibus-analysis" class="level2" data-number="4.6">
-<h2 data-number="4.6" class="anchored" data-anchor-id="perform-anova-test-omnibus-analysis"><span class="header-section-number">4.6</span> Perform ANOVA test (omnibus analysis)</h2>
+<section id="perform-anova-test-omnibus-analysis" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="perform-anova-test-omnibus-analysis"><span class="header-section-number">4.7</span> Perform ANOVA test (omnibus analysis)</h2>
 <p>The <code>summary()</code> is a generic function. When we give it an <code>aov</code> object, it calls a specific method (<code>summary.aov</code>) to create the ANOVA Table.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(anova_model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -504,8 +508,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <p>The p-value is &lt; 0.001, so we reject <span class="math inline">\(H_0\)</span> of the ANOVA test. <strong>There is at least one condition with mean SAT score which is different from the other means</strong>.</p>
 <p>A significant one-way ANOVA is generally followed up by post-hoc tests to perform multiple pairwise comparisons between groups, while controlling for the overall error rate.</p>
 </section>
-<section id="conduct-post-hoc-tests" class="level2" data-number="4.7">
-<h2 data-number="4.7" class="anchored" data-anchor-id="conduct-post-hoc-tests"><span class="header-section-number">4.7</span> Conduct Post hoc tests</h2>
+<section id="conduct-post-hoc-tests" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="conduct-post-hoc-tests"><span class="header-section-number">4.8</span> Conduct Post hoc tests</h2>
 <p>Tukey’s test is appropriate when we want to make all possible pairwise comparisons between a large set of means, assuming the variances are equal. It is recommended for balanced groups and is robust to moderate imbalances in group sizes.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">TukeyHSD</span>(anova_model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -965,8 +969,8 @@ $study_group
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./presentations.html" class="pagination-link" aria-label="Presentations">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Presentations</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./anovawithin.html" class="pagination-link" aria-label="One-way within-subjects Analysis of Variance (Repeated one-way ANOVA) in R">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">One-way within-subjects Analysis of Variance (Repeated one-way ANOVA) in R</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -16,6 +16,7 @@ book:
     - process.qmd
     - nonparametric.qmd
     - anovabetween.qmd
+    - anovawithin.qmd
     #- summary.qmd
     - presentations.qmd
     #- data.qmd

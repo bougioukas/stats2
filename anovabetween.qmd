@@ -32,7 +32,6 @@ library(readxl)
 
 <br>
 
-
 ## Introduction
 
 The one-way between-subjects analysis of variance (one-way ANOVA) is used to compare **more than two independent** (unrelated or unpaired) samples. We may think of it as an extension of Student’s t-test.
@@ -41,12 +40,11 @@ Although, ANOVA can detect whether there are mean differences between groups, it
 
 This is why, after an ANOVA test concludes that at least one difference exists between groups (omnibus analysis), we should perform statistical tests that account for the number of comparisons (post hoc tests). Some of the most commonly used post hoc tests include the Tukey test, Bonferroni correction, and Holm test.
 
-
-
 ## Research question and anova assumptions
 
-A quaziexperimental study explored the effect of preparation time on SAT^[The SAT is used by a wide range of colleges and universities as part of the application process for college admission.] performance, with students having studied for different duration (zero, two, four, six, or eight months). The question of interest is whether the mean SAT score differs across these preparation times.
+A quaziexperimental study explored the effect of preparation time on SAT[^anovabetween-1] performance, with students having studied for different duration (zero, two, four, six, or eight months). The question of interest is whether the mean SAT score differs across these preparation times.
 
+[^anovabetween-1]: The SAT is used by a wide range of colleges and universities as part of the application process for college admission.
 
 ### Hypothesis testing for the one-way ANOVA test
 
@@ -57,14 +55,11 @@ A quaziexperimental study explored the effect of preparation time on SAT^[The SA
 -   $H_1$: at least one group mean differs from the others (there is at least one group with mean SAT score different from the others)
 :::
 
-
 ### Assumptions
 
 A.  The dependent variable, satscore, should be approximately **normally** distributed for all groups. To increase the number of observations used in assessing normality, we often examine the residuals from the ANOVA model for the entire dataset using a normal quantile plot of the standardized residuals (Normal Q-Q plot).
 
 B.  The data in groups have similar **variance** (also named as homogeneity of variance or homoscedasticity).
-
-
 
 ## Import dataset and process the data variables
 
@@ -83,7 +78,6 @@ dat_sat
 
 The dataset has 35 students (rows) and is organized in a “long” format. It includes two variables (columns): the study group (independent variable) and the satscore (dependent variable).
 
-
 We need to convert the study group variable from a numeric type to a factor (`<fct>`) using the `factor()` function.
 
 ```{r}
@@ -95,12 +89,9 @@ dat_sat$study_group <- factor(dat_sat$study_group,
 dat_sat
 ```
 
+## Descriptive statistics and plots
 
-
-### Descriptive statistics and plots
-
-We use functions from the **_dplyr_** and **_dlookr_** packages to obtain summary statistics by study group:
-
+We use functions from the ***dplyr*** and ***dlookr*** packages to obtain summary statistics by study group:
 
 ```{r}
 # descriptive statistics using the package dlookr
@@ -124,8 +115,6 @@ ggplot(dat_sat, aes(x = study_group, y = satscore)) +
 
 The plot suggests that the mean SAT score (pink square) increases as the months progress, suggesting a positive association between time and SAT score improvement.
 
-
-
 ## Define the ANOVA model
 
 First, we define the ANOVA model using the `aov()` function:
@@ -135,7 +124,6 @@ anova_model <- aov(satscore ~ study_group, data = dat_sat)
 ```
 
 It creates a model object that stores the mathematical association between groups and scores.
-
 
 ## Check ANOVA Assumptions
 
@@ -149,7 +137,6 @@ shapiro.test(residuals(anova_model))
 
 The Shapiro-Wilk test of normality suggests normal distributions (p=0.56 \> 0.05; $H_o$ is not rejected).
 
-
 <br>
 
 We can also examine the normality assumption using a normal quantile plot (Q-Q plot) of the standardized residuals:
@@ -162,8 +149,6 @@ The data points mostly fall along the diagonal line, indicating that the residua
 
 <br>
 
-
-
 ### Equality of variances
 
 ```{r}
@@ -173,8 +158,6 @@ dat_sat |>
 
 Since p = 0.34 \> 0.05, the $H_0$ of the Levene's test is not rejected and the variances of the five conditions are comparable; in short, it appears that the assumption of homogeneity of variance is not violated.
 
-
-
 ## Perform ANOVA test (omnibus analysis)
 
 The `summary()` is a generic function. When we give it an `aov` object, it calls a specific method (`summary.aov`) to create the ANOVA Table.
@@ -182,7 +165,6 @@ The `summary()` is a generic function. When we give it an `aov` object, it calls
 ```{r}
 summary(anova_model)
 ```
-
 
 The F-statistic is calculated as follows:
 
@@ -192,15 +174,11 @@ Note that we compare this value to an F-distribution. The degrees of freedom (DF
 
 The p-value is \< 0.001, so we reject $H_0$ of the ANOVA test. **There is at least one condition with mean SAT score which is different from the other means**.
 
-
 A significant one-way ANOVA is generally followed up by post-hoc tests to perform multiple pairwise comparisons between groups, while controlling for the overall error rate.
-
-
 
 ## Conduct Post hoc tests
 
 Tukey’s test is appropriate when we want to make all possible pairwise comparisons between a large set of means, assuming the variances are equal. It is recommended for balanced groups and is robust to moderate imbalances in group sizes.
-
 
 ```{r}
 TukeyHSD(anova_model)
@@ -211,7 +189,6 @@ For example, the mean difference between two months and zero months and is: 474.
 <br>
 
 We can also display the 95% family-wise confidence intervals for the differences in mean satscore between groups:
-
 
 ```{r}
 plot(TukeyHSD(anova_model), las = 1)
