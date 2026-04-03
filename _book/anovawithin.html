@@ -251,7 +251,7 @@ window.Quarto = {
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -283,7 +283,7 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <p>You can download the complete R script from here:</p>
-<p><a href="https://osf.io/download/anefd/" download="psy400_4.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a></p>
+<p><a href="https://osf.io/download/r9w2m/" download="psy400_4.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a></p>
 </div>
 </div>
 <div class="callout callout-style-simple callout-tip callout-titled">
@@ -367,37 +367,47 @@ window.Quarto = {
 </div>
 </div>
 <p><br></p>
-<p>The dataset has 8 patients (rows) and is organized in a “wide” format. We need to reshape the data in long format using the <code>pivot_longer()</code> and we convert the time variable to a factor (<code>&lt;fct&gt;</code>) using the <code>factor()</code> function.</p>
+<p>The dataset has 8 patients (rows) and is organized in a “wide” format. We need to reshape the data in long format using the <code>pivot_longer()</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dat_long <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span> </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">c</span>(pre1, pre2, post1, post2, post3),</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"time"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"timepoint"</span>,</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"score"</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time =</span> <span class="fu">factor</span>(time, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"pre1"</span>, <span class="st">"pre2"</span>, <span class="st">"post1"</span>,</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                                        <span class="st">"post2"</span>, <span class="st">"post3"</span>),</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"prior1m"</span>, <span class="st">"prior1w"</span>, <span class="st">"post1w"</span>,</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"post1m"</span>, <span class="st">"post1y"</span>)))</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>dat_long</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">subid =</span> <span class="fu">factor</span>(subid),</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">timepoint =</span> <span class="fu">factor</span>(timepoint, </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"pre1"</span>, <span class="st">"pre2"</span>, <span class="st">"post1"</span>, <span class="st">"post2"</span>, <span class="st">"post3"</span>),</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"prior1m"</span>, <span class="st">"prior1w"</span>, <span class="st">"post1w"</span>, <span class="st">"post1m"</span>, <span class="st">"post1y"</span>))</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>dat_long</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 40 × 3
-   subid time    score
-   &lt;dbl&gt; &lt;fct&gt;   &lt;dbl&gt;
- 1     1 prior1m    12
- 2     1 prior1w    12
- 3     1 post1w      7
- 4     1 post1m      5
- 5     1 post1y      5
- 6     2 prior1m     9
- 7     2 prior1w    10
- 8     2 post1w      5
- 9     2 post1m      6
-10     2 post1y      5
+   subid timepoint score
+   &lt;fct&gt; &lt;fct&gt;     &lt;dbl&gt;
+ 1 1     prior1m      12
+ 2 1     prior1w      12
+ 3 1     post1w        7
+ 4 1     post1m        5
+ 5 1     post1y        5
+ 6 2     prior1m       9
+ 7 2     prior1w      10
+ 8 2     post1w        5
+ 9 2     post1m        6
+10 2     post1y        5
 # ℹ 30 more rows</code></pre>
 </div>
 </div>
+<p><strong><em>Explanation</em></strong></p>
+<p>The data initially starts in a wide format, where each time point is stored in its own column (e.g., pre1, pre2, post1, post2, post3). The <code>pivot_longer()</code> function reshapes the data into a long format by stacking these columns into two new variables, with names that we specify (e.g., timepoint and score):</p>
+<ul>
+<li><strong>timepoint:</strong> Indicates when the measurement was taken.</li>
+<li><strong>score:</strong> Contains the corresponding symptom value.</li>
+</ul>
+<p>Then, after reshaping to long format, we use <code>mutate()</code> to convert the <code>subid</code> and <code>timepoint</code> variables into factors (<code>&lt;fct&gt;</code>) by applying the <code>factor()</code> function within <code>mutate()</code>.</p>
+<p><br></p>
 </section>
 <section id="descriptive-statistics-and-plots" class="level2" data-number="5.4">
 <h2 data-number="5.4" class="anchored" data-anchor-id="descriptive-statistics-and-plots"><span class="header-section-number">5.4</span> Descriptive statistics and plots</h2>
@@ -405,24 +415,24 @@ window.Quarto = {
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># descriptive statistics using the package dlookr</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>dat_long <span class="sc">|&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(time) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(timepoint) <span class="sc">|&gt;</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">describe</span>(score) <span class="sc">|&gt;</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(time, n, na, mean, sd, p25, p50, p75, skewness, kurtosis)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(timepoint, n, na, mean, sd, p25, p50, p75, skewness, kurtosis)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 10
-  time        n    na  mean    sd   p25   p50   p75 skewness kurtosis
-  &lt;fct&gt;   &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
-1 prior1m     8     0  9.12 2.03   8      9    9.75   0.322    -0.161
-2 prior1w     8     0  9    1.93   7.75   9.5 10     -0.160    -0.377
-3 post1w      8     0  6.38 1.06   5.75   6.5  7     -0.0449   -0.940
-4 post1m      8     0  5.25 1.04   4.75   5    6      0.386    -0.448
-5 post1y      8     0  5.12 0.991  4.75   5    5.25   0.862     0.840</code></pre>
+  timepoint     n    na  mean    sd   p25   p50   p75 skewness kurtosis
+  &lt;fct&gt;     &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 prior1m       8     0  9.12 2.03   8      9    9.75   0.322    -0.161
+2 prior1w       8     0  9    1.93   7.75   9.5 10     -0.160    -0.377
+3 post1w        8     0  6.38 1.06   5.75   6.5  7     -0.0449   -0.940
+4 post1m        8     0  5.25 1.04   4.75   5    6      0.386    -0.448
+5 post1y        8     0  5.12 0.991  4.75   5    5.25   0.862     0.840</code></pre>
 </div>
 </div>
 <p><br></p>
 <p>A box plot is useful for visualizing the central tendency and dispersion of numerical data, especially when comparing distributions across multiple groups.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dat_long, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> score)) <span class="sc">+</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dat_long, <span class="fu">aes</span>(<span class="at">x =</span> timepoint, <span class="at">y =</span> score)) <span class="sc">+</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"#B0C4DE"</span>, <span class="at">width =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">"point"</span>, </span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">shape =</span> <span class="dv">15</span>, <span class="at">size =</span> <span class="fl">2.5</span>, <span class="at">color =</span> <span class="st">"deeppink"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -440,15 +450,15 @@ window.Quarto = {
 <h2 data-number="5.5" class="anchored" data-anchor-id="define-the-anova-model"><span class="header-section-number">5.5</span> Define the ANOVA model</h2>
 <p>First, we define the ANOVA model using the <code>aov()</code> function:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>anova_model <span class="ot">&lt;-</span> <span class="fu">aov_car</span>(score <span class="sc">~</span> <span class="fu">Error</span>(subid<span class="sc">/</span>time), <span class="at">data =</span> dat_long)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>anova_model <span class="ot">&lt;-</span> <span class="fu">aov_car</span>(score <span class="sc">~</span> timepoint <span class="sc">+</span> <span class="fu">Error</span>(subid<span class="sc">/</span>timepoint), <span class="at">data =</span> dat_long)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>It creates a model object that stores the mathematical association between time and scores.</p>
+<p>It creates a model object that stores the mathematical association between time points and scores.</p>
 </section>
 <section id="check-anova-assumptions" class="level2" data-number="5.6">
 <h2 data-number="5.6" class="anchored" data-anchor-id="check-anova-assumptions"><span class="header-section-number">5.6</span> Check ANOVA Assumptions</h2>
 <section id="normality-test-and-q-q-plot" class="level3" data-number="5.6.1">
 <h3 data-number="5.6.1" class="anchored" data-anchor-id="normality-test-and-q-q-plot"><span class="header-section-number">5.6.1</span> Normality test and Q-Q plot</h3>
-<p>We can conduct a Shapiro-Wilk test to assess the normality of the residuals from the ANOVA model:</p>
+<p>We can conduct a Shapiro-Wilk test to assess the normality of the standardized residuals from the ANOVA model:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get raw residuals</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>resids <span class="ot">&lt;-</span> <span class="fu">residuals</span>(anova_model)</span>
@@ -491,8 +501,8 @@ W = 0.96412, p-value = 0.231</code></pre>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(anova_model)<span class="sc">$</span>sphericity.tests</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>     Test statistic  p-value
-time       0.036076 0.043094</code></pre>
+<pre><code>          Test statistic  p-value
+timepoint       0.036076 0.043094</code></pre>
 </div>
 </div>
 <p>In our example, the assumption of sphericity has not been met (p = 0.043). In this case, we have to correct the degrees of freedom in repeated ANOVA analysis.</p>
@@ -500,8 +510,8 @@ time       0.036076 0.043094</code></pre>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(anova_model)<span class="sc">$</span>pval.adjustments</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>        GG eps   Pr(&gt;F[GG])    HF eps  Pr(&gt;F[HF])
-time 0.4877324 0.0001340496 0.6737596 1.09767e-05
+<pre><code>             GG eps   Pr(&gt;F[GG])    HF eps  Pr(&gt;F[HF])
+timepoint 0.4877324 0.0001340496 0.6737596 1.09767e-05
 attr(,"na.action")
 (Intercept) 
           1 
@@ -516,52 +526,94 @@ attr(,"class")
 <p><span class="math inline">\(df_2*HF \ eps=28*0.488=13.66\)</span>.</p>
 </section>
 </section>
-<section id="perform-anova-test-omnibus-analysis" class="level2" data-number="5.7">
+<section id="perform-anova-test-omnibus-analysis" class="level2 page-columns page-full" data-number="5.7">
 <h2 data-number="5.7" class="anchored" data-anchor-id="perform-anova-test-omnibus-analysis"><span class="header-section-number">5.7</span> Perform ANOVA test (omnibus analysis)</h2>
 <p>We use <strong><em>jmv</em></strong> package to perform a Repeated Measures ANOVA because of its precise partitioning of variance. Unlike standard R outputs, <strong><code>anovaRM()</code></strong> function explicitly separates the total variance into two distinct tables: Within-Subjects Effects and Between-Subjects Effects.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> jmv<span class="sc">::</span><span class="fu">anovaRM</span>(</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> dat,</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">rm =</span> <span class="fu">list</span>(</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">label =</span> <span class="st">"time"</span>,</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"pre1"</span>, <span class="st">"pre2"</span>, <span class="st">"post1"</span>, <span class="st">"post2"</span>, <span class="st">"post3"</span>)</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">rmCells =</span> <span class="fu">list</span>(</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">measure =</span> <span class="st">"pre1"</span>, <span class="at">cell =</span> <span class="st">"pre1"</span>),</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">measure =</span> <span class="st">"pre2"</span>, <span class="at">cell =</span> <span class="st">"pre2"</span>),</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">measure =</span> <span class="st">"post1"</span>, <span class="at">cell =</span> <span class="st">"post1"</span>),</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">measure =</span> <span class="st">"post2"</span>, <span class="at">cell =</span> <span class="st">"post2"</span>),</span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">measure =</span> <span class="st">"post3"</span>, <span class="at">cell =</span> <span class="st">"post3"</span>)</span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">spherCorr =</span> <span class="st">"GG"</span></span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-11"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-11-1"><a href="#annotated-cell-11-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> jmv<span class="sc">::</span><span class="fu">anovaRM</span>(</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-11-2" class="code-annotation-target"><a href="#annotated-cell-11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> dat,</span>
+<span id="annotated-cell-11-3"><a href="#annotated-cell-11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">rm =</span> <span class="fu">list</span>(</span>
+<span id="annotated-cell-11-4"><a href="#annotated-cell-11-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(</span>
+<span id="annotated-cell-11-5"><a href="#annotated-cell-11-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">label =</span> <span class="st">"timepoint"</span>,</span>
+<span id="annotated-cell-11-6"><a href="#annotated-cell-11-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"pre1"</span>, <span class="st">"pre2"</span>, <span class="st">"post1"</span>, <span class="st">"post2"</span>, <span class="st">"post3"</span>)</span>
+<span id="annotated-cell-11-7"><a href="#annotated-cell-11-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="annotated-cell-11-8"><a href="#annotated-cell-11-8" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="annotated-cell-11-9"><a href="#annotated-cell-11-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">rmCells =</span> <span class="fu">list</span>(</span>
+<span id="annotated-cell-11-10"><a href="#annotated-cell-11-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">measure =</span> <span class="st">"pre1"</span>, <span class="at">cell =</span> <span class="st">"pre1"</span>),</span>
+<span id="annotated-cell-11-11"><a href="#annotated-cell-11-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">measure =</span> <span class="st">"pre2"</span>, <span class="at">cell =</span> <span class="st">"pre2"</span>),</span>
+<span id="annotated-cell-11-12"><a href="#annotated-cell-11-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">measure =</span> <span class="st">"post1"</span>, <span class="at">cell =</span> <span class="st">"post1"</span>),</span>
+<span id="annotated-cell-11-13"><a href="#annotated-cell-11-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">measure =</span> <span class="st">"post2"</span>, <span class="at">cell =</span> <span class="st">"post2"</span>),</span>
+<span id="annotated-cell-11-14"><a href="#annotated-cell-11-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">measure =</span> <span class="st">"post3"</span>, <span class="at">cell =</span> <span class="st">"post3"</span>)</span>
+<span id="annotated-cell-11-15"><a href="#annotated-cell-11-15" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-11-16" class="code-annotation-target"><a href="#annotated-cell-11-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">spherCorr =</span> <span class="st">"GG"</span></span>
+<span id="annotated-cell-11-17"><a href="#annotated-cell-11-17" aria-hidden="true" tabindex="-1"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-11" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="2" data-code-annotation="1">The <code>anovaRM()</code> function needs wide format data.</span>
+</dd>
+<dt data-target-cell="annotated-cell-11" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="16" data-code-annotation="2">We use the Greenhouse-Geisser correction as it is less than 0.75.</span>
+</dd>
+</dl>
+</div>
 </div>
 <p><br></p>
 <ul>
 <li><strong>Within-subjects variance table</strong></li>
 </ul>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>rmTable  <span class="co"># Within Subjects</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell column-page-right">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>rmTable  <span class="co"># Within Subjects</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
- Within Subjects Effects                                                                                      
- ──────────────────────────────────────────────────────────────────────────────────────────────────────────── 
-               Sphericity Correction    Sum of Squares    df           Mean Square    F           p           
- ──────────────────────────────────────────────────────────────────────────────────────────────────────────── 
-   time        Greenhouse-Geisser            123.85000     1.950930      63.482554    18.62406    0.0001340   
-   Residual    Greenhouse-Geisser             46.55000    13.656508       3.408631                            
- ──────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ Within Subjects Effects                                                                                       
+ ───────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+                Sphericity Correction    Sum of Squares    df           Mean Square    F           p           
+ ───────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+   timepoint    Greenhouse-Geisser            123.85000     1.950930      63.482554    18.62406    0.0001340   
+   Residual     Greenhouse-Geisser             46.55000    13.656508       3.408631                            
+ ───────────────────────────────────────────────────────────────────────────────────────────────────────────── 
    Note. Type 3 Sums of Squares</code></pre>
 </div>
 </div>
+<p><br></p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">F-distribution</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Zoom In tail</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="anovawithin_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="anovawithin_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>As we can see, the within-subjects variable (timepoint) was statistically significant under the Greenhouse-Geisser correction, F(1.95, 13.66) = 18.62, p &lt; 0.001.</p>
+<p>A significant one-way ANOVA is generally followed up by post-hoc tests to perform multiple pairwise comparisons between groups, while controlling for the overall error rate.</p>
 <p><br></p>
 <ul>
 <li><strong>Between-subjects variance table</strong></li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>bsTable  <span class="co"># Between Subjects</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>bsTable  <span class="co"># Between Subjects</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
  Between Subjects Effects                                              
@@ -573,15 +625,14 @@ attr(,"class")
    Note. Type 3 Sums of Squares</code></pre>
 </div>
 </div>
-<p>As we can see, the within-subjects variable (time) was statistically significant under the Greenhouse-Geisser correction, F(1.95, 13.66) = 18.624, p &lt; 0.001.</p>
-<p>A significant one-way ANOVA is generally followed up by post-hoc tests to perform multiple pairwise comparisons between groups, while controlling for the overall error rate.</p>
+<p><br></p>
 </section>
 <section id="conduct-post-hoc-tests" class="level2" data-number="5.8">
 <h2 data-number="5.8" class="anchored" data-anchor-id="conduct-post-hoc-tests"><span class="header-section-number">5.8</span> Conduct Post hoc tests</h2>
 <p>To follow up on the significant main effect of time, pairwise comparisons were conducted using the Holm–Bonferroni adjustment. This procedure controls the family-wise error rate while being less conservative than the standard Bonferroni correction, thereby providing greater statistical power and reducing the likelihood of Type II errors.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>post_hocs <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(anova_model, <span class="sc">~</span> time)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(post_hocs, <span class="at">adjust =</span> <span class="st">"holm"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>post_hocs <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(anova_model, <span class="sc">~</span> timepoint)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(post_hocs, <span class="at">adjust =</span> <span class="st">"holm"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> contrast          estimate    SE df t.ratio p.value
  prior1m - prior1w    0.125 0.479  7   0.261  1.0000

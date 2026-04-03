@@ -18,13 +18,11 @@
 
      
 
-
 -   **Lecture 5: Non-parametric statistical tests**
 
 ![psy-400-4_non_parametric_tests](presentations/psy-400-4_non_parametric_tests.pdf){width="60%" height="400"}
 
      
-
 
 -   **Lecture 6: One-way between-subjects ANOVA**
 
@@ -35,6 +33,9 @@
 
 
 
+-   **Lecture 7: One-way within-subjects ANOVA**
 
+![psy-400-6_anova2](presentations/psy-400-6_anova2.pdf){width="60%" height="400"}
 
+     
 

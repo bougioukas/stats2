@@ -83,9 +83,7 @@ We need to convert the study group variable from a numeric type to a factor (`<f
 ```{r}
 dat_sat$study_group <- factor(dat_sat$study_group,
                               levels = c(0, 2, 4, 6, 8),
-                              labels = c("0 mo", "2 mo",
-                                         "4 mo", "6 mo",
-                                         "8 mo"))
+                              labels = c("0 mo", "2 mo", "4 mo", "6 mo", "8 mo"))
 dat_sat
 ```
 
@@ -171,6 +169,101 @@ The F-statistic is calculated as follows:
 $$F=  \frac{Mean \ Square \ group}{Mean \ Square \ residuals} = \frac{57624}{1326} = 43.4$$
 
 Note that we compare this value to an F-distribution. The degrees of freedom (DF) in the numerator and the denominator are 4 and 30, respectively.
+
+::: {.panel-tabset}
+
+## F-distribution
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+
+# Data from your image
+df1 <- 4
+df2 <- 30
+f_statistic <- 43.47
+p_value <- 4.53e-12
+
+# Generate data for the distribution curve
+x_vals <- seq(0, 5, length.out = 500) # Zoomed in to see the curve shape
+df_plot <- data.frame(x = x_vals, y = df(x_vals, df1, df2))
+
+# Create the plot
+ggplot(df_plot, aes(x = x, y = y)) +
+  geom_line(color = "steelblue", size = 1) +
+  # Add a vertical line for your F-statistic
+  # Note: Since 43.47 is off-chart, we'll label it with an arrow
+  labs(title = "F-Distribution (4, 30)",
+       subtitle = paste("The observed F-statistic (43.4) is far off-screen to the right. Click the Zoom In tab to see the tail."),
+       x = "F-value",
+       y = "Density") +
+  theme_minimal(base_size = 20) +
+  annotate("segment", x = 4.5, xend = 5, y = 0.1, yend = 0.1, 
+           arrow = arrow(length = unit(0.3, "cm")), color = "red") +
+  annotate("text", x = 4.2, y = 0.15, label = paste("Observed F = 43.47\np < 0.001"), color = "red")
+
+```
+
+
+## Zoom In tail
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+# Data
+df1 <- 4
+df2 <- 30
+f_obs <- 43.47
+
+# 1. Calculate the tiny height at the observed F
+# This value is ~4.48e-13. We use it to set our ylim.
+f_height <- df(f_obs, df1, df2)
+
+# 2. Extreme Tail Zoom Plot
+# We only draw data near the observed F (from 40 to 47)
+ggplot(data.frame(x = c(40, 47)), aes(x)) +
+  
+  # A. Shade the p-value area (red)
+  stat_function(fun = df, args = list(df1 = df1, df2 = df2),
+                xlim = c(f_obs, 47), geom = "area", fill = "#d35", alpha = 0.5,
+                n = 1000) + # High n ensures a smooth area at this zoom level
+  
+  # B. Draw the F-distribution curve (steelblue)
+  stat_function(fun = df, args = list(df1 = df1, df2 = df2), 
+                color = "steelblue", size = 1.2,
+                n = 1000) +
+  
+  # C. Dashed vertical line at F-observed
+  annotate("segment", x = f_obs, xend = f_obs, y = 0, yend = f_height,
+           linetype = "dashed", color = "darkred", size = 1) +
+  
+  # D. Text labels on the plot
+  annotate("text", x = f_obs + 1.5, y = f_height * 0.3, 
+           label = "p = 4.53e-12", color = "#d35", fontface = "bold", size = 6) +
+  annotate("text", x = f_obs, y = -f_height * 0.2, 
+           label = paste("F =", f_obs), color = "black", vjust = 1.5, size = 5.5) +
+  
+  # E. THE CRITICAL DEEP ZOOM
+  # We restrict the y-axis to the range of the tiny tail (10^-13 scale)
+  coord_cartesian(xlim = c(42, 46), ylim = c(0, f_height * 4), clip = "off") +
+  
+  labs(title = paste("F-Distribution (", df1, ",", df2, "): Extreme Tail Zoom"),
+       x = "F-statistic",
+       y = "Density") +
+  
+  theme_minimal(base_size = 20) +
+  # Custom aesthetic elements
+  theme(plot.margin = margin(10, 10, 40, 10),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "#fffafa", color = NA))
+```
+
+:::
+
 
 The p-value is \< 0.001, so we reject $H_0$ of the ANOVA test. **There is at least one condition with mean SAT score which is different from the other means**.
 

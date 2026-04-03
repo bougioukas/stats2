@@ -5,7 +5,7 @@
 
 You can download the complete R script from here:
 
-<a href="https://osf.io/download/anefd/" download="psy400_4.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a>
+<a href="https://osf.io/download/r9w2m/" download="psy400_4.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a>
 :::
 
 ::: {.callout-tip appearance="simple"}
@@ -59,8 +59,6 @@ A study investigated the effect of a drug on symptom intensity in a specific dis
 
 **B. Sphericity:** The variances of differences between all pairs of time points are equal (Mauchly's test).
 
-
-
 ## Import dataset and process the data variables
 
 In this example, symptom intensity was evaluated on a twelve-point scale with higher values indicating more intense symptoms. Two pre-treatment baseline measurements were made, the first a month prior to treatment and the second one week prior to treatment. Post-treatments measures of symptom intensity were made after one week, one month, and one year following administration of the drug. In this simplified example, we have eight patients in the study.
@@ -76,23 +74,35 @@ dat
 
 <br>
 
-The dataset has 8 patients (rows) and is organized in a “wide” format. We need to reshape the data in long format using the `pivot_longer()` and we convert the time variable to a factor (`<fct>`) using the `factor()` function.
+The dataset has 8 patients (rows) and is organized in a “wide” format. We need to reshape the data in long format using the `pivot_longer()`. 
 
 ```{r}
 dat_long <- dat |> 
   pivot_longer(
     cols = c(pre1, pre2, post1, post2, post3),
-    names_to = "time",
+    names_to = "timepoint",
     values_to = "score"
   ) |> 
-  mutate(time = factor(time, levels = c("pre1", "pre2", "post1",
-                                        "post2", "post3"),
-                       labels = c("prior1m", "prior1w", "post1w",
-                                  "post1m", "post1y")))
+  mutate(
+    subid = factor(subid),
+    timepoint = factor(timepoint, 
+                       levels = c("pre1", "pre2", "post1", "post2", "post3"),
+                       labels = c("prior1m", "prior1w", "post1w", "post1m", "post1y"))
+    )
 
 dat_long
 ```
 
+**_Explanation_**
+
+The data initially starts in a wide format, where each time point is stored in its own column (e.g., pre1, pre2, post1, post2, post3). The `pivot_longer()` function reshapes the data into a long format by stacking these columns into two new variables, with names that we specify (e.g., timepoint and score):
+
+- **timepoint:** Indicates when the measurement was taken.
+- **score:** Contains the corresponding symptom value.
+
+Then, after reshaping to long format, we use `mutate()` to convert the `subid` and `timepoint` variables into factors (`<fct>`) by applying the `factor()` function within `mutate()`.
+
+<br>
 
 ## Descriptive statistics and plots
 
@@ -101,9 +111,9 @@ We use functions from the ***dplyr*** and ***dlookr*** packages to obtain summar
 ```{r}
 # descriptive statistics using the package dlookr
 dat_long |>
-  group_by(time) |>
+  group_by(timepoint) |>
   describe(score) |>
-  select(time, n, na, mean, sd, p25, p50, p75, skewness, kurtosis)
+  select(timepoint, n, na, mean, sd, p25, p50, p75, skewness, kurtosis)
 
 ```
 
@@ -112,7 +122,7 @@ dat_long |>
 A box plot is useful for visualizing the central tendency and dispersion of numerical data, especially when comparing distributions across multiple groups.
 
 ```{r}
-ggplot(dat_long, aes(x = time, y = score)) +
+ggplot(dat_long, aes(x = timepoint, y = score)) +
   geom_boxplot(fill = "#B0C4DE", width = 0.4) +
   stat_summary(fun = mean, geom = "point", 
                shape = 15, size = 2.5, color = "deeppink")
@@ -125,16 +135,16 @@ The graph shows stable symptom intensity at the two measurements prior the treat
 First, we define the ANOVA model using the `aov()` function:
 
 ```{r}
-anova_model <- aov_car(score ~ Error(subid/time), data = dat_long)
+anova_model <- aov_car(score ~ timepoint + Error(subid/timepoint), data = dat_long)
 ```
 
-It creates a model object that stores the mathematical association between time and scores.
+It creates a model object that stores the mathematical association between time points and scores.
 
 ## Check ANOVA Assumptions
 
 ### Normality test and Q-Q plot
 
-We can conduct a Shapiro-Wilk test to assess the normality of the residuals from the ANOVA model:
+We can conduct a Shapiro-Wilk test to assess the normality of the standardized residuals from the ANOVA model:
 
 ```{r}
 # Get raw residuals
@@ -168,23 +178,19 @@ The data points mostly fall along the diagonal line, indicating that the residua
 
 This assumption is usually checked with the **Mauchly's sphericity test**, where null hypothesis states that the variances of the differences are equal.
 
-
 ```{r}
 summary(anova_model)$sphericity.tests
 ```
 
 In our example, the assumption of sphericity has not been met (p = 0.043). In this case, we have to correct the degrees of freedom in repeated ANOVA analysis.
 
-
 There are two correction options $\epsilon$ (epsilon) available: Greenhouse-Geisser (GG eps), or Huynh-Feldt (HF eps). The general recommendation is to use the Greenhouse-Geisser $\epsilon$ correction when it is less than 0.75; otherwise, we should use the Huynh-Feldt $\epsilon$ correction.
-
 
 ```{r}
 summary(anova_model)$pval.adjustments
 ```
 
 As the *GG eps* value is less than 0.75, we use the Greenhouse-Geisser adjustment of 0.488.
-
 
 The corrected degrees of freedom are:
 
@@ -194,17 +200,16 @@ and
 
 $df_2*HF \ eps=28*0.488=13.66$.
 
-
 ## Perform ANOVA test (omnibus analysis)
 
-We use **_jmv_** package to perform a Repeated Measures ANOVA because of its precise partitioning of variance. Unlike standard R outputs, **`anovaRM()`** function explicitly separates the total variance into two distinct tables: Within-Subjects Effects and Between-Subjects Effects.
+We use ***jmv*** package to perform a Repeated Measures ANOVA because of its precise partitioning of variance. Unlike standard R outputs, **`anovaRM()`** function explicitly separates the total variance into two distinct tables: Within-Subjects Effects and Between-Subjects Effects.
 
 ```{r}
 results <- jmv::anovaRM(
-  data = dat,
+  data = dat,    # <1>
   rm = list(
     list(
-      label = "time",
+      label = "timepoint",
       levels = c("pre1", "pre2", "post1", "post2", "post3")
     )
   ),
@@ -215,48 +220,154 @@ results <- jmv::anovaRM(
     list(measure = "post2", cell = "post2"),
     list(measure = "post3", cell = "post3")
   ),
-  spherCorr = "GG"
+  spherCorr = "GG"   # <2>
 )
 
 ```
 
+1.  The `anovaRM()` function needs wide format data.
+2.  We use the Greenhouse-Geisser correction as it is less than 0.75.
+
+
 <br>
 
-- **Within-subjects variance table**
+-   **Within-subjects variance table**
 
 ```{r}
+#| column: page-right
+
 results$rmTable  # Within Subjects
 ```
 
 <br>
 
-- **Between-subjects variance table**
+
+::: {.panel-tabset}
+
+## F-distribution
+
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+
+# Data from GG-corrected analysis
+df1_gg <- 1.95
+df2_gg <- 13.66
+f_obs  <- 18.62
+
+# Generate data for the main peak (0 to 10)
+x_vals <- seq(0, 10, length.out = 500)
+df_plot <- data.frame(x = x_vals, y = df(x_vals, df1_gg, df2_gg))
+
+# Create the Overview Plot
+ggplot(df_plot, aes(x = x, y = y)) +
+  geom_line(color = "steelblue", size = 1.2) +
+  annotate("segment", x = 8, xend = 9.5, y = 0.05, yend = 0.05, 
+           arrow = arrow(length = unit(0.3, "cm")), color = "red") +
+  annotate("text", x = 7.2, y = 0.15, label = paste("Observed F = 18.62\np < 0.001"), color = "red") +
+
+  labs(title = "F-Distribution (1.95, 13.66)",
+       subtitle = paste("The observed F-statistic (18.62) is far off-screen to the right. Click the Zoom In tab to see the tail."),
+       x = "F-statistic",
+       y = "Density") +
+  
+  theme_minimal(base_size = 20) +
+  theme(
+    plot.margin = margin(10, 10, 40, 10),
+    panel.grid.minor = element_blank(),
+    plot.background = element_rect(fill = "#fffafa", color = NA)
+  )
+
+```
+
+
+## Zoom In tail
+
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+# Data from GG-corrected analysis
+df1_gg <- 1.95
+df2_gg <- 13.66
+f_obs  <- 18.62
+
+# Calculate the exact height (y) of the distribution curve at our observed F
+# This ensures the dashed line stops exactly at the blue line
+f_height <- df(f_obs, df1_gg, df2_gg)
+
+# Extreme Tail Zoom Plot
+ggplot(data.frame(x = c(12, 22)), aes(x)) +
+  # Draw the F-distribution curve
+  stat_function(fun = df, args = list(df1 = df1_gg, df2 = df2_gg), 
+                color = "steelblue", size = 1.0) +
+  
+  # Shade the p-value area
+  stat_function(fun = df, args = list(df1 = df1_gg, df2 = df2_gg),
+                xlim = c(f_obs, 22), geom = "area", fill = "#d35", alpha = 0.5) +
+  
+  # FIXED LINE: Segment starting from the axis (0) up to the curve height
+  annotate("segment", x = f_obs, xend = f_obs, y = 0, yend = f_height,
+           linetype = "dashed", color = "red", size = 1) +
+  
+  # F-VALUE ON THE AXIS
+  annotate("text", x = f_obs, y = -0.00001, 
+           label = paste("F =", round(f_obs, 2)), 
+           color = "black", fontface = "bold", vjust = 1.5, size = 6.5) +
+  
+  # P-VALUE IN THE SHADED AREA
+  annotate("text", x = f_obs + 1.5, y = 0.000009, 
+           label = "p = 0.00013", 
+           color = "red", fontface = "bold", size = 6.5) +
+  
+  # THE EXTREME ZOOM
+  coord_cartesian(xlim = c(12, 22), ylim = c(0, 0.0002), clip = "off") +
+  
+  labs(title = paste("F-Distribution (", df1_gg, ",", df2_gg, "): Extreme Tail Zoom"),
+       x = "F-statistic",
+       y = "Probability Density)") +
+  theme_minimal(base_size = 20) +
+  # Light Pink Aesthetic
+  theme(plot.margin = margin(10, 10, 30, 10), 
+    panel.grid.minor = element_blank()
+  )
+```
+
+:::
+
+
+
+As we can see, the within-subjects variable (timepoint) was statistically significant under the Greenhouse-Geisser correction, F(1.95, 13.66) = 18.62, p \< 0.001.
+
+A significant one-way ANOVA is generally followed up by post-hoc tests to perform multiple pairwise comparisons between groups, while controlling for the overall error rate.
+
+
+<br>
+
+-   **Between-subjects variance table**
 
 ```{r}
 results$bsTable  # Between Subjects
 ```
-
-
-As we can see, the within-subjects variable (time) was statistically significant under the Greenhouse-Geisser correction, F(1.95, 13.66) = 18.624, p \< 0.001.
-
-
-A significant one-way ANOVA is generally followed up by post-hoc tests to perform multiple pairwise comparisons between groups, while controlling for the overall error rate.
+<br>
 
 ## Conduct Post hoc tests
 
 To follow up on the significant main effect of time, pairwise comparisons were conducted using the Holm–Bonferroni adjustment. This procedure controls the family-wise error rate while being less conservative than the standard Bonferroni correction, thereby providing greater statistical power and reducing the likelihood of Type II errors.
 
-
 ```{r}
-post_hocs <- emmeans(anova_model, ~ time)
+post_hocs <- emmeans(anova_model, ~ timepoint)
 pairs(post_hocs, adjust = "holm")
 ```
 
 For example, the mean difference between prior1m and post1m is: 9.12 - 5.25 = 3.87, which is significant (adjusted p = 0.021).
 
-
  
-
 
 ::: content-box-green
 **Interpretation**
