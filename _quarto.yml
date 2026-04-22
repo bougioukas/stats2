@@ -17,6 +17,9 @@ book:
     - nonparametric.qmd
     - anovabetween.qmd
     - anovawithin.qmd
+    - anova2factor.qmd
+    #- simplelinear.qmd
+    #- multiplelinear.qmd
     #- summary.qmd
     - presentations.qmd
     #- data.qmd

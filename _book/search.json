@@ -300,13 +300,113 @@
     ]
   },
   {
+    "objectID": "anova2factor.html",
+    "href": "anova2factor.html",
+    "title": "6  Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R",
+    "section": "",
+    "text": "6.1 Introduction\nFirst, we load the following R packages in our R session:\nA research design is not limited to examining the effects of a single independent variable. In this lecture, we explore how to incorporate a second independent variable. When a research design involves two independent categorical variables (Factors) and one continuous dependent variable, a Two-Way Between-Subjects ANOVA is the appropriate statistical test.1\nAfter obtaining a significant ANOVA result, it is essential to conduct post hoc tests that account for the number of comparisons to ensure accurate statistical interpretation.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R</span>"
+    ]
+  },
+  {
+    "objectID": "anova2factor.html#introduction",
+    "href": "anova2factor.html#introduction",
+    "title": "6  Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R",
+    "section": "",
+    "text": "1 A design that includes multiple independent variables is known as a factorial design, where each level of one independent variable is combined with each level of the other.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R</span>"
+    ]
+  },
+  {
+    "objectID": "anova2factor.html#research-question-and-anova-assumptions",
+    "href": "anova2factor.html#research-question-and-anova-assumptions",
+    "title": "6  Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R",
+    "section": "6.2 Research question and anova assumptions",
+    "text": "6.2 Research question and anova assumptions\nAssume that researchers are interested in exploring the role of analogical thinking in the problem-solving skills of children and adolescents. The researchers sample 21 primary school students (6th grade students from “Dimotiko,” aged 11–12) and 21 secondary school students (3rd grade students from “Gymnasium,” aged 14–15). The students are then randomly assigned to one of three groups, each consisting of 7 students: a control group, experimental group 1 (exposure to similar examples without instructions), and experimental group 2 (exposure to similar examples with instructions). The outcome measured is the number of mistakes made while attempting to solve the problems.\nThe primary question of interest is whether the intervention and school age affect the number of mistakes. Specifically, we aim to address the following questions:\n\nDoes the number of mistakes differ across intervention groups?\nDoes the number of mistakes differ by school age?\nDoes the effect of the intervention on the number of mistakes depend on school age (i.e., is school age a moderator)?\n\n\n6.2.1 Hypothesis testing for the two-way ANOVA test\nTo address the research questions, we test three distinct sets of hypotheses: two for the Main Effects (the individual factors) and one for the Interaction Effect (how the factors combine).\n\n\n\n\n\n\nNoteNull and alternative hypotheses\n\n\n\nMain effect: intervention\n\n\\(H_0\\): There is no significant difference in number of mistakes between intervention groups (\\(\\mu_{control} = \\mu_{exper1} = \\mu_{exper2}\\))\n\\(H_1\\): At least one intervention has a significantly different mean number of mistakes.\n\nMain effect: school age\n\n\\(H_0\\): There is no significant difference in number of mistakes between primary and secondary school. (\\(\\mu_{primary} = \\mu_{secondary}\\))\n\\(H_1\\): There is a significant difference in number of mistakes between primary and secondary school (\\(\\mu_{primary} \\neq \\mu_{secondary}\\)).\n\nInteraction effect between intervention and school age\n\n\\(H_0\\): There is no interaction effect between intervention and school age on number of mistakes (i.e., the effect of intervention on number of mistakes does not depend on school age).\n\\(H_1\\): There is a significant interaction effect between intervention and school age on number of mistakes (i.e., the effect of intervention on number of mistakes varies depending on school age).\n\n\n\n\n\n6.2.2 Assumptions\n\nThe standardized residuals should be approximately normally distributed (Shapiro-Wilk test, normal Q-Q plot).\nThe variance of the number of mistakes should be roughly equal across all groups (Levene’s test of homogeneity of variance).",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R</span>"
+    ]
+  },
+  {
+    "objectID": "anova2factor.html#import-dataset-and-process-the-data-variables",
+    "href": "anova2factor.html#import-dataset-and-process-the-data-variables",
+    "title": "6  Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R",
+    "section": "6.3 Import dataset and process the data variables",
+    "text": "6.3 Import dataset and process the data variables\nIf the dataset mistakes is saved in the subfolder named “data” of our RStudio project, we can read it with the read_excel() function from readxl package as follows:\n\ndat &lt;- read_excel(\"data/mistakes.xlsx\")\ndat\n\n# A tibble: 42 × 3\n   intervention school_age mistakes\n   &lt;chr&gt;        &lt;chr&gt;         &lt;dbl&gt;\n 1 control      secondary        38\n 2 control      secondary        47\n 3 control      secondary        42\n 4 control      secondary        37\n 5 control      secondary        33\n 6 control      secondary        31\n 7 control      secondary        33\n 8 control      primary          34\n 9 control      primary          39\n10 control      primary          37\n# ℹ 32 more rows\n\n\n The dataset consists of 42 students (rows) and is organized in a “long” format. It includes three variables (columns): intervention (first independent variable, or factor A), school age (second independent variable, or factor B), and number of mistakes (dependent variable).\nThe independent variables should be converted from character type to factors (&lt;fct&gt;) using the factor() function within mutate().\n\ndat &lt;- dat |&gt; \n  mutate(intervention = factor(intervention),\n         school_age = factor(school_age))\n\ndat\n\n# A tibble: 42 × 3\n   intervention school_age mistakes\n   &lt;fct&gt;        &lt;fct&gt;         &lt;dbl&gt;\n 1 control      secondary        38\n 2 control      secondary        47\n 3 control      secondary        42\n 4 control      secondary        37\n 5 control      secondary        33\n 6 control      secondary        31\n 7 control      secondary        33\n 8 control      primary          34\n 9 control      primary          39\n10 control      primary          37\n# ℹ 32 more rows",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R</span>"
+    ]
+  },
+  {
+    "objectID": "anova2factor.html#descriptive-statistics-and-plots",
+    "href": "anova2factor.html#descriptive-statistics-and-plots",
+    "title": "6  Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R",
+    "section": "6.4 Descriptive statistics and plots",
+    "text": "6.4 Descriptive statistics and plots\nWe use functions from the dplyr and dlookr packages to obtain summary statistics.\nFirst, we calculate the overall (grand) mean of the number of mistakes across all students:\n\nmean(dat$mistakes)\n\n[1] 30.07143\n\n\n\nNext, we compute marginal means2 of the main effects.\n2 Marginal means are the means of each level of one independent variable, averaged across all levels of the other independent variable(s). They are used to summarize the main effect of a factor by collapsing over the other factor(s).Marginal means of Intervention\nThe marginal means summarize the main effect of intervention by averaging the number of mistakes for each intervention level across all levels of the other factor (school age).\n\ndat |&gt;\n  group_by(intervention) |&gt;\n  describe(mistakes) |&gt;\n  select(intervention, n, mean, sd, p25, p50, p75, skewness, kurtosis)\n\n# A tibble: 3 × 9\n  intervention       n  mean    sd   p25   p50   p75 skewness kurtosis\n  &lt;fct&gt;          &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 control           14  36.4  6.28  33    37    39.8   0.0256   -0.470\n2 experimental_1    14  31.1  9.70  22.5  30    39.8   0.307    -1.32 \n3 experimental_2    14  22.6 18.6    6.5  20.5  36.2   0.223    -1.64 \n\n\nThese summaries show the average number of mistakes for each intervention group, collapsed across levels of school age.\n\nMarginal means of school age\nSimilarly, these marginal means reflect the main effect of school age:\n\ndat |&gt;\n  group_by(school_age) |&gt;\n  describe(mistakes) |&gt;\n  select(school_age, n, mean, sd, p25, p50, p75, skewness, kurtosis)\n\n# A tibble: 2 × 9\n  school_age     n  mean    sd   p25   p50   p75 skewness kurtosis\n  &lt;fct&gt;      &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 primary       21  37.5  7.68    31    37    44   0.0780    -1.26\n2 secondary     21  22.6 14.3     10    22    33  -0.0979    -1.18\n\n\nThese summaries show the average number of mistakes for each school age group, collapsed across levels of intervention.\n\nCell means (estimated marginal means)\nThe cell means represent the effect of one factor at specific levels of the other factor.\n\ndat |&gt;\n group_by(intervention, school_age) |&gt;\n describe(mistakes) |&gt;\n select(intervention, school_age, n, mean, sd, p25, p50, p75, skewness, kurtosis)\n\n# A tibble: 6 × 10\n  intervention  school_age     n  mean    sd   p25   p50   p75 skewness kurtosis\n  &lt;fct&gt;         &lt;fct&gt;      &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 control       primary        7 35.6   7.18  30.5    37  39.5   -0.155   -0.820\n2 control       secondary      7 37.3   5.68  33      37  40      0.785   -0.176\n3 experimental… primary        7 37.6   7.96  30      41  43.5   -0.225   -2.34 \n4 experimental… secondary      7 24.7   6.65  20      22  28      1.12    -0.357\n5 experimental… primary        7 39.4   8.54  33      37  46.5    0.237   -1.89 \n6 experimental… secondary      7  5.86  4.63   2.5     6   9     -0.210   -1.26 \n\n\nThis summary produces the mean number of mistakes for every cell defined by the combinations of intervention and school age.\n\nWe create an interaction plot to illustrates the effect of intervention on Mistakes for primary and secondary school students.\n\nggplot(dat, aes(x = intervention, y = mistakes, \n                color = school_age, group = school_age)) +\n  stat_summary(fun = mean, geom = \"line\", linewidth = 1.2, \n               position = position_dodge(0.2)) +\n  stat_summary(fun = mean, geom = \"point\", size = 4, \n               position = position_dodge(0.2)) +\n  stat_summary(fun.data = mean_se, geom = \"errorbar\", width = 0.15, \n               linewidth = 1, position = position_dodge(0.2)) +\n  scale_color_iterm(\"Rose Pine\") + \n  theme_minimal(base_size = 20) +\n  labs(title = \"Effect of Intervention on Mistakes by School Age\",\n       subtitle = \"Interaction Plot with Standard Error bars\",\n       y = \"Mean Number of Mistakes\", x = \"Intervention Group\",\n       color = \"School Age\") +\n  theme(plot.title = element_text(face = \"bold\", size = 20, hjust = 0.5),\n        plot.subtitle = element_text(hjust = 0.5, color = \"gray30\"),\n        legend.position = \"top\")\n\n\n\n\n\n\n\n\nThe resulting plot shows an interaction because the lines are not parallel. In this example, school age is a moderator.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R</span>"
+    ]
+  },
+  {
+    "objectID": "anova2factor.html#define-the-anova-model",
+    "href": "anova2factor.html#define-the-anova-model",
+    "title": "6  Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R",
+    "section": "6.5 Define the ANOVA model",
+    "text": "6.5 Define the ANOVA model\nFirst, we define the ANOVA model using the lm() function. The formula mistakes ~ intervention * school_age expands to include the main effects for each factor as well as their interaction term.\n\nanova_model &lt;- lm(mistakes ~ intervention * school_age, data = dat)\n\nThis create a model object named anova_model, which stores the mathematical association between the factors and the number of mistakes.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R</span>"
+    ]
+  },
+  {
+    "objectID": "anova2factor.html#check-anova-assumptions",
+    "href": "anova2factor.html#check-anova-assumptions",
+    "title": "6  Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R",
+    "section": "6.6 Check ANOVA Assumptions",
+    "text": "6.6 Check ANOVA Assumptions\n\n6.6.1 Normality test and Q-Q plot\nWe can conduct a Shapiro-Wilk test to assess the normality of the residuals from the ANOVA model:\n\n# Get raw residuals\nresids &lt;- residuals(anova_model)\n\n# Get standardized residuals\nstd_resids &lt;- scale(resids)\n\n# Run Shapiro-Wilk Test\nshapiro.test(std_resids)\n\n\n    Shapiro-Wilk normality test\n\ndata:  std_resids\nW = 0.95328, p-value = 0.08471\n\n\nThe Shapiro-Wilk test of normality suggests normal distributions (p=0.08 &gt; 0.05; \\(H_o\\) is not rejected).\n\nWe can also examine the normality assumption using a normal quantile plot (Q-Q plot) of the standardized residuals:\n\n# Q-Q plot\nqqnorm(std_resids)\n# add a reference line\nqqline(std_resids, col = \"red\", lwd = 2)\n\n\n\n\n\n\n\n\nThe data points mostly fall along the diagonal line, indicating that the residuals are approximately normally distributed.\n\n\n\n6.6.2 Equality of variances\n\ndat |&gt; \n  levene_test(mistakes ~ intervention * school_age)\n\n# A tibble: 1 × 4\n    df1   df2 statistic     p\n  &lt;int&gt; &lt;int&gt;     &lt;dbl&gt; &lt;dbl&gt;\n1     5    36     0.658 0.658\n\n\nSince p = 0.66 &gt; 0.05, the \\(H_0\\) of the Levene’s test is not rejected and the variances are comparable.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R</span>"
+    ]
+  },
+  {
+    "objectID": "anova2factor.html#perform-anova-test-omnibus-analysis",
+    "href": "anova2factor.html#perform-anova-test-omnibus-analysis",
+    "title": "6  Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R",
+    "section": "6.7 Perform ANOVA test (omnibus analysis)",
+    "text": "6.7 Perform ANOVA test (omnibus analysis)\nWe run a two-way ANOVA using the function anova_test() from the rstatix package, testing whether the outcome variable mistakes is significantly affected by intervention, school_age, and their interaction.\n\ndat |&gt;  \n  anova_test(mistakes ~ intervention * school_age, detailed = T)\n\nANOVA Table (type II tests)\n\n                   Effect      SSn      SSd DFn DFd      F        p p&lt;.05   ges\n1            intervention 1354.429 1714.857   2  36 14.217 2.81e-05     * 0.441\n2              school_age 2332.595 1714.857   1  36 48.968 3.31e-08     * 0.576\n3 intervention:school_age 2200.905 1714.857   2  36 23.102 3.51e-07     * 0.562\n\n\nWe observe that both main effects—intervention (F = 14.2, p &lt;0.001) and school age (F = 48.9, p &lt;0.001), are significant. Additionally, the interaction is also significant (F = 23.1, p &lt;0.001).\nA key principle in interpreting and reporting factorial analysis results is that interactions take precedence over main effects. This is because interactions offer a more detailed and comprehensive understanding of the data.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R</span>"
+    ]
+  },
+  {
+    "objectID": "anova2factor.html#simple-effects-analysis",
+    "href": "anova2factor.html#simple-effects-analysis",
+    "title": "6  Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R",
+    "section": "6.8 Simple effects analysis",
+    "text": "6.8 Simple effects analysis\nThe effect of intervention separately for each level of school_age is:\n\n# school age as moderator\ndat |&gt; \n  group_by(school_age) |&gt; \n  anova_test(mistakes ~ intervention, error = anova_model)\n\n# A tibble: 2 × 8\n  school_age Effect         DFn   DFd      F           p `p&lt;.05`   ges\n* &lt;fct&gt;      &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;\n1 primary    intervention     2    36  0.547 0.584       \"\"      0.029\n2 secondary  intervention     2    36 36.8   0.000000002 \"*\"     0.671\n\n\nThe number of mistakes in the intervention groups differs significantly only among secondary school students (F = 36.7, p &lt;0.001).\n \nWe can also examine the effect of school_age at each level of intervention:\n\n# intervention as moderator\ndat |&gt; \n  group_by(intervention) |&gt; \n  anova_test(mistakes ~ school_age, error = anova_model)\n\n# A tibble: 3 × 8\n  intervention   Effect       DFn   DFd      F        p `p&lt;.05`   ges\n* &lt;fct&gt;          &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;\n1 control        school_age     1    36  0.216 6.45e- 1 \"\"      0.006\n2 experimental_1 school_age     1    36 12.1   1   e- 3 \"*\"     0.252\n3 experimental_2 school_age     1    36 82.8   7.25e-11 \"*\"     0.697\n\n\nThe number of mistakes between primary school and secondary school students are significant for the experimental groups (F = 12.2, p = 0.001 and F = 82.8, p &lt;0.001).\nNOTE: The error = anova_model argument specifies that the residual variance from the full two-way ANOVA model should be used as the error term.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R</span>"
+    ]
+  },
+  {
+    "objectID": "anova2factor.html#conduct-post-hoc-tests",
+    "href": "anova2factor.html#conduct-post-hoc-tests",
+    "title": "6  Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R",
+    "section": "6.9 Conduct Post hoc tests",
+    "text": "6.9 Conduct Post hoc tests\nTukey’s test is appropriate when we want to make all possible pairwise comparisons between a large set of means, assuming the variances are equal.\n\ncell_means &lt;- emmeans(anova_model, ~ intervention * school_age)\ntukey_pairs &lt;- pairs(cell_means, adjust = \"tukey\")\ntukey_pairs\n\n contrast                                            estimate   SE df t.ratio\n control primary - experimental_1 primary              -2.000 3.69 36  -0.542\n control primary - experimental_2 primary              -3.857 3.69 36  -1.046\n control primary - control secondary                   -1.714 3.69 36  -0.465\n control primary - experimental_1 secondary            10.857 3.69 36   2.943\n control primary - experimental_2 secondary            29.714 3.69 36   8.054\n experimental_1 primary - experimental_2 primary       -1.857 3.69 36  -0.503\n experimental_1 primary - control secondary             0.286 3.69 36   0.077\n experimental_1 primary - experimental_1 secondary     12.857 3.69 36   3.485\n experimental_1 primary - experimental_2 secondary     31.714 3.69 36   8.597\n experimental_2 primary - control secondary             2.143 3.69 36   0.581\n experimental_2 primary - experimental_1 secondary     14.714 3.69 36   3.989\n experimental_2 primary - experimental_2 secondary     33.571 3.69 36   9.100\n control secondary - experimental_1 secondary          12.571 3.69 36   3.408\n control secondary - experimental_2 secondary          31.429 3.69 36   8.519\n experimental_1 secondary - experimental_2 secondary   18.857 3.69 36   5.111\n p.value\n  0.9940\n  0.8991\n  0.9971\n  0.0583\n &lt;0.0001\n  0.9957\n  1.0000\n  0.0153\n &lt;0.0001\n  0.9917\n  0.0039\n &lt;0.0001\n  0.0187\n &lt;0.0001\n  0.0001\n\nP value adjustment: tukey method for comparing a family of 6 estimates \n\n\n\nWe can also display the 95% family-wise confidence intervals for the differences in mean number of mistakes between groups:\n\nplot(tukey_pairs) +\n    theme(axis.text = element_text(size = 16))\n\n\n\n\n\n\n\n\n \n\nInterpretation\nSimple effects tests were conducted using the Tukey adjustment to maintain an alpha level of 0.05. Results showed that the effect of instructions on the number of mistakes depends on school age.\nPrimary school students showed a relatively stable number of mistakes across all three groups, with their mistakes remaining high even with experimental interventions.\nSecondary school students demonstrated a significant decrease in mistakes. Specifically, there was a significant reduction in mistakes when comparing the control group to the group exposed to examples (MD = 12.6, p = 0.019). Adding instructions led to an even greater reduction in mistakes (MD = 18.9, p &lt;0.001), indicating that explicit guidance further enhanced their problem-solving skills.\nAdditionally, secondary school students made significantly fewer mistakes than primary school students in both experimental interventions, suggesting that older children may have a stronger ability to apply analogical reasoning in problem-solving after being exposed to similar examples and instructions.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R</span>"
+    ]
+  },
+  {
     "objectID": "presentations.html",
     "href": "presentations.html",
-    "title": "6  Presentations",
+    "title": "7  Presentations",
     "section": "",
     "text": "Lecture 1: Intro and data structures\n\n\n\n\npsy-400-1_introR\n\n\n     \n\nLectures 2 & 3: Data wrangling\n\n\n\n\npsy-400-2_data_wrangling\n\n\n     \n\nLecture 4: Data visualization\n\n\n\n\npsy-400-3_data_visualization\n\n\n     \n\nLecture 5: Non-parametric statistical tests\n\n\n\n\npsy-400-4_non_parametric_tests\n\n\n     \n\nLecture 6: One-way between-subjects ANOVA\n\n\n\n\npsy-400-5_anova1\n\n\n     \n\nLecture 7: One-way within-subjects ANOVA\n\n\n\n\npsy-400-6_anova2",
     "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Presentations</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Presentations</span>"
     ]
   }
 ]

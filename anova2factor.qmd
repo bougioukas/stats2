@@ -1,0 +1,327 @@
+# Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R {#sec-anova2factor}
+
+::: {.callout-tip appearance="simple"}
+## Get the Code
+
+You can download the complete R script from here:
+
+<a href="https://osf.io/download/m3fd9/" download="psy400_5.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a>
+:::
+
+::: {.callout-tip appearance="simple"}
+## Get the Data sat
+
+You can download the Excel dataset **mistakes** from here:
+
+<a href="https://osf.io/download/uje8a/" download="sat.xlsx"> <button type="button" class="btn btn-success"> <i class="bi bi-file-earmark-excel"></i> Download Excel Data </button> </a>
+:::
+
+<br>
+
+First, we load the following R packages in our R session:
+
+```{r}
+#| warning: false 
+
+# Required packages for this R script
+library(tidyverse)
+library(rstatix)
+library(dlookr)
+library(emmeans)
+library(ggsci)
+library(readxl)
+
+```
+
+<br>
+
+## Introduction
+
+A research design is not limited to examining the effects of a single independent variable. In this lecture, we explore how to incorporate a second independent variable. When a research design involves two independent categorical variables (Factors) and one continuous dependent variable, a **Two-Way Between-Subjects ANOVA** is the appropriate statistical test.[^anova2factor-1]
+
+[^anova2factor-1]: A design that includes multiple independent variables is known as a **factorial design**, where each level of one independent variable is combined with each level of the other.
+
+After obtaining a significant ANOVA result, it is essential to conduct post hoc tests that account for the number of comparisons to ensure accurate statistical interpretation.
+
+## Research question and anova assumptions
+
+Assume that researchers are interested in exploring the role of analogical thinking in the problem-solving skills of children and adolescents. The researchers sample 21 primary school students (6th grade students from “Dimotiko,” aged 11–12) and 21 secondary school students (3rd grade students from “Gymnasium,” aged 14–15). The students are then randomly assigned to one of three groups, each consisting of 7 students: a control group, experimental group 1 (exposure to similar examples without instructions), and experimental group 2 (exposure to similar examples with instructions). The outcome measured is the **number of mistakes** made while attempting to solve the problems.
+
+The primary question of interest is whether the intervention and school age affect the number of mistakes. Specifically, we aim to address the following questions:
+
+-   Does the number of mistakes differ across intervention groups?
+
+-   Does the number of mistakes differ by school age?
+
+-   Does the effect of the intervention on the number of mistakes depend on school age (i.e., is school age a moderator)?
+
+### Hypothesis testing for the two-way ANOVA test
+
+To address the research questions, we test three distinct sets of hypotheses: two for the Main Effects (the individual factors) and one for the Interaction Effect (how the factors combine).
+
+::: {.callout-note icon="false"}
+## Null and alternative hypotheses
+
+**Main effect: intervention**
+
+-   $H_0$: There is no significant difference in number of mistakes between intervention groups ($\mu_{control} = \mu_{exper1} = \mu_{exper2}$)
+
+-   $H_1$: At least one intervention has a significantly different mean number of mistakes.
+
+**Main effect: school age**
+
+-   $H_0$: There is no significant difference in number of mistakes between primary and secondary school. ($\mu_{primary} = \mu_{secondary}$)
+
+-   $H_1$: There is a significant difference in number of mistakes between primary and secondary school ($\mu_{primary} \neq \mu_{secondary}$).
+
+**Interaction effect between intervention and school age**
+
+-   $H_0$: There is no interaction effect between intervention and school age on number of mistakes (i.e., the effect of intervention on number of mistakes does not depend on school age).
+
+-   $H_1$: There is a significant interaction effect between intervention and school age on number of mistakes (i.e., the effect of intervention on number of mistakes varies depending on school age).
+:::
+
+### Assumptions
+
+A.  The **standardized residuals** should be approximately **normally** distributed (Shapiro-Wilk test, normal Q-Q plot).
+
+B.  The **variance** of the number of mistakes should be roughly equal across all groups (Levene's test of homogeneity of variance).
+
+## Import dataset and process the data variables
+
+If the dataset *mistakes* is saved in the subfolder named “data” of our RStudio project, we can read it with the `read_excel()` function from `readxl` package as follows:
+
+```{r}
+#| warning: false 
+
+dat <- read_excel("data/mistakes.xlsx")
+dat
+```
+
+<br> The dataset consists of 42 students (rows) and is organized in a “long” format. It includes three variables (columns): intervention (first independent variable, or factor A), school age (second independent variable, or factor B), and number of mistakes (dependent variable).
+
+The independent variables should be converted from character type to factors (`<fct>`) using the `factor()` function within `mutate()`.
+
+```{r}
+dat <- dat |> 
+  mutate(intervention = factor(intervention),
+         school_age = factor(school_age))
+
+dat
+```
+
+## Descriptive statistics and plots
+
+We use functions from the ***dplyr*** and ***dlookr*** packages to obtain summary statistics.
+
+First, we calculate the overall (grand) mean of the number of mistakes across all students:
+
+```{r}
+mean(dat$mistakes)
+```
+
+<br>
+
+Next, we compute marginal means[^anova2factor-2] of the main effects.
+
+[^anova2factor-2]: Marginal means are the means of each level of one independent variable, averaged across all levels of the other independent variable(s). They are used to summarize the main effect of a factor by collapsing over the other factor(s).
+
+**Marginal means of Intervention**
+
+The marginal means summarize the main effect of intervention by averaging the number of mistakes for each intervention level across all levels of the other factor (school age).
+
+```{r}
+dat |>
+  group_by(intervention) |>
+  describe(mistakes) |>
+  select(intervention, n, mean, sd, p25, p50, p75, skewness, kurtosis)
+```
+
+These summaries show the average number of mistakes for each intervention group, collapsed across levels of school age.
+
+<br>
+
+**Marginal means of school age**
+
+Similarly, these marginal means reflect the main effect of school age:
+
+```{r}
+dat |>
+  group_by(school_age) |>
+  describe(mistakes) |>
+  select(school_age, n, mean, sd, p25, p50, p75, skewness, kurtosis)
+```
+
+These summaries show the average number of mistakes for each school age group, collapsed across levels of intervention.
+
+<br>
+
+**Cell means (estimated marginal means)**
+
+The cell means represent the effect of one factor at specific levels of the other factor.
+
+```{r}
+dat |>
+ group_by(intervention, school_age) |>
+ describe(mistakes) |>
+ select(intervention, school_age, n, mean, sd, p25, p50, p75, skewness, kurtosis)
+```
+
+This summary produces the mean number of mistakes for every cell defined by the combinations of intervention and school age.
+
+<br>
+
+We create an interaction plot to illustrates the effect of intervention on Mistakes for primary and secondary school students.
+
+```{r}
+ggplot(dat, aes(x = intervention, y = mistakes, 
+                color = school_age, group = school_age)) +
+  stat_summary(fun = mean, geom = "line", linewidth = 1.2, 
+               position = position_dodge(0.2)) +
+  stat_summary(fun = mean, geom = "point", size = 4, 
+               position = position_dodge(0.2)) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.15, 
+               linewidth = 1, position = position_dodge(0.2)) +
+  scale_color_iterm("Rose Pine") + 
+  theme_minimal(base_size = 20) +
+  labs(title = "Effect of Intervention on Mistakes by School Age",
+       subtitle = "Interaction Plot with Standard Error bars",
+       y = "Mean Number of Mistakes", x = "Intervention Group",
+       color = "School Age") +
+  theme(plot.title = element_text(face = "bold", size = 20, hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5, color = "gray30"),
+        legend.position = "top")
+```
+
+The resulting plot shows an interaction because the lines are not parallel. In this example, school age is a moderator.
+
+## Define the ANOVA model
+
+First, we define the ANOVA model using the `lm()` function. The formula `mistakes ~ intervention * school_age` expands to include the main effects for each factor as well as their interaction term.
+
+```{r}
+anova_model <- lm(mistakes ~ intervention * school_age, data = dat)
+```
+
+This create a model object named `anova_model`, which stores the mathematical association between the factors and the number of mistakes.
+
+
+## Check ANOVA Assumptions
+
+### Normality test and Q-Q plot
+
+We can conduct a Shapiro-Wilk test to assess the normality of the residuals from the ANOVA model:
+
+```{r}
+# Get raw residuals
+resids <- residuals(anova_model)
+
+# Get standardized residuals
+std_resids <- scale(resids)
+
+# Run Shapiro-Wilk Test
+shapiro.test(std_resids)
+```
+
+The Shapiro-Wilk test of normality suggests normal distributions (p=0.08 \> 0.05; $H_o$ is not rejected).
+
+<br>
+
+We can also examine the normality assumption using a normal quantile plot (Q-Q plot) of the standardized residuals:
+
+```{r}
+# Q-Q plot
+qqnorm(std_resids)
+# add a reference line
+qqline(std_resids, col = "red", lwd = 2)
+
+```
+
+The data points mostly fall along the diagonal line, indicating that the residuals are approximately normally distributed.
+
+<br>
+
+### Equality of variances
+
+```{r}
+dat |> 
+  levene_test(mistakes ~ intervention * school_age)
+```
+
+Since p = 0.66 \> 0.05, the $H_0$ of the Levene's test is not rejected and the variances are comparable.
+
+## Perform ANOVA test (omnibus analysis)
+
+We run a two-way ANOVA using the function **`anova_test()`** from the ***rstatix*** package, testing whether the outcome variable `mistakes` is significantly affected by `intervention`, `school_age`, and their interaction. 
+
+```{r}
+dat |>  
+  anova_test(mistakes ~ intervention * school_age, detailed = T)
+```
+
+We observe that both main effects—intervention (F = 14.2, p \<0.001) and school age (F = 48.9, p \<0.001), are significant. Additionally, the interaction is also significant (F = 23.1, p \<0.001).
+
+A key principle in interpreting and reporting factorial analysis results is that interactions take precedence over main effects. This is because interactions offer a more detailed and comprehensive understanding of the data.
+
+## Simple effects analysis
+
+The effect of `intervention` separately for each level of `school_age` is:
+
+```{r}
+# school age as moderator
+dat |> 
+  group_by(school_age) |> 
+  anova_test(mistakes ~ intervention, error = anova_model)
+```
+
+The number of mistakes in the intervention groups differs significantly only among secondary school students (F = 36.7, p \<0.001).
+
+ 
+
+We can also examine the effect of `school_age` at each level of `intervention`:
+
+```{r}
+# intervention as moderator
+dat |> 
+  group_by(intervention) |> 
+  anova_test(mistakes ~ school_age, error = anova_model)
+```
+
+The number of mistakes between primary school and secondary school students are significant for the experimental groups (F = 12.2, p = 0.001 and F = 82.8, p \<0.001).
+
+
+**NOTE:** The `error = anova_model` argument specifies that the residual variance from the full two-way ANOVA model should be used as the error term.
+
+
+## Conduct Post hoc tests
+
+Tukey’s test is appropriate when we want to make all possible pairwise comparisons between a large set of means, assuming the variances are equal.
+
+```{r}
+cell_means <- emmeans(anova_model, ~ intervention * school_age)
+tukey_pairs <- pairs(cell_means, adjust = "tukey")
+tukey_pairs
+```
+
+<br>
+
+We can also display the 95% family-wise confidence intervals for the differences in mean number of mistakes between groups:
+
+```{r}
+plot(tukey_pairs) +
+    theme(axis.text = element_text(size = 16))
+```
+
+ 
+
+::: content-box-green
+**Interpretation**
+
+Simple effects tests were conducted using the Tukey adjustment to maintain an alpha level of 0.05. Results showed that the effect of instructions on the number of mistakes depends on school age.
+
+Primary school students showed a relatively stable number of mistakes across all three groups, with their mistakes remaining high even with experimental interventions.
+
+Secondary school students demonstrated a significant decrease in mistakes. Specifically, there was a significant reduction in mistakes when comparing the control group to the group exposed to examples (MD = 12.6, p = 0.019). Adding instructions led to an even greater reduction in mistakes (MD = 18.9, p \<0.001), indicating that explicit guidance further enhanced their problem-solving skills.
+
+Additionally, secondary school students made significantly fewer mistakes than primary school students in both experimental interventions, suggesting that older children may have a stronger ability to apply analogical reasoning in problem-solving after being exposed to similar examples and instructions.
+:::
