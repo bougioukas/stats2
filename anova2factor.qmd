@@ -9,11 +9,11 @@ You can download the complete R script from here:
 :::
 
 ::: {.callout-tip appearance="simple"}
-## Get the Data sat
+## Get the Data mistakes
 
 You can download the Excel dataset **mistakes** from here:
 
-<a href="https://osf.io/download/uje8a/" download="sat.xlsx"> <button type="button" class="btn btn-success"> <i class="bi bi-file-earmark-excel"></i> Download Excel Data </button> </a>
+<a href="https://osf.io/download/uje8a/" download="mistakes.xlsx"> <button type="button" class="btn btn-success"> <i class="bi bi-file-earmark-excel"></i> Download Excel Data </button> </a>
 :::
 
 <br>
@@ -205,7 +205,6 @@ anova_model <- lm(mistakes ~ intervention * school_age, data = dat)
 
 This create a model object named `anova_model`, which stores the mathematical association between the factors and the number of mistakes.
 
-
 ## Check ANOVA Assumptions
 
 ### Normality test and Q-Q plot
@@ -252,7 +251,7 @@ Since p = 0.66 \> 0.05, the $H_0$ of the Levene's test is not rejected and the v
 
 ## Perform ANOVA test (omnibus analysis)
 
-We run a two-way ANOVA using the function **`anova_test()`** from the ***rstatix*** package, testing whether the outcome variable `mistakes` is significantly affected by `intervention`, `school_age`, and their interaction. 
+We run a two-way ANOVA using the function **`anova_test()`** from the ***rstatix*** package, testing whether the outcome variable `mistakes` is significantly affected by `intervention`, `school_age`, and their interaction.
 
 ```{r}
 dat |>  
@@ -289,9 +288,7 @@ dat |>
 
 The number of mistakes between primary school and secondary school students are significant for the experimental groups (F = 12.2, p = 0.001 and F = 82.8, p \<0.001).
 
-
 **NOTE:** The `error = anova_model` argument specifies that the residual variance from the full two-way ANOVA model should be used as the error term.
-
 
 ## Conduct Post hoc tests
 

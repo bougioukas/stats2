@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>7&nbsp; Simple Linear regression – Statistics II</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./presentations.html" rel="next">
+<link href="./anova2factor.html" rel="prev">
+<link href="./images/cover.avif" rel="icon">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-4781fbed7d30d1988487fb2dff96a39c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./simplelinear.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Simple Linear regression</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Statistics II</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Basic data structures in R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data processing, transformation and ploting in R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nonparametric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Non-parametric statistical tests in R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./anovabetween.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">One-way between-subjects Analysis of Variance (One-way ANOVA) in R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./anovawithin.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">One-way within-subjects Analysis of Variance (Repeated one-way ANOVA) in R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./anova2factor.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./simplelinear.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Simple Linear regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./presentations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Presentations</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#import-dataset-and-process-the-data-variables" id="toc-import-dataset-and-process-the-data-variables" class="nav-link active" data-scroll-target="#import-dataset-and-process-the-data-variables"><span class="header-section-number">7.1</span> Import dataset and process the data variables</a></li>
+  <li><a href="#simple-linear-regression-with-a-continuous-explanatory-variable" id="toc-simple-linear-regression-with-a-continuous-explanatory-variable" class="nav-link" data-scroll-target="#simple-linear-regression-with-a-continuous-explanatory-variable"><span class="header-section-number">7.2</span> Simple linear regression with a continuous explanatory variable</a>
+  <ul class="collapse">
+  <li><a href="#research-question" id="toc-research-question" class="nav-link" data-scroll-target="#research-question"><span class="header-section-number">7.2.1</span> Research question</a></li>
+  <li><a href="#hypothesis-testsing-for-beta_1" id="toc-hypothesis-testsing-for-beta_1" class="nav-link" data-scroll-target="#hypothesis-testsing-for-beta_1"><span class="header-section-number">7.2.2</span> Hypothesis Testsing for <span class="math inline">\(\beta_1\)</span></a></li>
+  <li><a href="#correlation" id="toc-correlation" class="nav-link" data-scroll-target="#correlation"><span class="header-section-number">7.2.3</span> Correlation</a></li>
+  <li><a href="#fit-a-simple-linear-regression-model" id="toc-fit-a-simple-linear-regression-model" class="nav-link" data-scroll-target="#fit-a-simple-linear-regression-model"><span class="header-section-number">7.2.4</span> Fit a simple linear regression model</a></li>
+  <li><a href="#interpretation-of-the-coefficients" id="toc-interpretation-of-the-coefficients" class="nav-link" data-scroll-target="#interpretation-of-the-coefficients"><span class="header-section-number">7.2.5</span> Interpretation of the coefficients</a></li>
+  <li><a href="#the-standard-error-se-of-the-slope" id="toc-the-standard-error-se-of-the-slope" class="nav-link" data-scroll-target="#the-standard-error-se-of-the-slope"><span class="header-section-number">7.2.6</span> The Standard error (SE) of the slope</a></li>
+  <li><a href="#test-statistic-and-confidence-intervals-for-the-slope" id="toc-test-statistic-and-confidence-intervals-for-the-slope" class="nav-link" data-scroll-target="#test-statistic-and-confidence-intervals-for-the-slope"><span class="header-section-number">7.2.7</span> Test statistic and confidence intervals for the slope</a></li>
+  <li><a href="#observed-expected-fitted-values-and-residuals" id="toc-observed-expected-fitted-values-and-residuals" class="nav-link" data-scroll-target="#observed-expected-fitted-values-and-residuals"><span class="header-section-number">7.2.8</span> Observed, expected (fitted) values and residuals</a></li>
+  <li><a href="#quality-of-a-linear-regression-fit" id="toc-quality-of-a-linear-regression-fit" class="nav-link" data-scroll-target="#quality-of-a-linear-regression-fit"><span class="header-section-number">7.2.9</span> Quality of a linear regression fit</a></li>
+  </ul></li>
+  <li><a href="#simple-linear-regression-with-a-binary-explanatory-variable" id="toc-simple-linear-regression-with-a-binary-explanatory-variable" class="nav-link" data-scroll-target="#simple-linear-regression-with-a-binary-explanatory-variable"><span class="header-section-number">7.3</span> Simple linear regression with a binary explanatory variable</a></li>
+  <li><a href="#simple-linear-regression-with-a-categorical-explanatory-variable-2-categories" id="toc-simple-linear-regression-with-a-categorical-explanatory-variable-2-categories" class="nav-link" data-scroll-target="#simple-linear-regression-with-a-categorical-explanatory-variable-2-categories"><span class="header-section-number">7.4</span> Simple linear regression with a categorical explanatory variable (&gt; 2 categories)</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-simplelinear" class="quarto-section-identifier"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Simple Linear regression</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Get the Code
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can download the complete R script from here:</p>
+<p><a href="https://osf.io/download/ghw86/" download="psy400_6.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a></p>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Get the Data birtweight
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can download the Excel dataset <strong>birtweight</strong> from here:</p>
+<p><a href="https://osf.io/download/8j64u/" download="birtweight.xlsx"> <button type="button" class="btn btn-success"> <i class="bi bi-file-earmark-excel"></i> Download Excel Data </button> </a></p>
+</div>
+</div>
+<p><br></p>
+<p>First, we load the following R packages in our R session:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Required packages for this R script</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggstatsplot)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><br></p>
+<p>Simple linear regression involves a numeric dependent (or response) variable <span class="math inline">\(Y\)</span> and one independent (or explanatory) variable <span class="math inline">\(X\)</span> that is either numeric or categorical.</p>
+<section id="import-dataset-and-process-the-data-variables" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="import-dataset-and-process-the-data-variables"><span class="header-section-number">7.1</span> Import dataset and process the data variables</h2>
+<p>If the dataset <em>birthweight</em> is saved in the subfolder named “data” of our RStudio project, we can read it with the <code>read_excel()</code> function from <code>readxl</code> package as follows:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/birthweight.xlsx"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 550 × 6
+   weight height headc gender education parity            
+    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;             
+ 1   3950   55.5  37.5 Female tertiary  2 or more siblings
+ 2   4630   57    38.5 Female tertiary  Singleton         
+ 3   4750   56    38.5 Male   year12    2 or more siblings
+ 4   3920   56    39   Male   tertiary  One sibling       
+ 5   4559   55    39.5 Male   year10    2 or more siblings
+ 6   3639   51.5  34.5 Female tertiary  Singleton         
+ 7   3550   56    38   Female year10    2 or more siblings
+ 8   4530   57    39.7 Male   year10    2 or more siblings
+ 9   4969   58.5  39   Male   tertiary  2 or more siblings
+10   3740   52    38   Male   year10    One sibling       
+# ℹ 540 more rows</code></pre>
+</div>
+</div>
+<p>Data of 550 infants at 1 month age was collected. The following variables were recorded:</p>
+<p>• Body weight of the infant in g (weight)</p>
+<p>• Body height of the infant in cm (height)</p>
+<p>• Head circumference in cm (headc)</p>
+<p>• Gender of the infant (gender: Female, Male)</p>
+<p>• Birth order in their family (parity: Singleton, One sibling, 2 or more siblings)</p>
+<p>• Education of the mother (education: tertiary, year10, year12)</p>
+<p>We convert <code>gender</code>, <code>parity</code>, and <code>education</code> into factor variables using the <strong><code>factor()</code></strong> function within <strong><code>mutate()</code></strong>, as factors are used in R to represent categorical data. Specifying the levels argument defines the ordering of categories, which is important for setting the reference category in regression models and for controlling how categories are displayed in summaries or plots.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gender =</span> <span class="fu">factor</span>(gender),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">parity =</span> <span class="fu">factor</span>(parity,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Singleton"</span>, <span class="st">"One sibling"</span>, <span class="st">"2 or more siblings"</span>)),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">education =</span> <span class="fu">factor</span>(education,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                            <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"year10"</span>, <span class="st">"year12"</span>, <span class="st">"tertiary"</span>)))</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>dat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 550 × 6
+   weight height headc gender education parity            
+    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;  &lt;fct&gt;     &lt;fct&gt;             
+ 1   3950   55.5  37.5 Female tertiary  2 or more siblings
+ 2   4630   57    38.5 Female tertiary  Singleton         
+ 3   4750   56    38.5 Male   year12    2 or more siblings
+ 4   3920   56    39   Male   tertiary  One sibling       
+ 5   4559   55    39.5 Male   year10    2 or more siblings
+ 6   3639   51.5  34.5 Female tertiary  Singleton         
+ 7   3550   56    38   Female year10    2 or more siblings
+ 8   4530   57    39.7 Male   year10    2 or more siblings
+ 9   4969   58.5  39   Male   tertiary  2 or more siblings
+10   3740   52    38   Male   year10    One sibling       
+# ℹ 540 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="simple-linear-regression-with-a-continuous-explanatory-variable" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="simple-linear-regression-with-a-continuous-explanatory-variable"><span class="header-section-number">7.2</span> Simple linear regression with a continuous explanatory variable</h2>
+<p>Often it is of interest to quantify the linear association between two continuous variables, <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, and given the value of one variable for an individual, to predict the value of the other variable. This is not possible from the correlation coefficient as it simply indicates the strength of the association as a single number; in order to describe the association between the values of the two variables, a technique called regression is used. In regression, we assume that a change in the independent variable, <span class="math inline">\(X\)</span>, will lead directly to a change in the dependent variable <span class="math inline">\(Y\)</span>. However, the term “dependent” does not necessarily imply a cause-and-effect relationship between the two variables.</p>
+<p>We may recall from secondary/high school algebra that the equation of a line is: <span id="eq-line1"><span class="math display">\[y = \beta_o + \beta_1 \cdot x \tag{7.1}\]</span></span></p>
+<div id="fig-line" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-line-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/line.png" class="img-fluid figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-line-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.1: The equation of line.
+</figcaption>
+</figure>
+</div>
+<p>The <a href="#eq-line1" class="quarto-xref">Equation&nbsp;<span>7.1</span></a> is defined by two coefficients (parameters) <span class="math inline">\(\beta_o\)</span> and <span class="math inline">\(\beta_1\)</span>.</p>
+<ul>
+<li><p>The <strong>intercept coefficient</strong> <span class="math inline">\(\beta_o\)</span> is the value of <span class="math inline">\(y\)</span> when <span class="math inline">\(x = 0\)</span> (the point where the fitted line crosses the y-axis; <a href="#fig-line" class="quarto-xref">Figure&nbsp;<span>7.1</span></a>).</p></li>
+<li><p>The <strong>slope coefficient</strong> <span class="math inline">\(\beta_1\)</span> for <span class="math inline">\(x\)</span> is the mean change in <span class="math inline">\(y\)</span> for every one unit increase in <span class="math inline">\(x\)</span> (<a href="#fig-line" class="quarto-xref">Figure&nbsp;<span>7.1</span></a>).</p></li>
+</ul>
+<p>&nbsp;</p>
+<section id="research-question" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="research-question"><span class="header-section-number">7.2.1</span> Research question</h3>
+<p>Let’s say that we want to model the association between <code>height</code> and <code>weight</code> for the sample of 550 infants of 1 month age. In other words, we want to find the parameters, <span class="math inline">\(\beta_o\)</span> and <span class="math inline">\(\beta_1\)</span>, of the mathematical equation: <span class="math inline">\(y = \beta_o + \beta_1 \cdot x\)</span>. In this equation, <span class="math inline">\(\beta_1\)</span> is the critical parameter.</p>
+</section>
+<section id="hypothesis-testsing-for-beta_1" class="level3" data-number="7.2.2">
+<h3 data-number="7.2.2" class="anchored" data-anchor-id="hypothesis-testsing-for-beta_1"><span class="header-section-number">7.2.2</span> Hypothesis Testsing for <span class="math inline">\(\beta_1\)</span></h3>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Null hypothesis and alternative hypothesis
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p><span class="math inline">\(H_{0}:\)</span> the two variables are not linearly related. There is no effect between height and weight (<span class="math inline">\(β_1 = 0\)</span>).</p></li>
+<li><p><span class="math inline">\(H_{1}:\)</span> the two variables are linearly related. There is an effect between height and weight (<span class="math inline">\(β_1 \neq 0\)</span>).</p></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="correlation" class="level3" data-number="7.2.3">
+<h3 data-number="7.2.3" class="anchored" data-anchor-id="correlation"><span class="header-section-number">7.2.3</span> Correlation</h3>
+<p>We begin by visualizing the correlation between the two variables (<code>height</code>, <code>weight</code>). A scatter plot is a useful first step because it helps us assess the pattern, strength, and direction of the association between the variables before proceeding to formal modeling.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dat, <span class="fu">aes</span>(<span class="at">x =</span> height, <span class="at">y =</span> weight)) <span class="sc">+</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="simplelinear_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The points in the plot seem to be scattered around a line. The scatter plot also shows that, in general, infants with high height tend to have high weight (positive association). To quantify the strength of this linear association, we first calculate the Pearson correlation coefficient (<span class="math inline">\(r\)</span>). This value ranges from <span class="math inline">\(-1\)</span> to <span class="math inline">\(1\)</span>, where <span class="math inline">\(1\)</span> indicates a perfect positive linear association.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(dat<span class="sc">$</span>height, dat<span class="sc">$</span>weight)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7131141</code></pre>
+</div>
+</div>
+</section>
+<section id="fit-a-simple-linear-regression-model" class="level3" data-number="7.2.4">
+<h3 data-number="7.2.4" class="anchored" data-anchor-id="fit-a-simple-linear-regression-model"><span class="header-section-number">7.2.4</span> Fit a simple linear regression model</h3>
+<p>To select the best fitting straight line for this dataset, it is necessary to estimate the values <span class="math inline">\(b_o\)</span> and <span class="math inline">\(b_1\)</span> of parameters <span class="math inline">\(\beta_o\)</span> and <span class="math inline">\(\beta_1\)</span> in <a href="#eq-line1" class="quarto-xref">Equation&nbsp;<span>7.1</span></a>. The regression equation of the model becomes:</p>
+<p><span id="eq-line2"><span class="math display">\[\widehat{y} = b_o  + b_1 \cdot x \tag{7.2}\]</span></span></p>
+<p>Why do we put a “hat” on top of the <span class="math inline">\(y\)</span>? It’s a form of notation commonly used in regression to indicate that we have a <strong>expected value</strong>, or the value of <span class="math inline">\(y\)</span> <strong>on the regression line</strong> for a given <span class="math inline">\(x\)</span> value.</p>
+<ul>
+<li><strong>Fit the model</strong></li>
+</ul>
+<p>We fit a simple linear regression model to estimate the association between height (independent variable) and weight (dependent variable).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the model</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>model_height <span class="ot">&lt;-</span> <span class="fu">lm</span>(weight <span class="sc">~</span> height, <span class="at">data =</span> dat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>&nbsp;</p>
+<ul>
+<li><strong>Normality of the residuals</strong></li>
+</ul>
+<p>First, let’s check the assumption that the standardized residuals are normally distributed using a normal Q-Q plot:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract residuals from your model</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>std_resids <span class="ot">&lt;-</span> <span class="fu">rstandard</span>(model_height)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(std_resids)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(std_resids, <span class="at">col =</span> <span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-scat6" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-scat6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="simplelinear_files/figure-html/fig-scat6-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-scat6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.2: Normal Q-Q plot of the residuals.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The <a href="#fig-scat6" class="quarto-xref">Figure&nbsp;<span>7.2</span></a> shows no significant deviation from normality.</p>
+<p>&nbsp;</p>
+<ul>
+<li><strong>Model Summary</strong></li>
+</ul>
+<p>To view the statistical details of our model, we use the <code>summary()</code> function.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_height)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = weight ~ height, data = dat)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1218.4  -262.7   -24.1   282.5  1365.7 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -5411.953    411.019  -13.17   &lt;2e-16 ***
+height        178.296      7.488   23.81   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 422.3 on 548 degrees of freedom
+Multiple R-squared:  0.5085,    Adjusted R-squared:  0.5076 
+F-statistic:   567 on 1 and 548 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>In the Estimate column, we find the values necessary to build our linear equation: the intercept (<span class="math inline">\(b_o = -5412\)</span>) and the slope (<span class="math inline">\(b_1 = 178\)</span>). The resulting equation for the regression line is:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\widehat{y} &amp;= b_o + b_1 \cdot x\\
+\widehat{\text{weight}} &amp;= b_o + b_1 \cdot\text{height}\\
+\widehat{\text{weight}}&amp;= -5412 + 178\cdot\text{height}
+\end{aligned}
+\]</span></p>
+<p>&nbsp;</p>
+</section>
+<section id="interpretation-of-the-coefficients" class="level3" data-number="7.2.5">
+<h3 data-number="7.2.5" class="anchored" data-anchor-id="interpretation-of-the-coefficients"><span class="header-section-number">7.2.5</span> Interpretation of the coefficients</h3>
+<p><strong>The intercept</strong> <span class="math inline">\(b_o\)</span></p>
+<p>The intercept <span class="math inline">\(b_o =-5412\)</span> is the average weight for those infants with height of 0. In graphical terms, it’s where the line intersects the <span class="math inline">\(y\)</span> axis when <span class="math inline">\(x\)</span> = 0 (<a href="#fig-intercept" class="quarto-xref">Figure&nbsp;<span>7.3</span></a>). Note, however, that while the intercept of the regression line has a mathematical interpretation, it has no <em>physical</em> interpretation here, since observing a weight of 0 is impossible.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-intercept" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-intercept-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="simplelinear_files/figure-html/fig-intercept-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-intercept-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.3: Data of infants’ body height-body weight with fitted line crossing the y-axis.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+<p><strong>The slope</strong> <span class="math inline">\(b_1\)</span></p>
+<p>Of greater interest is the slope of height, <span class="math inline">\(b_1 = 178\)</span>, as it summarizes the association between the height and weight variables.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-slope" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-slope-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="simplelinear_files/figure-html/fig-slope-1.png" class="img-fluid figure-img" width="691">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-slope-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.4: Scatter plot of infants’ body height-body weight and graphically calculation of the slope.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The graphical calculation of the slope from two points of the fitted line is (<a href="#fig-slope" class="quarto-xref">Figure&nbsp;<span>7.4</span></a>):</p>
+<p><span class="math display">\[  
+b =\frac{dy}{dx}=\frac{5270-4560}{60-56}= \frac{710}{4} \approx 178
+\]</span> Note that, in this example, the coefficient has units g/cm.</p>
+<p>Additionally, note that the sign is positive, suggesting a positive association between these two variables, meaning infants with higher height also tend to have higher weight. Recall from earlier that the correlation coefficient was <span class="math inline">\(r = 0.71\)</span>. They both have the same positive sign, but have a different value. Recall further that the correlation’s interpretation is the “strength of linear association”. The slope’s interpretation is a little different:</p>
+<blockquote class="blockquote">
+<p>For every 1 cm increase in height, there is <strong>on average</strong> an associated increase of 178 g of weight.</p>
+</blockquote>
+<p>We only state that there is an <strong>associated</strong> increase and not necessarily a <strong>causal</strong> increase. In other words, just because two variables are strongly associated, it doesn’t necessarily mean that one causes the other. This is summed up in the often quoted phrase, “correlation is not necessarily causation.”</p>
+<p>Furthermore, we say that this associated increase is <strong>on average</strong> 178 g of weight, because we might have two infants whose height differ by 1 cm, but their difference in weight won’t necessarily be exactly . What the slope is saying is that, <strong>across all possible infants, the <em>average</em> difference in weight between two infants whose height differ by 1 cm is 178 g</strong>.</p>
+<p>&nbsp;</p>
+</section>
+<section id="the-standard-error-se-of-the-slope" class="level3" data-number="7.2.6">
+<h3 data-number="7.2.6" class="anchored" data-anchor-id="the-standard-error-se-of-the-slope"><span class="header-section-number">7.2.6</span> The Standard error (SE) of the slope</h3>
+<p>The <strong>Std. Error column</strong> of the statistical results of the model corresponds to the <em>standard error</em> of our estimates. We are interested in understanding the standard error of the slope (<span class="math inline">\(\text{SE}_{b_1}\)</span>).</p>
+<p>The standard error is a way to measure the “uncertainty” in the estimate of the regression coefficients. In general, a smaller standard error indicates a more precise estimate. For example, the estimated coefficient for the independent variable height is 178.31. <strong>Its standard error is 7.49</strong>, which reflects the amount of sampling variability in the estimated regression slope. In other words, if we repeatedly drew similar samples and refit the model, the estimated slope would vary from sample to sample, and the standard error quantifies that variation.</p>
+<p>&nbsp;</p>
+</section>
+<section id="test-statistic-and-confidence-intervals-for-the-slope" class="level3" data-number="7.2.7">
+<h3 data-number="7.2.7" class="anchored" data-anchor-id="test-statistic-and-confidence-intervals-for-the-slope"><span class="header-section-number">7.2.7</span> Test statistic and confidence intervals for the slope</h3>
+<p>The <strong>t value column</strong> of the statistical results of the model corresponds to a <em>t-statistic</em>. The hypothesis testing for the slope is:</p>
+<p><span class="math display">\[
+\begin{aligned}
+H_0 &amp;: \beta_1 = 0\\
+\text{vs } H_1&amp;: \beta_1 \neq 0.
+\end{aligned}
+\]</span></p>
+<p>The null hypothesis, <span class="math inline">\(H_{0}\)</span>, states that the coefficient of the independent variable (height) is equal to zero, and the alternative hypothesis, <span class="math inline">\(H_{1}\)</span>, states that the coefficient of the independent variable is not equal to zero.</p>
+<p>The <strong>t-statistic</strong> for the slope is defined by the following equation:</p>
+<p><span id="eq-tstats"><span class="math display">\[\ t = \frac{\ b_1}{\text{SE}_{b_1}} \tag{7.3}\]</span></span></p>
+<p>In our example:</p>
+<p><span class="math display">\[\ t = \frac{\ b_1}{\text{SE}_{b_1}}=\frac{\ 178.31}{\text{7.49}} = 23.81\]</span></p>
+<p>In practice, we use the p-value to guide our decision:</p>
+<ul>
+<li>If p − value &lt; 0.05, reject the null hypothesis, <span class="math inline">\(H_{0}\)</span>.</li>
+<li>If p − value ≥ 0.05, do not reject the null hypothesis, <span class="math inline">\(H_{0}\)</span>.</li>
+</ul>
+<p>In our example p &lt;0.001 <span class="math inline">\(\Rightarrow\)</span> reject <span class="math inline">\(H_{0}\)</span>.</p>
+<p>The <span class="math inline">\(95\%\)</span> CI of the coefficient <span class="math inline">\(b\)</span> for a significance level α = 0.05, <span class="math inline">\(df=n-2 = 550 - 2 = 548\)</span> degrees of freedom and for a two-tailed t-test is given by:</p>
+<p><span id="eq-tci"><span class="math display">\[ 95\% \ \text{CI}_{b_1} = b_1 \pm t_{548; 1-a/2} \cdot \text{SE}_{b_1} \tag{7.4}\]</span></span></p>
+<p>We can fine the critical value <span class="math inline">\(t_{548; 1-a/2}\)</span> in R using the following command:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For two-tailed alpha = 0.05, we look at the 0.975 percentile</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qt</span>(<span class="fl">0.975</span>, <span class="at">df =</span> <span class="dv">548</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.964302</code></pre>
+</div>
+</div>
+<p>Therefore, in our example:</p>
+<p><span class="math display">\[ 95\% \ \text{CI}_{b_1} = 178.31 \pm 1.96 \cdot \text{7.49}= 178.31 \pm 14.68 \Rightarrow 95\% \text{CI}_{b_1}= \ (163.6, 193)\]</span> &nbsp;</p>
+<p>The 95% CI can be obtained directly in R using the <code>confint()</code> function, which computes confidence intervals for model parameters.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract 95% Confidence Intervals</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(model_height, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 2.5 %    97.5 %
+(Intercept) -6219.3189 -4604.586
+height        163.5884   193.004</code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Interpretation of linear regression
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In summary, we can say that the regression coefficient of the height (178) is significantly different from zero (p &lt; 0.001) and indicates that there’s on average an increase of 178 g (<span class="math inline">\(95\%\)</span>CI: 164 to 193) in weight for every 1 cm increase in height. Note that the <span class="math inline">\(95\%\)</span>CI does not include the hypothesized null value of zero for the slope.</p>
+</div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="observed-expected-fitted-values-and-residuals" class="level3" data-number="7.2.8">
+<h3 data-number="7.2.8" class="anchored" data-anchor-id="observed-expected-fitted-values-and-residuals"><span class="header-section-number">7.2.8</span> Observed, expected (fitted) values and residuals</h3>
+<p>We define the following three concepts:</p>
+<ol type="1">
+<li><strong>Observed</strong> values <span class="math inline">\(y\)</span>, or the observed value of the dependent variable for a given <span class="math inline">\(x\)</span> value</li>
+<li><strong>Expected</strong> (or fitted) values <span class="math inline">\(\widehat{y}\)</span>, or the value on the regression line for a given <span class="math inline">\(x\)</span> value</li>
+<li><strong>Residuals</strong> <span class="math inline">\(y - \widehat{y}\)</span>, or the error (ε) between the observed value and the expected value for a given <span class="math inline">\(x\)</span> value</li>
+</ol>
+<div id="fig-line2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-line2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/line2.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-line2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.5: The equation of line.
+</figcaption>
+</figure>
+</div>
+<p>The residuals are exactly the <strong>vertical</strong> distance between the observed data point and the associated point on the regression line (expected value) (<a href="#fig-line2" class="quarto-xref">Figure&nbsp;<span>7.5</span></a>). Positive residuals have associated y values above the fitted line and negative residuals have values below. We want the residuals to be small in magnitude, because large negative residuals are as bad as large positive residuals.</p>
+<p><a href="#fig-residuals" class="quarto-xref">Figure&nbsp;<span>7.6</span></a> shows these values:</p>
+<div class="cell">
+<div id="fig-residuals" class="cell-output-display quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-residuals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table" style="font-size: 16px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+ID
+</th>
+<th style="text-align:right;">
+weight
+</th>
+<th style="text-align:right;">
+height
+</th>
+<th style="text-align:right;">
+weight_hat
+</th>
+<th style="text-align:right;">
+residual
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3950
+</td>
+<td style="text-align:right;">
+55.5
+</td>
+<td style="text-align:right;">
+4483.486
+</td>
+<td style="text-align:right;">
+-533.486
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+4630
+</td>
+<td style="text-align:right;">
+57.0
+</td>
+<td style="text-align:right;">
+4750.930
+</td>
+<td style="text-align:right;">
+-120.930
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4750
+</td>
+<td style="text-align:right;">
+56.0
+</td>
+<td style="text-align:right;">
+4572.634
+</td>
+<td style="text-align:right;">
+177.366
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+3920
+</td>
+<td style="text-align:right;">
+56.0
+</td>
+<td style="text-align:right;">
+4572.634
+</td>
+<td style="text-align:right;">
+-652.634
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+4559
+</td>
+<td style="text-align:right;">
+55.0
+</td>
+<td style="text-align:right;">
+4394.338
+</td>
+<td style="text-align:right;">
+164.662
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+3639
+</td>
+<td style="text-align:right;">
+51.5
+</td>
+<td style="text-align:right;">
+3770.301
+</td>
+<td style="text-align:right;">
+-131.301
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+3550
+</td>
+<td style="text-align:right;">
+56.0
+</td>
+<td style="text-align:right;">
+4572.634
+</td>
+<td style="text-align:right;">
+-1022.634
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+4530
+</td>
+<td style="text-align:right;">
+57.0
+</td>
+<td style="text-align:right;">
+4750.930
+</td>
+<td style="text-align:right;">
+-220.930
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+4969
+</td>
+<td style="text-align:right;">
+58.5
+</td>
+<td style="text-align:right;">
+5018.375
+</td>
+<td style="text-align:right;">
+-49.375
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+3740
+</td>
+<td style="text-align:right;">
+52.0
+</td>
+<td style="text-align:right;">
+3859.449
+</td>
+<td style="text-align:right;">
+-119.449
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-residuals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.6: Regression points (first 10 out of 550 infants).
+</figcaption>
+</figure>
+</div>
+</div>
+<p>Observe in the above table that <strong>weight_hat</strong> contains the expected (fitted) values <span class="math inline">\(\widehat{y}\)</span> = <span class="math inline">\(\widehat{\text{weight}}\)</span>.</p>
+<p>The <strong>residual</strong> column is simply <span class="math inline">\(e_i = y - \widehat{y} = weight - weight\_hat\)</span>.</p>
+<p>Let’s see, for example, the values for the first infant and have a visual representation:</p>
+<ul>
+<li><p>The <strong>observed value</strong> <span class="math inline">\(y\)</span> = 3950 is infant’s weight for <span class="math inline">\(x\)</span> = 55.5.</p></li>
+<li><p>The <strong>expected value</strong> <span class="math inline">\(\widehat{y}\)</span> is the value 4483.939 on the regression line for <span class="math inline">\(x\)</span> = 55.5. This value is computed using the intercept and slope in the previous regression in <a href="#fig-residuals" class="quarto-xref">Figure&nbsp;<span>7.6</span></a>: <span class="math display">\[\widehat{y} = b_o + b_1 \cdot x = -5411.953 + 178.296 \cdot 55.5 = 4483.48\]</span></p></li>
+<li><p>The <strong>residual</strong> is computed by subtracting the expected (fitted) value <span class="math inline">\(\widehat{y}\)</span> from the observed value <span class="math inline">\(y\)</span>. The residual can be thought of as a model’s error or “lack of fit” for a particular observation. In the case of this infant, it is <span class="math inline">\(y - \widehat{y}\)</span> = 3950 - 4483.4 = -533.4 .</p></li>
+</ul>
+<p>A “best-fitting” line refers to the line that <strong>minimizes</strong> the <strong>sum of squared residuals (RSS)</strong>, also known as sum of squared estimate of errors (SSE) out of all possible lines we can draw through the points. The method of least squares is the most popular method used to calculate the coefficients of the regression line.</p>
+<p><span id="eq-minrss"><span class="math display">\[ min(RSS) =min\sum_{i=1}^{n}(y_i - \widehat{y}_i)^2  \tag{7.5}\]</span></span></p>
+<p>In <a href="#fig-min_slope" class="quarto-xref">Figure&nbsp;<span>7.7</span></a>, we have found the minimum value of RSS (it turns out to be 97723317) and have drawn a horizontal dashed green line. At the point where this minimum touches the graph, we have read down to the x axis to find the best value of the slope. This is the value 178.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-min_slope" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-min_slope-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="simplelinear_files/figure-html/fig-min_slope-1.png" class="img-fluid figure-img" width="691">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-min_slope-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.7: The sum of the squares of the residuals against the value of the coefficient of the slope which we are trying to estimate.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="quality-of-a-linear-regression-fit" class="level3" data-number="7.2.9">
+<h3 data-number="7.2.9" class="anchored" data-anchor-id="quality-of-a-linear-regression-fit"><span class="header-section-number">7.2.9</span> Quality of a linear regression fit</h3>
+<p>The quality of a linear regression fit is typically assessed using two related quantities: residual standard error (RSE) and the coefficient of determination R<span class="math inline">\(^2\)</span>.</p>
+<p><strong>Residual standard error (RSE)</strong></p>
+<p>RSE represents the average distance that the observed values fall from the regression line. Conveniently, it tells us how wrong the regression model is on average using the units of the response variable. Smaller values are better because it indicates that the observations are closer to the fitted line. In our example:</p>
+<p><span id="eq-rse"><span class="math display">\[\ RSE = \sqrt{\frac{\ RSS}{n-2}}= \sqrt{\frac{\ 97723317}{550-2}}= 422.3 \tag{7.6}\]</span></span></p>
+<p>&nbsp;</p>
+<p><strong>Coefficient of determination R</strong><span class="math inline">\(^2\)</span></p>
+<p>The R<span class="math inline">\(^2\)</span> is the fraction of the total variation in <span class="math inline">\(y\)</span> that is explained by the regression.</p>
+<p><span id="eq-r2"><span class="math display">\[\ R^2 = \frac{\ explained \ \ variation}{total \ \ variation} \tag{7.7}\]</span></span></p>
+<p>The R<span class="math inline">\(^2\)</span> value is called the <strong>coefficient of determination</strong> and indicates the percentage of the variance in the dependent variable that can be explained or accounted for by the independent variable. Hence, it is a measure of the <strong>‘goodness of fit’</strong> of the regression line to the data. It ranges between 0 and 1 (it won’t be negative). An R<span class="math inline">\(^2\)</span> statistic that is close to 1 indicates that a large proportion of the variability in the response has been explained by the regression. A number near 0 indicates that the regression did not explain much of the variability in the response.</p>
+<p>In our example takes the value 0.509. It indicates that about 50.9% of the variation in infant’s body weight can be explained by the variation of the infant’s body height. In simple linear regression <span class="math inline">\(\sqrt{0.509} = 0.713\)</span> which equals to the Pearson’s correlation coefficient, r.</p>
+<p>&nbsp;</p>
+</section>
+</section>
+<section id="simple-linear-regression-with-a-binary-explanatory-variable" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="simple-linear-regression-with-a-binary-explanatory-variable"><span class="header-section-number">7.3</span> Simple linear regression with a binary explanatory variable</h2>
+<p>Using the same sample of 550 infants of 1 month age we want to examine how body weight is associated with the gender of the infant. Now we have an explanatory variable x that is binary (Male/Female), as opposed to the numerical explanatory variable model (height) that we used previously.</p>
+<p>A graphical comparison of the weight between the males and females is presented below using the <strong><code>ggbetweenstats()</code></strong> function from the <strong><em>ggstatsplot</em></strong> package:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggbetweenstats</span>(<span class="at">data =</span> dat, <span class="at">x =</span> gender, <span class="at">y =</span> weight,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"parametric"</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot.type =</span> <span class="st">"boxviolin"</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">results =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-scat12" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-scat12-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="simplelinear_files/figure-html/fig-scat12-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-scat12-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.8: Violin plot by gender.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>To include gender in a mathematical equation, we use an indicator variable (often called a <em>dummy variable</em>). All cases in which the infant is Male will be coded as 1 and all other cases, in which the infant is Female, will be coded as 0 (reference category). For our model, we define <span class="math inline">\(genderMale\)</span> as follows:</p>
+<p><span class="math display">\[
+\text{genderMale} =
+\begin{cases}
+1 &amp; \text{if infant is Male} \\
+0 &amp; \text{otherwise (reference)}
+\end{cases}
+\]</span></p>
+<p>By including this indicator into the standard linear equation, the model takes the following form:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\widehat{\text{weight}} &amp;= b_o + b_1 \cdot\text{genderMale}
+\end{aligned}
+\]</span></p>
+<p>In R, the <strong><code>lm()</code></strong> function automatically detects the factor type and applies this coding:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the model</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>model_gender <span class="ot">&lt;-</span> <span class="fu">lm</span>(weight <span class="sc">~</span> gender, <span class="at">data =</span> dat)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_gender)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = weight ~ gender, data = dat)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1611.87  -372.17     3.03   379.92  1897.13 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  4140.08      33.66  122.99   &lt;2e-16 ***
+genderMale    451.79      47.60    9.49   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 558.2 on 548 degrees of freedom
+Multiple R-squared:  0.1412,    Adjusted R-squared:  0.1396 
+F-statistic: 90.07 on 1 and 548 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>Based on the model coefficients, our specific equation becomes:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\widehat{\text{weight}} &amp;= 4140 + 452 \cdot\text{genderMale}
+\end{aligned}
+\]</span></p>
+<ul>
+<li><p><strong>The Intercept (</strong><span class="math inline">\(b_0 = 4140\)</span>): This is the expected weight for the reference group (Female). When <span class="math inline">\(genderMale = 0\)</span>, the equation simplifies to 4140 g. Thus, the intercept represents the mean weight of female infants.</p></li>
+<li><p><strong>The Slope (</strong><span class="math inline">\(b_1 = 452\)</span>): This is the mean difference between the groups. It tells us that male infants are, on average, 452 g heavier than female infants.</p></li>
+</ul>
+<p>We also calculate the 95% Confidence Interval (CI) for the model parameters:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(model_gender, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                2.5 %    97.5 %
+(Intercept) 4073.9594 4206.2006
+genderMale   358.2768  545.2941</code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>Therefore, the mean weight of a male infant is (4140 + 452) 4592 g which is significantly higher (on average) about 452 g relative to a female infant (p&lt;0.001). The 95% confidence interval for this estimation (the difference in means) is 358 to 545 g.</p>
+<p>It is important to note that the above analysis is equivalent to run an independent two-sample t-test.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(weight <span class="sc">~</span> gender, <span class="at">var.equal =</span> <span class="cn">TRUE</span>, <span class="at">data =</span> dat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Two Sample t-test
+
+data:  weight by gender
+t = -9.4905, df = 548, p-value &lt; 2.2e-16
+alternative hypothesis: true difference in means between group Female and group Male is not equal to 0
+95 percent confidence interval:
+ -545.2941 -358.2768
+sample estimates:
+mean in group Female   mean in group Male 
+            4140.080             4591.865 </code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="simple-linear-regression-with-a-categorical-explanatory-variable-2-categories" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="simple-linear-regression-with-a-categorical-explanatory-variable-2-categories"><span class="header-section-number">7.4</span> Simple linear regression with a categorical explanatory variable (&gt; 2 categories)</h2>
+<p>Suppose that infants are categorized into three categories based on parity: singletons, having one sibling, or having 2 or more siblings. <strong>We choose as the reference category the singleton infants.</strong></p>
+<p>A graphical comparison of the weight between the males and females is presented below using the <strong><code>ggbetweenstats()</code></strong> function from the <strong><em>ggstatsplot</em></strong> package:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggbetweenstats</span>(<span class="at">data =</span> dat, <span class="at">x =</span> parity, <span class="at">y =</span> weight,</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"parametric"</span>,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot.type =</span> <span class="st">"boxviolin"</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">results =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-scat14" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-scat14-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="simplelinear_files/figure-html/fig-scat14-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-scat14-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.9: Violin plot by parity.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>When an explanatory variable, such as Parity, contains three or more categories, we extend the “dummy variable trick.” For a variable with <span class="math inline">\(k\)</span> categories, we must create <span class="math inline">\(k-1\)</span> dummy variables. One category is always left out to serve as the Reference Category (or baseline), against which all others are compared.</p>
+<p>To include Parity in our regression equation, we create two indicator variables (dummy variables):</p>
+<p><span class="math display">\[
+\text{parityOne sibling} =
+\begin{cases}
+1 &amp; \text{if infant has one sibling} \\
+0 &amp; \text{otherwise}
+\end{cases}
+\]</span></p>
+<p><span class="math display">\[
+\text{parity2 or more siblings} =
+\begin{cases}
+1 &amp; \text{if infant has 2 or more siblings} \\
+0 &amp; \text{otherwise}
+\end{cases}
+\]</span></p>
+<p>The equation of the regression line will have the following form:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\widehat{\text{weight}} &amp;= b_o + b_1 \cdot\text{parityOne sibling} + b_2 \cdot\text{parity2 or more siblings}
+\end{aligned}
+\]</span></p>
+<p>Therefore, we are including all the categories to the linear regression model except the one which is going to be used as the reference category (here is the Singleton). Actually, we create a multiple regression model which we will examine in the next lecture analytically.</p>
+<p>In R, the <strong><code>lm()</code></strong> function automatically detects the factor type and applies this coding:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the model</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>model_parity <span class="ot">&lt;-</span> <span class="fu">lm</span>(weight <span class="sc">~</span> parity, <span class="at">data =</span> dat)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_parity)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = weight ~ parity, data = dat)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1360.62  -408.45   -23.88   411.70  2038.38 
+
+Coefficients:
+                         Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)               4258.53      44.55  95.601  &lt; 2e-16 ***
+parityOne sibling          129.69      62.00   2.092  0.03694 *  
+parity2 or more siblings   192.09      63.17   3.041  0.00247 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 597.6 on 547 degrees of freedom
+Multiple R-squared:  0.01734,   Adjusted R-squared:  0.01375 
+F-statistic: 4.827 on 2 and 547 DF,  p-value: 0.008353</code></pre>
+</div>
+</div>
+<p>Based on the model coefficients, our specific equation becomes:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\widehat{\text{weight}} &amp;= 4259 + 130 \cdot\text{parityOne sibling} + 192 \cdot\text{parity2 or more siblings}
+\end{aligned}
+\]</span></p>
+<ul>
+<li><p><strong>The Intercept (</strong><span class="math inline">\(b_0 = 4259\)</span>): This is the mean weight of Singleton infants. In the equation, this is the value of <span class="math inline">\(\widehat{y}\)</span> when both dummy variables are set to <span class="math inline">\(0\)</span>.</p></li>
+<li><p><strong>Coefficient</strong> <span class="math inline">\(b_1 = 130\)</span>: This represents the average weight difference between infants with one sibling and the reference group (Singletons).</p></li>
+<li><p><strong>Coefficient</strong> <span class="math inline">\(b_2 = 192\)</span>: This represents the average weight difference between infants with two or more siblings and the reference group (Singletons).</p></li>
+</ul>
+<p>We also calculate the 95% Confidence Interval (CI) for the model parameters:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(model_parity, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                               2.5 %    97.5 %
+(Intercept)              4171.033020 4346.0336
+parityOne sibling           7.890135  251.4807
+parity2 or more siblings   67.999024  316.1815</code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+<div class="content-box-green">
+<p><strong>Interpretation</strong></p>
+<ul>
+<li><p>The mean weight for a singleton infant (the reference category) is 4259 g .</p></li>
+<li><p>The mean weight of an infant with one sibling is 4389 g which is significantly higher (on average) about 130 g relative to a singleton infant (p=0.037). The 95% confidence interval for this estimation (the difference in means) is 8 to 252 g.</p></li>
+<li><p>The mean weight of an infant with 2 or more siblings is 4451 g which is significantly higher (on average) about 192 g relative to a singleton infant (p=0.002). The 95% confidence interval for this estimation (the difference in means) is 68 to 316 g.</p></li>
+</ul>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./anova2factor.html" class="pagination-link" aria-label="Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./presentations.html" class="pagination-link" aria-label="Presentations">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Presentations</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© Copyright 2025-26, Konstantinos I. Bougioukas. License: <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivs 4.0</a>.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Built with <a href="https://quarto.org/">Quarto</a><sup>®</sup></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

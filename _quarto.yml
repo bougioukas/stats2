@@ -18,7 +18,7 @@ book:
     - anovabetween.qmd
     - anovawithin.qmd
     - anova2factor.qmd
-    #- simplelinear.qmd
+    - simplelinear.qmd
     #- multiplelinear.qmd
     #- summary.qmd
     - presentations.qmd

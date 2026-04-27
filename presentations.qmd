@@ -30,12 +30,18 @@
 
      
 
-
-
-
 -   **Lecture 7: One-way within-subjects ANOVA**
 
 ![psy-400-6_anova2](presentations/psy-400-6_anova2.pdf){width="60%" height="400"}
 
      
+
+
+-   **Lecture 8: Two-way Analysis of Variance (ANOVA)**
+
+![psy-400-7_anova3](presentations/psy-400-7_anova3.pdf){width="60%" height="400"}
+
+     
+
+
 

@@ -9,22 +9,20 @@ library(kableExtra)
 library(moderndive)
 ```
 
-
-
 ::: {.callout-tip appearance="simple"}
 ## Get the Code
 
 You can download the complete R script from here:
 
-<a href="https://osf.io/download/ubf9g/" download="psy400_3.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a>
+<a href="https://osf.io/download/ghw86/" download="psy400_6.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a>
 :::
 
 ::: {.callout-tip appearance="simple"}
-## Get the Data sat
+## Get the Data birtweight
 
-You can download the Excel dataset **sat** from here:
+You can download the Excel dataset **birtweight** from here:
 
-<a href="https://osf.io/download/ru5jx/" download="sat.xlsx"> <button type="button" class="btn btn-success"> <i class="bi bi-file-earmark-excel"></i> Download Excel Data </button> </a>
+<a href="https://osf.io/download/8j64u/" download="birtweight.xlsx"> <button type="button" class="btn btn-success"> <i class="bi bi-file-earmark-excel"></i> Download Excel Data </button> </a>
 :::
 
 <br>
@@ -44,7 +42,6 @@ library(readxl)
 
 Simple linear regression involves a numeric dependent (or response) variable $Y$ and one independent (or explanatory) variable $X$ that is either numeric or categorical.
 
-
 ## Import dataset and process the data variables
 
 If the dataset *birthweight* is saved in the subfolder named “data” of our RStudio project, we can read it with the `read_excel()` function from `readxl` package as follows:
@@ -55,7 +52,6 @@ If the dataset *birthweight* is saved in the subfolder named “data” of our R
 dat <- read_excel("data/birthweight.xlsx")
 dat
 ```
-
 
 Data of 550 infants at 1 month age was collected. The following variables were recorded:
 
@@ -73,19 +69,16 @@ Data of 550 infants at 1 month age was collected. The following variables were r
 
 We convert `gender`, `parity`, and `education` into factor variables using the **`factor()`** function within **`mutate()`**, as factors are used in R to represent categorical data. Specifying the levels argument defines the ordering of categories, which is important for setting the reference category in regression models and for controlling how categories are displayed in summaries or plots.
 
-
 ```{r}
 dat <- dat |> 
   mutate(gender = factor(gender),
          parity = factor(parity,
                          levels = c("Singleton", "One sibling", "2 or more siblings")),
          education = factor(education,
-                            levels = c("tertiary", "year10", "year12")))
+                            levels = c("year10", "year12", "tertiary")))
 
 dat
 ```
-
-
 
 ## Simple linear regression with a continuous explanatory variable
 
@@ -105,10 +98,9 @@ The @eq-line1 is defined by two coefficients (parameters) $\beta_o$ and $\beta_1
 
 ### Research question
 
-Let’s say that we want to model the association between height and weight for the sample of 550 infants of 1 month age. In other words, we want to find the parameters of a mathematical equation, such as $y = \beta_o + \beta_1 \cdot x$.
+Let’s say that we want to model the association between `height` and `weight` for the sample of 550 infants of 1 month age. In other words, we want to find the parameters, $\beta_o$ and $\beta_1$, of the mathematical equation: $y = \beta_o + \beta_1 \cdot x$. In this equation, $\beta_1$ is the critical parameter.
 
-
-### Hypothesis Testsing
+### Hypothesis Testsing for $\beta_1$
 
 ::: {.callout-note icon="false"}
 ## Null hypothesis and alternative hypothesis
@@ -128,28 +120,21 @@ ggplot(dat, aes(x = height, y = weight)) +
   geom_smooth(method = "lm", se = FALSE)
 ```
 
-
-The points in the plot seem to be scattered around a line. The scatter plot also shows that, in general, infants with high height tend to have high weight (positive association).
-
-
-To quantify the strength of this linear association, we calculate the Pearson correlation coefficient ($r$). This value ranges from $-1$ to $1$, where $1$ indicates a perfect positive linear association.
+The points in the plot seem to be scattered around a line. The scatter plot also shows that, in general, infants with high height tend to have high weight (positive association). To quantify the strength of this linear association, we first calculate the Pearson correlation coefficient ($r$). This value ranges from $-1$ to $1$, where $1$ indicates a perfect positive linear association.
 
 ```{r}
 cor(dat$height, dat$weight)
 ```
 
-
-
 ### Fit a simple linear regression model
 
-To select the best fitting straight line of the data set, it is necessary to estimate the values $b_o$ and $b_1$ of parameters $\beta_o$ and $\beta_1$ in @eq-line1. The regression equation of the model becomes:
+To select the best fitting straight line for this dataset, it is necessary to estimate the values $b_o$ and $b_1$ of parameters $\beta_o$ and $\beta_1$ in @eq-line1. The regression equation of the model becomes:
 
 $$\widehat{y} = b_o  + b_1 \cdot x$$ {#eq-line2}
 
 Why do we put a "hat" on top of the $y$? It's a form of notation commonly used in regression to indicate that we have a **expected value**, or the value of $y$ **on the regression line** for a given $x$ value.
 
-
-- **Fit the model**
+-   **Fit the model**
 
 We fit a simple linear regression model to estimate the association between height (independent variable) and weight (dependent variable).
 
@@ -160,7 +145,7 @@ model_height <- lm(weight ~ height, data = dat)
 
  
 
-- **Normality of the residuals**
+-   **Normality of the residuals**
 
 First, let's check the assumption that the standardized residuals are normally distributed using a normal Q-Q plot:
 
@@ -179,15 +164,13 @@ The @fig-scat6 shows no significant deviation from normality.
 
  
 
-
-- **Model Summary**
+-   **Model Summary**
 
 To view the statistical details of our model, we use the `summary()` function.
 
 ```{r}
 summary(model_height)
 ```
-
 
  
 
@@ -205,10 +188,9 @@ $$
 
 ### Interpretation of the coefficients
 
-
 **The intercept** $b_o$
 
-The intercept $b_o =5412$ is the average weight for those infants with height of 0. In graphical terms, it's where the line intersects the $y$ axis when $x$ = 0 (@fig-intercept). Note, however, that while the intercept of the regression line has a mathematical interpretation, it has no *physical* interpretation here, since observing a weight of 0 is impossible.
+The intercept $b_o =-5412$ is the average weight for those infants with height of 0. In graphical terms, it's where the line intersects the $y$ axis when $x$ = 0 (@fig-intercept). Note, however, that while the intercept of the regression line has a mathematical interpretation, it has no *physical* interpretation here, since observing a weight of 0 is impossible.
 
 ```{r}
 #| echo: false
@@ -263,14 +245,13 @@ Additionally, note that the sign is positive, suggesting a positive association 
 
 We only state that there is an **associated** increase and not necessarily a **causal** increase. In other words, just because two variables are strongly associated, it doesn't necessarily mean that one causes the other. This is summed up in the often quoted phrase, "correlation is not necessarily causation."
 
-Furthermore, we say that this associated increase is **on average**  178 g of weight, because we might have two infants whose height differ by 1 cm, but their difference in weight won't necessarily be exactly . What the slope is saying is that, **across all possible infants, the *average* difference in weight between two infants whose height differ by 1 cm is 178 g**.
+Furthermore, we say that this associated increase is **on average** 178 g of weight, because we might have two infants whose height differ by 1 cm, but their difference in weight won't necessarily be exactly . What the slope is saying is that, **across all possible infants, the *average* difference in weight between two infants whose height differ by 1 cm is 178 g**.
 
  
 
 ### The Standard error (SE) of the slope
 
 The **Std. Error column** of the statistical results of the model corresponds to the *standard error* of our estimates. We are interested in understanding the standard error of the slope ($\text{SE}_{b_1}$).
-
 
 The standard error is a way to measure the “uncertainty” in the estimate of the regression coefficients. In general, a smaller standard error indicates a more precise estimate. For example, the estimated coefficient for the independent variable height is 178.31. **Its standard error is 7.49**, which reflects the amount of sampling variability in the estimated regression slope. In other words, if we repeatedly drew similar samples and refit the model, the estimated slope would vary from sample to sample, and the standard error quantifies that variation.
 
@@ -306,8 +287,7 @@ In our example p \<0.001 $\Rightarrow$ reject $H_{0}$.
 
 The $95\%$ CI of the coefficient $b$ for a significance level α = 0.05, $df=n-2 = 550 - 2 = 548$ degrees of freedom and for a two-tailed t-test is given by:
 
-$$ 95\% \ \text{CI}_{b} = b \pm t_{548; 1-a/2} \cdot \text{SE}_{b_1}$$ {#eq-tci}
-
+$$ 95\% \ \text{CI}_{b_1} = b_1 \pm t_{548; 1-a/2} \cdot \text{SE}_{b_1}$$ {#eq-tci}
 
 We can fine the critical value $t_{548; 1-a/2}$ in R using the following command:
 
@@ -316,12 +296,9 @@ We can fine the critical value $t_{548; 1-a/2}$ in R using the following command
 qt(0.975, df = 548)
 ```
 
-
 Therefore, in our example:
 
 $$ 95\% \ \text{CI}_{b_1} = 178.31 \pm 1.96 \cdot \text{7.49}= 178.31 \pm 14.68 \Rightarrow 95\% \text{CI}_{b_1}= \ (163.6, 193)$$  
-
- 
 
 The 95% CI can be obtained directly in R using the `confint()` function, which computes confidence intervals for model parameters.
 
@@ -439,13 +416,11 @@ In our example takes the value 0.509. It indicates that about 50.9% of the varia
 
  
 
-
 ## Simple linear regression with a binary explanatory variable
 
 Using the same sample of 550 infants of 1 month age we want to examine how body weight is associated with the gender of the infant. Now we have an explanatory variable x that is binary (Male/Female), as opposed to the numerical explanatory variable model (height) that we used previously.
 
-A graphical comparison of the weight between the males and females is presented below using the **`ggbetweenstats()`** function from the **_ggstatsplot_** package:
-
+A graphical comparison of the weight between the males and females is presented below using the **`ggbetweenstats()`** function from the ***ggstatsplot*** package:
 
 ```{r}
 #| label: fig-scat12
@@ -457,7 +432,6 @@ ggbetweenstats(data = dat, x = gender, y = weight,
   results = FALSE)
 ```
 
-
 To include gender in a mathematical equation, we use an indicator variable (often called a *dummy variable*). All cases in which the infant is Male will be coded as 1 and all other cases, in which the infant is Female, will be coded as 0 (reference category). For our model, we define $genderMale$ as follows:
 
 $$
@@ -467,7 +441,6 @@ $$
 0 & \text{otherwise (reference)}
 \end{cases}
 $$
-
 
 By including this indicator into the standard linear equation, the model takes the following form:
 
@@ -485,6 +458,7 @@ model_gender <- lm(weight ~ gender, data = dat)
 summary(model_gender)
 ```
 
+ 
 
 Based on the model coefficients, our specific equation becomes:
 
@@ -494,11 +468,9 @@ $$
 \end{aligned}
 $$
 
-- **The Intercept ($b_0 = 4140$):** This is the expected weight for the reference group (Female). When $genderMale = 0$, the equation simplifies to 4140 g. Thus, the intercept represents the mean weight of female infants.
+-   **The Intercept (**$b_0 = 4140$): This is the expected weight for the reference group (Female). When $genderMale = 0$, the equation simplifies to 4140 g. Thus, the intercept represents the mean weight of female infants.
 
-
-- **The Slope ($b_1 = 452$):** This is the mean difference between the groups. It tells us that male infants are, on average, 452 g heavier than female infants.
-
+-   **The Slope (**$b_1 = 452$): This is the mean difference between the groups. It tells us that male infants are, on average, 452 g heavier than female infants.
 
 We also calculate the 95% Confidence Interval (CI) for the model parameters:
 
@@ -506,6 +478,7 @@ We also calculate the 95% Confidence Interval (CI) for the model parameters:
 confint(model_gender, level = 0.95)
 ```
 
+ 
 
 Therefore, the mean weight of a male infant is (4140 + 452) 4592 g which is significantly higher (on average) about 452 g relative to a female infant (p\<0.001). The 95% confidence interval for this estimation (the difference in means) is 358 to 545 g.
 
@@ -515,16 +488,13 @@ It is important to note that the above analysis is equivalent to run an independ
 t.test(weight ~ gender, var.equal = TRUE, data = dat)
 ```
 
-
  
-
 
 ## Simple linear regression with a categorical explanatory variable (\> 2 categories)
 
 Suppose that infants are categorized into three categories based on parity: singletons, having one sibling, or having 2 or more siblings. **We choose as the reference category the singleton infants.**
 
-A graphical comparison of the weight between the males and females is presented below using the **`ggbetweenstats()`** function from the **_ggstatsplot_** package:
-
+A graphical comparison of the weight between the males and females is presented below using the **`ggbetweenstats()`** function from the ***ggstatsplot*** package:
 
 ```{r}
 #| label: fig-scat14
@@ -536,11 +506,9 @@ ggbetweenstats(data = dat, x = parity, y = weight,
   results = FALSE)
 ```
 
-
 When an explanatory variable, such as Parity, contains three or more categories, we extend the "dummy variable trick." For a variable with $k$ categories, we must create $k-1$ dummy variables. One category is always left out to serve as the Reference Category (or baseline), against which all others are compared.
 
 To include Parity in our regression equation, we create two indicator variables (dummy variables):
-
 
 $$
 \text{parityOne sibling} =
@@ -568,7 +536,6 @@ $$
 
 Therefore, we are including all the categories to the linear regression model except the one which is going to be used as the reference category (here is the Singleton). Actually, we create a multiple regression model which we will examine in the next lecture analytically.
 
-
 In R, the **`lm()`** function automatically detects the factor type and applies this coding:
 
 ```{r}
@@ -576,7 +543,6 @@ In R, the **`lm()`** function automatically detects the factor type and applies 
 model_parity <- lm(weight ~ parity, data = dat)
 summary(model_parity)
 ```
-
 
 Based on the model coefficients, our specific equation becomes:
 
@@ -586,12 +552,11 @@ $$
 \end{aligned}
 $$
 
-- **The Intercept ($b_0 = 4259$):** This is the mean weight of Singleton infants. In the equation, this is the value of $\widehat{y}$ when both dummy variables are set to $0$.
+-   **The Intercept (**$b_0 = 4259$): This is the mean weight of Singleton infants. In the equation, this is the value of $\widehat{y}$ when both dummy variables are set to $0$.
 
-- **Coefficient $b_1 = 130$:** This represents the average weight difference between infants with one sibling and the reference group (Singletons).
+-   **Coefficient** $b_1 = 130$: This represents the average weight difference between infants with one sibling and the reference group (Singletons).
 
-- **Coefficient $b_2 = 192$**: This represents the average weight difference between infants with two or more siblings and the reference group (Singletons).
-
+-   **Coefficient** $b_2 = 192$: This represents the average weight difference between infants with two or more siblings and the reference group (Singletons).
 
 We also calculate the 95% Confidence Interval (CI) for the model parameters:
 
@@ -604,7 +569,7 @@ confint(model_parity, level = 0.95)
 ::: content-box-green
 **Interpretation**
 
--   The mean weight for a singleton infant (the reference category)  is 4259 g .
+-   The mean weight for a singleton infant (the reference category) is 4259 g .
 
 -   The mean weight of an infant with one sibling is 4389 g which is significantly higher (on average) about 130 g relative to a singleton infant (p=0.037). The 95% confidence interval for this estimation (the difference in means) is 8 to 252 g.
 

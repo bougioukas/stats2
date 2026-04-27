@@ -9,7 +9,7 @@ You can download the complete R script from here:
 :::
 
 ::: {.callout-tip appearance="simple"}
-## Get the Data sat
+## Get the Data symptoms
 
 You can download the Excel dataset **symptoms** from here:
 
@@ -74,7 +74,7 @@ dat
 
 <br>
 
-The dataset has 8 patients (rows) and is organized in a “wide” format. We need to reshape the data in long format using the `pivot_longer()`. 
+The dataset has 8 patients (rows) and is organized in a “wide” format. We need to reshape the data in long format using the `pivot_longer()`.
 
 ```{r}
 dat_long <- dat |> 
@@ -93,12 +93,12 @@ dat_long <- dat |>
 dat_long
 ```
 
-**_Explanation_**
+***Explanation***
 
 The data initially starts in a wide format, where each time point is stored in its own column (e.g., pre1, pre2, post1, post2, post3). The `pivot_longer()` function reshapes the data into a long format by stacking these columns into two new variables, with names that we specify (e.g., timepoint and score):
 
-- **timepoint:** Indicates when the measurement was taken.
-- **score:** Contains the corresponding symptom value.
+-   **timepoint:** Indicates when the measurement was taken.
+-   **score:** Contains the corresponding symptom value.
 
 Then, after reshaping to long format, we use `mutate()` to convert the `subid` and `timepoint` variables into factors (`<fct>`) by applying the `factor()` function within `mutate()`.
 
@@ -228,7 +228,6 @@ results <- jmv::anovaRM(
 1.  The `anovaRM()` function needs wide format data.
 2.  We use the Greenhouse-Geisser correction as it is less than 0.75.
 
-
 <br>
 
 -   **Within-subjects variance table**
@@ -241,11 +240,8 @@ results$rmTable  # Within Subjects
 
 <br>
 
-
-::: {.panel-tabset}
-
+::: panel-tabset
 ## F-distribution
-
 
 ```{r}
 #| echo: false
@@ -283,9 +279,7 @@ ggplot(df_plot, aes(x = x, y = y)) +
 
 ```
 
-
 ## Zoom In tail
-
 
 ```{r}
 #| echo: false
@@ -337,15 +331,11 @@ ggplot(data.frame(x = c(12, 22)), aes(x)) +
     panel.grid.minor = element_blank()
   )
 ```
-
 :::
-
-
 
 As we can see, the within-subjects variable (timepoint) was statistically significant under the Greenhouse-Geisser correction, F(1.95, 13.66) = 18.62, p \< 0.001.
 
 A significant one-way ANOVA is generally followed up by post-hoc tests to perform multiple pairwise comparisons between groups, while controlling for the overall error rate.
-
 
 <br>
 
@@ -354,6 +344,7 @@ A significant one-way ANOVA is generally followed up by post-hoc tests to perfor
 ```{r}
 results$bsTable  # Between Subjects
 ```
+
 <br>
 
 ## Conduct Post hoc tests
