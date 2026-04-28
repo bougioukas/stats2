@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Statistics II",
     "section": "",
-    "text": "Preface\nThis course introduces undergraduate students to more advanced statistical methods than Statistics I used in the quantitative social, educational, and behavioral sciences. Students will learn:\n\nBasic R syntax.\nData management in R.\nBasic parametric and non-parametric statistical tests.\nAnalysis of Variance (ANOVA) Designs.\nMultiple Linear Regression. Interaction between variables.\nMediation and Path Analysis.\nFactor Analysis.\nPrinciples of Evidence Synthesis (Systematic reviews and Meta-analysis).",
+    "text": "Preface\nThis course introduces undergraduate students to more advanced statistical methods than Statistics I used in the quantitative social, educational, and behavioral sciences. Students will learn:\n\nBasic R syntax.\nData management in R.\nBasic parametric and non-parametric statistical tests.\nAnalysis of Variance (ANOVA) Designs.\nMultiple Linear Regression. Interaction between variables.\nMediation and Path Analysis.\nFactor Analysis.",
     "crumbs": [
       "Preface"
     ]
