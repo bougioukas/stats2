@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>8&nbsp; Multiple Linear regression – Statistics II</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./presentations.html" rel="next">
+<link href="./simplelinear.html" rel="prev">
+<link href="./images/cover.avif" rel="icon">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-4781fbed7d30d1988487fb2dff96a39c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./multiplelinear.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multiple Linear regression</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Statistics II</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Basic data structures in R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data processing, transformation and ploting in R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nonparametric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Non-parametric statistical tests in R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./anovabetween.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">One-way between-subjects Analysis of Variance (One-way ANOVA) in R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./anovawithin.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">One-way within-subjects Analysis of Variance (Repeated one-way ANOVA) in R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./anova2factor.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./simplelinear.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Simple Linear regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./multiplelinear.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multiple Linear regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./presentations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Presentations</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#multiple-linear-regression-model" id="toc-multiple-linear-regression-model" class="nav-link active" data-scroll-target="#multiple-linear-regression-model"><span class="header-section-number">8.1</span> Multiple linear regression model</a></li>
+  <li><a href="#basic-criteria-for-model-selection" id="toc-basic-criteria-for-model-selection" class="nav-link" data-scroll-target="#basic-criteria-for-model-selection"><span class="header-section-number">8.2</span> Basic criteria for model selection</a></li>
+  <li><a href="#strategies-for-model-selection" id="toc-strategies-for-model-selection" class="nav-link" data-scroll-target="#strategies-for-model-selection"><span class="header-section-number">8.3</span> Strategies for model selection</a></li>
+  <li><a href="#importing-data" id="toc-importing-data" class="nav-link" data-scroll-target="#importing-data"><span class="header-section-number">8.4</span> Importing data</a></li>
+  <li><a href="#simultaneous-regression" id="toc-simultaneous-regression" class="nav-link" data-scroll-target="#simultaneous-regression"><span class="header-section-number">8.5</span> Simultaneous Regression</a>
+  <ul class="collapse">
+  <li><a href="#assumptions" id="toc-assumptions" class="nav-link" data-scroll-target="#assumptions"><span class="header-section-number">8.5.1</span> Assumptions</a></li>
+  <li><a href="#normality-of-the-residuals" id="toc-normality-of-the-residuals" class="nav-link" data-scroll-target="#normality-of-the-residuals"><span class="header-section-number">8.5.2</span> Normality of the residuals</a></li>
+  <li><a href="#no-multicollinearity" id="toc-no-multicollinearity" class="nav-link" data-scroll-target="#no-multicollinearity"><span class="header-section-number">8.5.3</span> No multicollinearity</a></li>
+  <li><a href="#no-outliers-that-influence-the-model-influential-points" id="toc-no-outliers-that-influence-the-model-influential-points" class="nav-link" data-scroll-target="#no-outliers-that-influence-the-model-influential-points"><span class="header-section-number">8.5.4</span> No outliers that influence the model (influential points)</a></li>
+  <li><a href="#the-model-fit-and-coefficients" id="toc-the-model-fit-and-coefficients" class="nav-link" data-scroll-target="#the-model-fit-and-coefficients"><span class="header-section-number">8.5.5</span> The model fit and coefficients</a></li>
+  </ul></li>
+  <li><a href="#hierarchical-regression" id="toc-hierarchical-regression" class="nav-link" data-scroll-target="#hierarchical-regression"><span class="header-section-number">8.6</span> Hierarchical regression</a>
+  <ul class="collapse">
+  <li><a href="#model-1-begin-with-height-gender" id="toc-model-1-begin-with-height-gender" class="nav-link" data-scroll-target="#model-1-begin-with-height-gender"><span class="header-section-number">8.6.1</span> Model 1: Begin with height + gender</a></li>
+  <li><a href="#model-2-add-headc-parity" id="toc-model-2-add-headc-parity" class="nav-link" data-scroll-target="#model-2-add-headc-parity"><span class="header-section-number">8.6.2</span> Model 2: add headc + parity</a></li>
+  </ul></li>
+  <li><a href="#model-with-an-interaction-term" id="toc-model-with-an-interaction-term" class="nav-link" data-scroll-target="#model-with-an-interaction-term"><span class="header-section-number">8.7</span> Model with an Interaction Term</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-multiplelinear" class="quarto-section-identifier"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multiple Linear regression</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Get the Code
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can download the complete R script from here:</p>
+<p><a href="https://osf.io/download/tyq9s/" download="psy400_7.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a></p>
+</div>
+</div>
+<p><strong>DATA:</strong> We will work with the <strong>birthweight</strong> dataset that we downloaded in the previous lesson.</p>
+<p><br></p>
+<p>First, we load the following R packages in our R session:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Required packages for this R script</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(performance)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(interactions)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggstatsplot)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>&nbsp;</p>
+<section id="multiple-linear-regression-model" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="multiple-linear-regression-model"><span class="header-section-number">8.1</span> Multiple linear regression model</h2>
+<p>Although multivariable regression may appear complex, its concepts, computations, and interpretations are direct extensions of those in simple regression.</p>
+<p>The general form of a linear regression model is given by:</p>
+<p><span id="eq-line21"><span class="math display">\[\widehat{y} = b_o  + b_1 \cdot x_1 + b_2 \cdot x_2 + b_3 \cdot x_3 + ...+b_p \cdot x_p \tag{8.1}\]</span></span></p>
+<p>The objective is to obtain the coefficients-also known as partial regression slopes- <span class="math inline">\(b_o, b_1, b_2, b_3,...,b_p\)</span>.</p>
+<p>It is important to emphasize that the term “linear” refers to the model’s linearity in the coefficients b, rather than in the explanatory variables x. For example, the following is still considered a <strong>general</strong> linear model:</p>
+<p><span id="eq-line22"><span class="math display">\[\widehat{y} = b_o  + b_1 \cdot x_1 + b_2 \cdot x_2 + b_3 \cdot x_1 \cdot x_2 + b_4 \cdot x_1^2 \tag{8.2}\]</span></span></p>
+<p>For example, in <a href="#fig-linear3d" class="quarto-xref">Figure&nbsp;<span>8.1</span></a> we present a model consisted of one response variable (weight) and two continuous explanatory variables (height, headc):</p>
+<p><span class="math display">\[
+\begin{aligned}
+\widehat{\text{y}} &amp;= b_o + b_1 \cdot x_1 + b_2 \cdot x_2\\
+\widehat{\text{weight}} &amp;= b_o + b_1 \cdot \text{height} + b_2 \cdot \text{headc}
+\end{aligned}
+\]</span></p>
+<div id="fig-linear3d" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-linear3d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/linear3d.png" class="img-fluid figure-img" style="width:75.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-linear3d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.1: For a model consisted of one response variable and two explanatory variables a plane in three-dimensional space may be fitted to the data points.
+</figcaption>
+</figure>
+</div>
+<p>We have visualized some of the points as being located above the plane and some as being located below the plane. The deviation of a point from the plane is represented by the dashed red line and is the residual. When the model contains more than two independent variables, it is described geometrically as a hyperplane.</p>
+<p>It is important to note that the residuals in linear regression are assumed to be independent and identically distributed following the normal distribution with mean equals to zero and constant variance.</p>
+</section>
+<section id="basic-criteria-for-model-selection" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="basic-criteria-for-model-selection"><span class="header-section-number">8.2</span> Basic criteria for model selection</h2>
+<p>In simple linear regression, there is only one possible model, as it involves a single explanatory variable. However, in multiple linear regression, where multiple explanatory variables are involved, the challenge becomes identifying the best model. But what does “best” really mean?</p>
+<p>Should we select a model with only a few explanatory variables, or include as many as possible? For instance, if we have 20 potential explanatory variables, should we use all of them—or just a subset? And if we choose to use a subset, how do we decide which variables to include in order to optimize a particular function or goal?</p>
+<p>Surprisingly, these questions do not have straightforward answers—even for experienced researchers and data analysts. Variable selection in regression modeling is a complex task, and there is no universal agreement on the best approach. As we’ll see, choosing the “best” model often depends as much on scientific or practical considerations as on statistical criteria.</p>
+<p>A fundamental principle in model selection is the preference for <strong>simplicity</strong>. When comparing two models that explain the data equally well, the simpler model is generally favored. This principle, known as Occam’s Razor (or the law of parsimony), is widely embraced across scientific disciplines, including statistics.</p>
+<blockquote class="blockquote">
+<p><strong>Parcimonious model:</strong> We typically prefer simpler models, provided they account for similar amounts of variance as more complex ones.</p>
+</blockquote>
+<p>The idea behind a parsimonious model is to avoid overfitting, where a model becomes too complex and starts to capture noise rather than the underlying patterns in the data. A parsimonious model aims to find a balance between complexity and performance, ensuring that the model is neither too simple (underfitting) nor too complex (overfitting).</p>
+</section>
+<section id="strategies-for-model-selection" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="strategies-for-model-selection"><span class="header-section-number">8.3</span> Strategies for model selection</h2>
+<p>Next we present some commonly used strategies for model selection:</p>
+<ul>
+<li><strong>Simultaneous Regression</strong></li>
+</ul>
+<p>The first and most straightforward approach to model selection is to include all available explanatory variables and assess model fit based on this complete model. This is known as full entry or simultaneous regression. In this method, the regression model is built by estimating all parameters simultaneously. However, there are cases where full-entry or simultaneous regression may not be the best choice for model-building. In such instances, the researcher may prefer to adopt a more complex algorithm for constructing the regression model.</p>
+<ul>
+<li><strong>Hierarchical Regression</strong></li>
+</ul>
+<p>In hierarchical regression, unlike in simultaneous regression, where all explanatory variables are entered into the model at once, researchers typically follow a pre-specified order for introducing variables creating multiple models or blocks. The order is usually driven by theory, reflecting the researcher’s prior knowledge. Hierarchical regression is particularly popular among social scientists when testing mediational hypotheses.</p>
+<ul>
+<li><strong>Automated regression methods (Best subset selection)</strong></li>
+</ul>
+<p>These methods combine the explanatory variables in all possible ways. The best subset selection (using backward elimination, forward selection, or both [stepwise selection]) seek to find the best model according to statistical criteria in many steps (stepwise method, the model is re-avaluated in each step). However, as you might imagine, the number of possible models quickly becomes quite large.</p>
+<p>It is important to note that several statistical criteria can be used to assess the efficiency or fit of a model, with penalties for the number of explanatory variables. These criteria are calculated and compared across a set of competing models, providing an objective basis for selecting the “best” regression model. Examples include adjusted R-squared, Akaike Information Criterion (AIC)—where a smaller AIC indicates a better model—and Bayesian Information Criterion (BIC).</p>
+<p>At first glance, especially for those new to statistics, automated selection methods may seem like an ideal solution for many multiple regression problems. They can appear to be the “panacea” for model selection—after all, allowing the computer to determine the “correct” model using its complex computational abilities seems like a logical approach.</p>
+<p>However, the issue is not as straightforward as it may seem, and several statistical and substantive challenges complicate the application of these methods. While automation offers convenience, it also has significant drawbacks, and not all decisions can or should be left to a computer. In addition to these statistical issues, there are substantive considerations to account for when selecting a model. The final model chosen by automated methods may not always offer the most practical value or utility.</p>
+<p>From a statistical perspective, automated selection methods, such as forward and backward regression, can introduce bias into parameter estimates, making the resulting inferential model unreliable. After multiple iterations, the probability of a Type I error becomes higher than the nominal <span class="math inline">\(\alpha\)</span> (typically 0.05). In addition to these statistical issues, there are substantive considerations to account for when selecting a model. The final model chosen by automated methods may not always offer the most practical value or utility.</p>
+<blockquote class="blockquote">
+<p><strong>Maximizing statistical criteria is not the same as maximizing utility of the model.</strong></p>
+</blockquote>
+<ul>
+<li><strong>Purposeful selection process</strong></li>
+</ul>
+<p>The purposeful selection process begins with a univariable analysis of each candidate variable. A general decision rule is then applied to determine which variables to include. For example, any variable with a p-value &lt; 0.20 in the univariable analysis may be selected for the multivariable analysis.</p>
+<p>However, since the primary goal of a multivariable model is typically to assess the effect of the study intervention while controlling for potential confounders, variable selection should also take into account existing knowledge and the clinical significance of the variables. If necessary, the initial rule can be adjusted. For example, a potential confounder may be included in the model if it alters the coefficient of the primary exposure variable by 10% in the multivariable model.</p>
+<p>&nbsp;</p>
+</section>
+<section id="importing-data" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="importing-data"><span class="header-section-number">8.4</span> Importing data</h2>
+<p>Continuing from the previous chapter, we will work with the <em>birthweight</em> dataset. This time, we aim to explore the association between infant weight and all other measured explanatory variables.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/birthweight.xlsx"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 550 × 6
+   weight height headc gender education parity            
+    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;             
+ 1   3950   55.5  37.5 Female tertiary  2 or more siblings
+ 2   4630   57    38.5 Female tertiary  Singleton         
+ 3   4750   56    38.5 Male   year12    2 or more siblings
+ 4   3920   56    39   Male   tertiary  One sibling       
+ 5   4559   55    39.5 Male   year10    2 or more siblings
+ 6   3639   51.5  34.5 Female tertiary  Singleton         
+ 7   3550   56    38   Female year10    2 or more siblings
+ 8   4530   57    39.7 Male   year10    2 or more siblings
+ 9   4969   58.5  39   Male   tertiary  2 or more siblings
+10   3740   52    38   Male   year10    One sibling       
+# ℹ 540 more rows</code></pre>
+</div>
+</div>
+<p>• Body weight of the infant in g (weight)</p>
+<p>• Body height of the infant in cm (height)</p>
+<p>• Head circumference in cm (headc)</p>
+<p>• Gender of the infant (gender: Female, Male)</p>
+<p>• Birth order in their family (parity: Singleton, One sibling, 2 or more siblings)</p>
+<p>• Education of the mother (education: tertiary, year10, year12)</p>
+<p>&nbsp;</p>
+<p>We convert <code>gender</code>, <code>parity</code>, and <code>education</code> into factor variables:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gender =</span> <span class="fu">factor</span>(gender),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">parity =</span> <span class="fu">factor</span>(parity,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Singleton"</span>, <span class="st">"One sibling"</span>, <span class="st">"2 or more siblings"</span>)),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">education =</span> <span class="fu">factor</span>(education,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                            <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"year10"</span>, <span class="st">"year12"</span>, <span class="st">"tertiary"</span>)))</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>dat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 550 × 6
+   weight height headc gender education parity            
+    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;  &lt;fct&gt;     &lt;fct&gt;             
+ 1   3950   55.5  37.5 Female tertiary  2 or more siblings
+ 2   4630   57    38.5 Female tertiary  Singleton         
+ 3   4750   56    38.5 Male   year12    2 or more siblings
+ 4   3920   56    39   Male   tertiary  One sibling       
+ 5   4559   55    39.5 Male   year10    2 or more siblings
+ 6   3639   51.5  34.5 Female tertiary  Singleton         
+ 7   3550   56    38   Female year10    2 or more siblings
+ 8   4530   57    39.7 Male   year10    2 or more siblings
+ 9   4969   58.5  39   Male   tertiary  2 or more siblings
+10   3740   52    38   Male   year10    One sibling       
+# ℹ 540 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="simultaneous-regression" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="simultaneous-regression"><span class="header-section-number">8.5</span> Simultaneous Regression</h2>
+<p>First, we will include all available explanatory variables and assess model fit based on this complete model.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>model_full <span class="ot">&lt;-</span> <span class="fu">lm</span>(weight <span class="sc">~</span> ., <span class="at">data =</span> dat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>NOTE:</strong> The dot (<code>.</code>) tells R to include all explanatory variables present in the data frame.</p>
+<section id="assumptions" class="level3" data-number="8.5.1">
+<h3 data-number="8.5.1" class="anchored" data-anchor-id="assumptions"><span class="header-section-number">8.5.1</span> Assumptions</h3>
+<p>Specific assumptions have to be met for reliable hypothesis testing and confidence intervals in linear regression: independence of the residuals, linearity and homoscedasticity of the data, normality of the residuals, no multicollinearity and outliers. We will describe some statistical tests and diagnostic plots in R for testing the assumptions underlying linear regression model.</p>
+<p><strong>Independence of residuals</strong></p>
+<p>The residuals (or errors) from the model should be independent of each other. If the sample is obtained through random sampling at a single time point, independence can generally be assumed.</p>
+<p>&nbsp;</p>
+<p><strong>Linearity of the data</strong></p>
+<p>In a multiple regression model, Component+Residual (C+R) plots (or partial residual plots) serve as a diagnostic tool to visualize how a single explanatory variable influences the outcome (<code>weight</code>) after accounting for the other explanatory variables in the model.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">crPlots</span>(model_full, <span class="at">smooth =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="multiplelinear_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>For a continuous explanatory variable, the points in a C+R plot represent the variable’s partial association with the response variable after adjusting for all other explanatory variables. If these points align reasonably well with the fitted straight line (that is, the slope estimated by the regression model), then the assumption of a linear effect for that variable is supported. Systematic curvature or other visible patterns may indicate non-linearity and suggest the need for transformations or additional terms.</p>
+<p>For a categorical variable, the boxes compare the adjusted residual-based values across categories after controlling for the remaining variables in the model. Clear vertical separation between groups suggests the factor is a useful explanatory variable. By contrast, substantial overlap indicates that, after accounting for the other explanatory variables, the categorical variable may add little additional information to the model.</p>
+<p>&nbsp;</p>
+<p>We can assess linearity and homoscedasticity by examining the <strong>Residuals vs Fitted Values</strong> plot.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>diagnostic_plots <span class="ot">&lt;-</span> <span class="fu">plot</span>(<span class="fu">check_model</span>(model_full, <span class="at">panel =</span> <span class="cn">FALSE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>For confidence bands, please install `qqplotr`.</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>diagnostic_plots[[<span class="st">"NCV"</span>]] <span class="sc">+</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="multiplelinear_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We would expect to see a random scatter of points around zero on the y-axis. In our example, the residuals appear randomly dispersed in a cloud-like pattern, which indicates that the assumption of linearity and homoscedasticity is satisfied.</p>
+<p>&nbsp;</p>
+<p><strong>Homoscedasticity of the data</strong></p>
+<p>If the residuals display a pattern—such as being more spread out at the ends and tighter in the middle (a bow tie shape), or more spread out on one side of the x-axis and tighter on the other (a funnel or fan shape)—this suggests heteroscedasticity. In such cases, the assumption of homoscedasticity is violated.</p>
+<div id="fig-mlinear9" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mlinear9-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/mlinear9.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlinear9-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.2: Homoscedasticity Vs heteroscedasticity.
+</figcaption>
+</figure>
+</div>
+<p>To verify the assumption, we plot the <strong>square root</strong> of the absolute values of the standardized residuals against the fitted values from the regression.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>diagnostic_plots[[<span class="st">"HOMOGENEITY"</span>]] <span class="sc">+</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="multiplelinear_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A horizontal line with equally spread points would be the desired pattern, as demonstrated in our example.</p>
+<p>&nbsp;</p>
+</section>
+<section id="normality-of-the-residuals" class="level3" data-number="8.5.2">
+<h3 data-number="8.5.2" class="anchored" data-anchor-id="normality-of-the-residuals"><span class="header-section-number">8.5.2</span> Normality of the residuals</h3>
+<p>We generate the Normal Q-Q plot to assess whether the standardized residuals from our model are normally distributed.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract residuals from your model</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>std_resids <span class="ot">&lt;-</span> <span class="fu">rstandard</span>(model_full)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(std_resids)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(std_resids, <span class="at">col =</span> <span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="multiplelinear_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="no-multicollinearity" class="level3" data-number="8.5.3">
+<h3 data-number="8.5.3" class="anchored" data-anchor-id="no-multicollinearity"><span class="header-section-number">8.5.3</span> No multicollinearity</h3>
+<p>This assumption means there should be no perfect or near-perfect linear relationship between two or more of the explanatory variables in our regression model. Multicollinearity is a problem for three reasons:</p>
+<ol type="1">
+<li><p>Untrustworthy <span class="math inline">\(b\)</span>: As multicollinearity increases, so do the standard errors of the <span class="math inline">\(b\)</span> coefficients. We want smaller standard errors, so this is problematic.</p></li>
+<li><p>Limits the size of R, and therefore the size of <span class="math inline">\(R^2\)</span>, and we want to have the largest <span class="math inline">\(R^2\)</span> possible, given our data.</p></li>
+<li><p>Importance of explanatory variables (predictors): When two explanatory variables are highly correlated, it is very hard to determine which variable is more important than the other.</p></li>
+</ol>
+<p>To test for multicollinearity, we examine the VIF and Tolerance values. VIF is actually a transformation of Tolerance (Tolerance = 1/VIF). In general, we want VIF values 5 or lower, which corresponds to Tolerance values greater than (1/5) 0.2.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_collinearity</span>(model_full)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Check for Multicollinearity
+
+Low Correlation
+
+      Term  VIF   VIF 95% CI adj. VIF Tolerance Tolerance 95% CI
+    height 1.60 [1.44, 1.81]     1.26      0.63     [0.55, 0.69]
+     headc 1.68 [1.51, 1.90]     1.29      0.60     [0.53, 0.66]
+    gender 1.14 [1.06, 1.29]     1.07      0.88     [0.77, 0.94]
+ education 1.07 [1.02, 1.27]     1.02      0.93     [0.79, 0.98]
+    parity 1.08 [1.02, 1.26]     1.02      0.93     [0.79, 0.98]</code></pre>
+</div>
+</div>
+<p>We have categorical variables with multiple levels; the adjusted VIF accounts for this, making it comparable to that of continuous variables. In our data, the VIF values indicate that the assumption of no multicollinearity is satisfied.</p>
+<p>&nbsp;</p>
+<div class="content-box-blue">
+<p><strong>Proposed remedies for multicollinearity</strong></p>
+<p>• <strong>Increase the sample size:</strong> A larger sample can reduce the standard errors of the coefficient estimates, thereby improving the precision and stability of the model.</p>
+<p>• <strong>Model respecification:</strong> Remove some of the highly associated explanatory variables or replace them with a linear combination of them (if possible).</p>
+<p>• <strong>Regularization (Tolerant) techniques:</strong> Some regression techniques may be more sensitive to multicollinearity than others. Recent developments in model selection methods have introduced new methods for balancing model complexity and fit. For example two special linear regression model — Lasso and Ridge regression. Although not necessarily designed to be tolerant of collinearity, they offer approaches that may be less sensitive.</p>
+<p>• <strong>Principal Component Regression:</strong> This technique transforms the original correlated variables into a smaller set of uncorrelated components and uses them in the regression, effectively addressing multicollinearity.</p>
+<p>• <strong>Change the reference category for categorical variables:</strong> In cases where multicollinearity arises from dummy variables, selecting a different reference category can sometimes alleviate the problem.</p>
+</div>
+</section>
+<section id="no-outliers-that-influence-the-model-influential-points" class="level3" data-number="8.5.4">
+<h3 data-number="8.5.4" class="anchored" data-anchor-id="no-outliers-that-influence-the-model-influential-points"><span class="header-section-number">8.5.4</span> No outliers that influence the model (influential points)</h3>
+<p>There shouldn’t be any data point in the dataset that is an outlier which would strongly influence our results.</p>
+<p>Outliers are points that fall away from the cloud of points. Outliers that actually influence the parameters of the regression model are called <strong>influential points</strong>. Therefore, not all outliers are influential in linear regression analysis. Even though data have extreme values, they might not be influential to determine a regression model. That means, the results wouldn’t be much different if we either include or exclude them from analysis.</p>
+<p>Cook’s distance is a measure used to identify influential data points in regression analysis. In general, Cook’s distances greater than 1 indicate an outlier that may influence the model.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate Cook's distance</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>cooks_vals <span class="ot">&lt;-</span> <span class="fu">cooks.distance</span>(model_full)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Min, Median, Mean, and Max</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cooks_vals)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+1.000e-08 1.286e-04 7.075e-04 1.932e-03 2.264e-03 3.474e-02 </code></pre>
+</div>
+</div>
+<p>Our Cook’s distances are very small, so we do not have a problem with outliers.</p>
+<p>We can further assess this using a standardized residuals vs.&nbsp;leverage plot:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>diagnostic_plots[[<span class="st">"OUTLIERS"</span>]] <span class="sc">+</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="multiplelinear_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>If any point falls outside the dashed green lines, which are defined by the Cook’s distance, it is considered an influential observation. In our example, all data points fall within the dashed green lines, indicating that none of the observations are influential to the fitted model.</p>
+<p>&nbsp;</p>
+</section>
+<section id="the-model-fit-and-coefficients" class="level3" data-number="8.5.5">
+<h3 data-number="8.5.5" class="anchored" data-anchor-id="the-model-fit-and-coefficients"><span class="header-section-number">8.5.5</span> The model fit and coefficients</h3>
+<p>The estimated model coefficients are presented below:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_full)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = weight ~ ., data = dat)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1310.91  -241.78     5.25   255.60  1248.61 
+
+Coefficients:
+                          Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)              -7082.073    500.418 -14.152  &lt; 2e-16 ***
+height                     130.789      8.616  15.180  &lt; 2e-16 ***
+headc                      109.327     15.604   7.006 7.28e-12 ***
+genderMale                 196.142     34.955   5.611 3.21e-08 ***
+educationyear12            -34.987     48.421  -0.723   0.4703    
+educationtertiary          -36.293     37.446  -0.969   0.3329    
+parityOne sibling           75.628     40.630   1.861   0.0632 .  
+parity2 or more siblings    95.662     42.042   2.275   0.0233 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 384.6 on 542 degrees of freedom
+Multiple R-squared:  0.5967,    Adjusted R-squared:  0.5915 
+F-statistic: 114.6 on 7 and 542 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>The full model can be expressed as follows:</p>
+<p><span class="math display">\[\begin{align}
+\widehat{Weight} &amp;= -7082 + 131 \cdot height + 109 \cdot headc + 196 \cdot genderMale \\
+&amp;\quad +\ 76 \cdot parityparityOne sibling + 96 \cdot parity2 or more siblings\\
+&amp;\quad - 35 \cdot educationyear12 - 36 \cdot educationtertiary
+\end{align}\]</span></p>
+<p>All variables in the model are statistically significant except for the comparison between infants with one sibling and singletons (p = 0.06), as well as the mother’s education level (year12-year10, p = 0.47; tertiary-year10 p = 0.33).</p>
+<p><strong>Adjusted R-squared:</strong> This metric adjusts the R-squared value to account for the number of explanatory variables (predictors) in the model. About 59% of the variation in infant’s body weight can be explained by the independent variables (<code>height</code>, <code>head circumference</code>, <code>gender</code>, <code>parity</code>, and <code>education</code>) in the model.</p>
+<p>Additionally, the 95% confidence intervals for the model coefficients can be obtained using:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(model_full)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                2.5 %      97.5 %
+(Intercept)              -8065.069219 -6099.07631
+height                     113.865137   147.71376
+headc                       78.676203   139.97872
+genderMale                 127.477854   264.80535
+educationyear12           -130.102092    60.12762
+educationtertiary         -109.849290    37.26413
+parityOne sibling           -4.182909   155.43918
+parity2 or more siblings    13.077405   178.24669</code></pre>
+</div>
+</div>
+<p><br></p>
+</section>
+</section>
+<section id="hierarchical-regression" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="hierarchical-regression"><span class="header-section-number">8.6</span> Hierarchical regression</h2>
+<p>Next, we apply the hierarchical approach, adding explanatory variables in stages (or blocks) rather than all at once. This strategy is useful when there is a theoretical or practical ordering among the candidate variables — starting with the most fundamental explanatory variables and progressively introducing others to assess their incremental contribution. At each stage, we ask: does adding these variables meaningfully improve the model?</p>
+<p>To compare models while accounting for complexity, we use the Akaike Information Criterion (AIC). <strong>A lower AIC indicates a better model fit relative to its complexity.</strong>.</p>
+<section id="model-1-begin-with-height-gender" class="level3" data-number="8.6.1">
+<h3 data-number="8.6.1" class="anchored" data-anchor-id="model-1-begin-with-height-gender"><span class="header-section-number">8.6.1</span> Model 1: Begin with height + gender</h3>
+<p>We begin with <code>height</code> and <code>gender</code> as explanatory variables.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>model_1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(weight <span class="sc">~</span> height <span class="sc">+</span> gender, <span class="at">data =</span> dat)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = weight ~ height + gender, data = dat)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1087.7  -248.8     3.3   271.7  1293.5 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -4813.829    403.004 -11.945  &lt; 2e-16 ***
+height        165.100      7.417  22.259  &lt; 2e-16 ***
+genderMale    251.083     35.673   7.038 5.85e-12 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 404.7 on 547 degrees of freedom
+Multiple R-squared:  0.5493,    Adjusted R-squared:  0.5477 
+F-statistic: 333.4 on 2 and 547 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>The regression equation of model 1 is:</p>
+<p><span class="math display">\[\widehat{Weight} = -4814 + 165 \cdot height + 251 \cdot genderMale\]</span></p>
+<p>Both explanatory variables are statistically significant (p&lt;0.001), and the model explains approximately 55% of the variance in infant body weight (adjusted R²)</p>
+<p>We also calculate the 95% confidence intervals for the coefficients:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(model_1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 2.5 %     97.5 %
+(Intercept) -5605.4542 -4022.2042
+height        150.5306   179.6704
+genderMale    181.0102   321.1565</code></pre>
+</div>
+</div>
+<p>The AIC of model 1 is:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(model_1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8169.344</code></pre>
+</div>
+</div>
+</section>
+<section id="model-2-add-headc-parity" class="level3" data-number="8.6.2">
+<h3 data-number="8.6.2" class="anchored" data-anchor-id="model-2-add-headc-parity"><span class="header-section-number">8.6.2</span> Model 2: add headc + parity</h3>
+<p>Model 2 extends Model 1 with two additional explanatory variables: <code>headc</code> and <code>parity</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>model_2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(weight <span class="sc">~</span> height <span class="sc">+</span> gender <span class="sc">+</span> headc <span class="sc">+</span> parity, <span class="at">data =</span> dat)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = weight ~ height + gender + headc + parity, data = dat)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1325.48  -247.03     9.53   251.03  1239.08 
+
+Coefficients:
+                          Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)              -7071.558    499.613 -14.154  &lt; 2e-16 ***
+height                     129.751      8.535  15.202  &lt; 2e-16 ***
+genderMale                 196.894     34.915   5.639 2.75e-08 ***
+headc                      109.798     15.582   7.047 5.57e-12 ***
+parityOne sibling           82.019     40.095   2.046   0.0413 *  
+parity2 or more siblings   104.855     41.019   2.556   0.0109 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 384.3 on 544 degrees of freedom
+Multiple R-squared:  0.5959,    Adjusted R-squared:  0.5922 
+F-statistic: 160.5 on 5 and 544 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>The fitted regression equation of model 2 is:</p>
+<p><span class="math display">\[\begin{align}
+\widehat{Weight} &amp;= -7072 + 130 \cdot height + 197 \cdot genderMale + 110 \cdot headc \\
+&amp;\quad +\ 82 \cdot parityparityOne sibling + 105 \cdot parity2 or more siblings
+\end{align}\]</span></p>
+<p>This model explains approximately 59% of the variance in infant body weight.</p>
+<p>Next, we compute the AIC for Model 2:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(model_2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8115.339</code></pre>
+</div>
+</div>
+<p>Model 2 (AIC = 8115) outperforms Model 1 (AIC = 8169). This suggests that Model 2 provides a better balance between model fit and complexity, making it the preferred model under the AIC criterion.</p>
+<p>For completeness, we also evaluate the full model, which includes education (maternal education level) as an additional variable:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(model_full)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8118.288</code></pre>
+</div>
+</div>
+<p>Compared with Model 2, the full model has a higher AIC, suggesting that the <code>education</code> do not provide enough improvement in fit to justify the increase in model complexity. Model 2 remains the preferred model.</p>
+</section>
+</section>
+<section id="model-with-an-interaction-term" class="level2" data-number="8.7">
+<h2 data-number="8.7" class="anchored" data-anchor-id="model-with-an-interaction-term"><span class="header-section-number">8.7</span> Model with an Interaction Term</h2>
+<p>We extend Model 2 by adding an interaction term between <code>height</code> and <code>gender</code>. An interaction term allows the effect of one explanatory variable on the response to vary depending on the value of another — here, we ask whether the association between height and weight differs between male and female infants.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>model_3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(weight <span class="sc">~</span> height <span class="sc">+</span> gender <span class="sc">+</span> headc <span class="sc">+</span> parity <span class="sc">+</span> height<span class="sc">:</span>gender, <span class="at">data =</span> dat)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = weight ~ height + gender + headc + parity + height:gender, 
+    data = dat)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1201.84  -239.73    -0.04   237.32  1198.05 
+
+Coefficients:
+                         Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)              -5298.94     658.57  -8.046 5.41e-15 ***
+height                      98.08      11.48   8.542  &lt; 2e-16 ***
+genderMale               -2920.77     769.41  -3.796 0.000164 ***
+headc                      108.15      15.37   7.036 5.98e-12 ***
+parityOne sibling           91.42      39.61   2.308 0.021358 *  
+parity2 or more siblings   115.92      40.54   2.859 0.004410 ** 
+height:genderMale           56.95      14.04   4.056 5.72e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 378.9 on 543 degrees of freedom
+Multiple R-squared:  0.6078,    Adjusted R-squared:  0.6035 
+F-statistic: 140.3 on 6 and 543 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>The AIC of Model 3 is:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(model_3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8100.923</code></pre>
+</div>
+</div>
+<p>Model 3 (AIC = 8101) outperforms Model 2 (AIC = 8115), indicating that the interaction term improves model fit beyond what would be expected from the added parameter alone.</p>
+<p>The interaction term is statistically significant (Estimate = 57, p&lt;0.001), indicating effect modification: gender moderates the strength of the association between height and body weight, i.e.&nbsp;gender is a moderator.</p>
+<p>The equation of model 3 with the interaction term is:</p>
+<p><span class="math display">\[\begin{align}
+\widehat{Weight} &amp;= -5299 + 98 \cdot height + 108 \cdot headc -2921 \cdot genderMale +\ 91 \cdot parityOne sibling\\
+&amp;\quad  + 116 \cdot parity2 or more siblings + 57 \cdot heigh \cdot genderMale
+\end{align}\]</span></p>
+<p>When an interaction is present, the main effects of height and gender cannot be interpreted independently — their meaning depends on the value of the other variable. We therefore interpret the effect of height separately for each gender group.</p>
+<ul>
+<li>For <strong>females</strong> (reference group; genderMale = 0), the interaction term drops out and the equation simplifies to:</li>
+</ul>
+<p><span class="math display">\[\begin{align}
+\widehat{Weight} &amp;= -5299 + 98 \cdot \text{height} + 108 \cdot \text{headc}\\
+&amp;\quad + 91 \cdot parityOne sibling + 116 \cdot parity2 or more siblings
+\end{align}\]</span></p>
+<p>The effect of height on weight for females is 98 g/cm.</p>
+<ul>
+<li>For <strong>males</strong> (genderMale = 1), substituting into the equation gives:</li>
+</ul>
+<p><span class="math display">\[\begin{align}
+\widehat{Weight} &amp;= -5299 + 98 \cdot height + 108 \cdot headc -2921 \cdot 1 \\
+&amp;\quad +\ 91 \cdot parityOne sibling + 116 \cdot parity2 or more siblings + 57 \cdot heigh \cdot 1
+\end{align}\]</span></p>
+<p>Combining the constant terms (<span class="math inline">\(−5299−2921=−8220\)</span>) and collecting the height terms (<span class="math inline">\(98+57\)</span>):</p>
+<p><span class="math display">\[\begin{align}
+\widehat{Weight} &amp;= -8220 + (98 + 57) \cdot height + 108 \cdot headc \\
+&amp;\quad  + 91 \cdot parityOne sibling + 116 \cdot parity2 or more siblings \\
+\end{align}\]</span></p>
+<p>This gives the simplified equation for males:</p>
+<p><span class="math display">\[\begin{align}
+\widehat{Weight} &amp;= -8220 + 155 \cdot \text{height} + 108 \cdot \text{headc} \\
+&amp;\quad + 91 \cdot parityOne sibling + 116 \cdot parity2 or more siblings
+\end{align}\]</span></p>
+<p>The effect of height on weight for males is therefore 155 g/cm — substantially stronger than for females. This implies that height is a more influential variable of body weight in male infants than in female infants.</p>
+<p>The following plot shows two different slopes for the data, illustrating the concept of interaction.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">interact_plot</span>(model_3, <span class="at">plot.points =</span> T, <span class="at">pred =</span> height, <span class="at">modx =</span> gender)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="multiplelinear_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The slopes of the regression lines are not parallel which indicates that there is interaction between height and gender.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./simplelinear.html" class="pagination-link" aria-label="Simple Linear regression">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Simple Linear regression</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./presentations.html" class="pagination-link" aria-label="Presentations">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Presentations</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© Copyright 2025-26, Konstantinos I. Bougioukas. License: <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivs 4.0</a>.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Built with <a href="https://quarto.org/">Quarto</a><sup>®</sup></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

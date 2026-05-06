@@ -13,16 +13,12 @@ library(kableExtra)
 
 You can download the complete R script from here:
 
-<a href="https://osf.io/download/ubf9g/" download="psy400_3.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a>
+<a href="https://osf.io/download/tyq9s/" download="psy400_7.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a>
 :::
 
-::: {.callout-tip appearance="simple"}
-## Get the Data sat
 
-You can download the Excel dataset **sat** from here:
+**DATA:** We will work with the **birthweight** dataset that we downloaded in the previous lesson.
 
-<a href="https://osf.io/download/ru5jx/" download="sat.xlsx"> <button type="button" class="btn btn-success"> <i class="bi bi-file-earmark-excel"></i> Download Excel Data </button> </a>
-:::
 
 <br>
 
@@ -34,6 +30,7 @@ First, we load the following R packages in our R session:
 # Required packages for this R script
 library(car)
 library(performance)
+library(interactions)
 library(tidyverse)
 library(ggstatsplot)
 library(readxl)
@@ -164,11 +161,11 @@ First, we will include all available explanatory variables and assess model fit 
 model_full <- lm(weight ~ ., data = dat)
 ```
 
+**NOTE:** The dot (`.`) tells R to include all explanatory variables present in the data frame.
+
 ### Assumptions
 
 Specific assumptions have to be met for reliable hypothesis testing and confidence intervals in linear regression: independence of the residuals, linearity and homoscedasticity of the data, normality of the residuals, no multicollinearity and outliers. We will describe some statistical tests and diagnostic plots in R for testing the assumptions underlying linear regression model.
-
- 
 
 **Independence of residuals**
 
@@ -176,7 +173,7 @@ The residuals (or errors) from the model should be independent of each other. If
 
  
 
-**Linearity and homoscedasticity of the data**
+**Linearity of the data**
 
 In a multiple regression model, Component+Residual (C+R) plots (or partial residual plots) serve as a diagnostic tool to visualize how a single explanatory variable influences the outcome (`weight`) after accounting for the other explanatory variables in the model.
 
@@ -190,7 +187,6 @@ crPlots(model_full, smooth = FALSE)
 For a continuous explanatory variable, the points in a C+R plot represent the variable’s partial association with the response variable after adjusting for all other explanatory variables. If these points align reasonably well with the fitted straight line (that is, the slope estimated by the regression model), then the assumption of a linear effect for that variable is supported. Systematic curvature or other visible patterns may indicate non-linearity and suggest the need for transformations or additional terms.
 
 For a categorical variable, the boxes compare the adjusted residual-based values across categories after controlling for the remaining variables in the model. Clear vertical separation between groups suggests the factor is a useful explanatory variable. By contrast, substantial overlap indicates that, after accounting for the other explanatory variables, the categorical variable may add little additional information to the model.
-
 
  
 
@@ -207,12 +203,29 @@ diagnostic_plots[["NCV"]] +
 theme_classic(base_size = 12)
 ```
 
-
 We would expect to see a random scatter of points around zero on the y-axis. In our example, the residuals appear randomly dispersed in a cloud-like pattern, which indicates that the assumption of linearity and homoscedasticity is satisfied.
 
-> If the residuals display a pattern—such as being more spread out at the ends and tighter in the middle (a bow tie shape), or more spread out on one side of the x-axis and tighter on the other (a funnel or fan shape)—this suggests heteroscedasticity. In such cases, the assumption of homoscedasticity is violated.
+ 
+
+**Homoscedasticity of the data**
+
+
+If the residuals display a pattern—such as being more spread out at the ends and tighter in the middle (a bow tie shape), or more spread out on one side of the x-axis and tighter on the other (a funnel or fan shape)—this suggests heteroscedasticity. In such cases, the assumption of homoscedasticity is violated.
 
 ![Homoscedasticity Vs heteroscedasticity.](images/mlinear9.png){#fig-mlinear9 width="95%"}
+
+
+To verify the assumption, we plot the **square root** of the absolute values of the standardized residuals against the fitted values from the regression.
+
+```{r}
+#| fig-height: 4
+#| fig-width: 5
+#| fig-align: center
+
+diagnostic_plots[["HOMOGENEITY"]] +
+  theme_classic(base_size = 12)
+```
+A horizontal line with equally spread points would be the desired pattern, as demonstrated in our example.
 
  
 
@@ -227,7 +240,6 @@ std_resids <- rstandard(model_full)
 qqnorm(std_resids)
 qqline(std_resids, col = "red")
 ```
-
 
  
 
@@ -273,7 +285,6 @@ Outliers are points that fall away from the cloud of points. Outliers that actua
 
 Cook’s distance is a measure used to identify influential data points in regression analysis. In general, Cook’s distances greater than 1 indicate an outlier that may influence the model.
 
-
 ```{r}
 # Calculate Cook's distance
 cooks_vals <- cooks.distance(model_full)
@@ -283,8 +294,6 @@ summary(cooks_vals)
 ```
 
 Our Cook’s distances are very small, so we do not have a problem with outliers.
-
-
 
 We can further assess this using a standardized residuals vs. leverage plot:
 
@@ -297,34 +306,169 @@ diagnostic_plots[["OUTLIERS"]] +
   theme_classic(base_size = 12)
 ```
 
-If any point falls outside the dashed green lines, which are defined by the Cook’s distance, it is considered an influential observation.
-In our example, all data points fall within the dashed green lines,
-indicating that none of the observations are influential to the fitted model.
-
-
+If any point falls outside the dashed green lines, which are defined by the Cook’s distance, it is considered an influential observation. In our example, all data points fall within the dashed green lines, indicating that none of the observations are influential to the fitted model.
 
  
 
 ### The model fit and coefficients
 
-
-The model coefficients are presented below:
+The estimated model coefficients are presented below:
 
 ```{r}
 summary(model_full)
 ```
 
+The full model can be expressed as follows:
 
-The equation of our model with all variables is:
-
-\begin{align}
+$$\begin{align}
 \widehat{Weight} &= -7082 + 131 \cdot height + 109 \cdot headc + 196 \cdot genderMale \\
 &\quad +\ 76 \cdot parityparityOne sibling + 96 \cdot parity2 or more siblings\\
 &\quad - 35 \cdot educationyear12 - 36 \cdot educationtertiary
-\end{align}
+\end{align}$$
 
-All variables in the model are statistically significant except for the comparison between infants with two or more siblings and singletons (p = 0.06), as well as the mother's education level (year12-year10, p = 0.47; tertiary-year10 p = 0.33).
-
-
+All variables in the model are statistically significant except for the comparison between infants with one sibling and singletons (p = 0.06), as well as the mother's education level (year12-year10, p = 0.47; tertiary-year10 p = 0.33).
 
 **Adjusted R-squared:** This metric adjusts the R-squared value to account for the number of explanatory variables (predictors) in the model. About 59% of the variation in infant’s body weight can be explained by the independent variables (`height`, `head circumference`, `gender`, `parity`, and `education`) in the model.
+
+Additionally, the 95% confidence intervals for the model coefficients can be obtained using:
+
+```{r}
+confint(model_full)
+```
+
+<br>
+
+## Hierarchical regression
+
+Next, we apply the hierarchical approach, adding explanatory variables in stages (or blocks) rather than all at once. This strategy is useful when there is a theoretical or practical ordering among the candidate variables — starting with the most fundamental explanatory variables and progressively introducing others to assess their incremental contribution. At each stage, we ask: does adding these variables meaningfully improve the model?
+
+To compare models while accounting for complexity, we use the Akaike Information Criterion (AIC). **A lower AIC indicates a better model fit relative to its complexity.**.
+
+### Model 1: Begin with height + gender
+
+We begin with `height` and `gender` as explanatory variables.
+
+```{r}
+model_1 <- lm(weight ~ height + gender, data = dat)
+summary(model_1)
+```
+
+The regression equation of model 1 is:
+
+$$\widehat{Weight} = -4814 + 165 \cdot height + 251 \cdot genderMale$$
+
+Both explanatory variables are statistically significant (p\<0.001), and the model explains approximately 55% of the variance in infant body weight (adjusted R²)
+
+We also calculate the 95% confidence intervals for the coefficients:
+
+```{r}
+confint(model_1)
+```
+
+The AIC of model 1 is:
+
+```{r}
+AIC(model_1)
+```
+
+### Model 2: add headc + parity
+
+Model 2 extends Model 1 with two additional explanatory variables: `headc` and `parity`:
+
+```{r}
+model_2 <- lm(weight ~ height + gender + headc + parity, data = dat)
+summary(model_2)
+```
+
+The fitted regression equation of model 2 is:
+
+$$\begin{align}
+\widehat{Weight} &= -7072 + 130 \cdot height + 197 \cdot genderMale + 110 \cdot headc \\
+&\quad +\ 82 \cdot parityparityOne sibling + 105 \cdot parity2 or more siblings
+\end{align}$$
+
+This model explains approximately 59% of the variance in infant body weight.
+
+Next, we compute the AIC for Model 2:
+
+```{r}
+AIC(model_2)
+```
+
+Model 2 (AIC = 8115) outperforms Model 1 (AIC = 8169). This suggests that Model 2 provides a better balance between model fit and complexity, making it the preferred model under the AIC criterion.
+
+For completeness, we also evaluate the full model, which includes education (maternal education level) as an additional variable:
+
+```{r}
+AIC(model_full)
+```
+
+Compared with Model 2, the full model has a higher AIC, suggesting that the `education` do not provide enough improvement in fit to justify the increase in model complexity. Model 2 remains the preferred model.
+
+## Model with an Interaction Term
+
+We extend Model 2 by adding an interaction term between `height` and `gender`. An interaction term allows the effect of one explanatory variable on the response to vary depending on the value of another — here, we ask whether the association between height and weight differs between male and female infants.
+
+```{r}
+model_3 <- lm(weight ~ height + gender + headc + parity + height:gender, data = dat)
+summary(model_3)
+```
+
+The AIC of Model 3 is:
+
+```{r}
+AIC(model_3)
+```
+
+Model 3 (AIC = 8101) outperforms Model 2 (AIC = 8115), indicating that the interaction term improves model fit beyond what would be expected from the added parameter alone.
+
+The interaction term is statistically significant (Estimate = 57, p\<0.001), indicating effect modification: gender moderates the strength of the association between height and body weight, i.e. gender is a moderator.
+
+The equation of model 3 with the interaction term is:
+
+$$\begin{align}
+\widehat{Weight} &= -5299 + 98 \cdot height + 108 \cdot headc -2921 \cdot genderMale +\ 91 \cdot parityOne sibling\\
+&\quad  + 116 \cdot parity2 or more siblings + 57 \cdot heigh \cdot genderMale
+\end{align}$$
+
+When an interaction is present, the main effects of height and gender cannot be interpreted independently — their meaning depends on the value of the other variable. We therefore interpret the effect of height separately for each gender group.
+
+-   For **females** (reference group; genderMale = 0), the interaction term drops out and the equation simplifies to:
+
+$$\begin{align}
+\widehat{Weight} &= -5299 + 98 \cdot \text{height} + 108 \cdot \text{headc}\\ 
+&\quad + 91 \cdot parityOne sibling + 116 \cdot parity2 or more siblings
+\end{align}$$
+
+The effect of height on weight for females is 98 g/cm.
+
+-   For **males** (genderMale = 1), substituting into the equation gives:
+
+$$\begin{align}
+\widehat{Weight} &= -5299 + 98 \cdot height + 108 \cdot headc -2921 \cdot 1 \\
+&\quad +\ 91 \cdot parityOne sibling + 116 \cdot parity2 or more siblings + 57 \cdot heigh \cdot 1
+\end{align}$$
+
+Combining the constant terms ($−5299−2921=−8220$) and collecting the height terms ($98+57$):
+
+$$\begin{align}
+\widehat{Weight} &= -8220 + (98 + 57) \cdot height + 108 \cdot headc \\
+&\quad  + 91 \cdot parityOne sibling + 116 \cdot parity2 or more siblings \\
+\end{align}$$
+
+This gives the simplified equation for males:
+
+$$\begin{align}
+\widehat{Weight} &= -8220 + 155 \cdot \text{height} + 108 \cdot \text{headc} \\
+&\quad + 91 \cdot parityOne sibling + 116 \cdot parity2 or more siblings
+\end{align}$$
+
+The effect of height on weight for males is therefore 155 g/cm — substantially stronger than for females. This implies that height is a more influential variable of body weight in male infants than in female infants.
+
+The following plot shows two different slopes for the data, illustrating the concept of interaction.
+
+```{r}
+interact_plot(model_3, plot.points = T, pred = height, modx = gender)
+```
+
+The slopes of the regression lines are not parallel which indicates that there is interaction between height and gender.
