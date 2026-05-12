@@ -42,11 +42,16 @@
 
      
 
-
-
 -   **Lecture 9: Simple Linear Regression**
 
 ![psy-400-8_linear1](presentations/psy-400-8_linear1.pdf){width="60%" height="400"}
+
+     
+
+
+-   **Lecture 10: Multiple Linear Regression**
+
+![psy-400-9_linear2](presentations/psy-400-9_linear2.pdf){width="60%" height="400"}
 
      
 
