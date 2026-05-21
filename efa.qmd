@@ -1,0 +1,371 @@
+# Exploratory Factor Analysis {#sec-efa}
+
+```{r}
+#| include: false
+
+library(fontawesome)
+
+library(kableExtra)
+```
+
+::: {.callout-tip appearance="simple"}
+## Get the Code
+
+You can download the complete R script from here:
+
+<a href="https://osf.io/download/n7eu8/" download="psy400_9.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a>
+:::
+
+::: {.callout-tip appearance="simple"}
+## Get the Data GRMS
+
+You can download the Excel dataset **GRMS** from here:
+
+<a href="https://osf.io/download/y94kc/" download="GRMS.xlsx"> <button type="button" class="btn btn-success"> <i class="bi bi-file-earmark-excel"></i> Download Excel Data </button> </a>
+:::
+
+<br>
+
+First, we load the following R packages in our R session:
+
+```{r}
+#| warning: false 
+
+# Required packages for this R script
+library(psych)
+library(corrplot)
+library(GPArotation)
+library(readxl)
+```
+
+ 
+
+## Introduction
+
+Exploratory Factor Analysis (EFA) focuses on identifying unobserved **latent variables** (also known as common factors) that explain the correlations among observed variables, with the aim of uncovering the data's underlying structure.
+
+-   **Observed variables** (also called manifest variables) are the variables that we can directly measure or observe.
+
+-   **Latent variables** are hidden or abstract concepts inferred from manifest variables.
+
+::: content-box-blue
+**Exploratory Factor Analysis**
+
+Exploratory Factor Analysis (EFA) can be used to explore the dimensionality of a measurement instrument by identifying the smallest number of interpretable factors that explain the **common variance** among variables.
+:::
+
+Let's say we have $p$ observed variables, denoted as $X_1, X_2, ..., X_p$. The factor model for the $i$-th observed variable ($X_i$) can be expressed as a regression on the common factors:
+
+$$X_i = l_{i1}F_1 + l_{i2}F_2 + ...+ l_{ij}F_j +... + l_{ik}F_k + u_i$$
+
+Where:
+
+-   $X_i$ is the $i$-th observed variable (often standardized to have a mean of 0 and a standard deviation of 1).
+-   $F_j$ is the $j$-th common factor ($j = 1, 2, ..., k$), which are the latent constructs we're trying to uncover.
+-   $l_{ij}$ is the factor loading of the $i$-th observed variable on the $j$-th common factor. It represents the strength and direction of the association between the observed variable and the factor.
+-   $k$ is the number of common factors (where $k < p$). This is a key parameter to determine in EFA.
+-   $u_i$ is the unique factor associated with the observed variable $X_i$. It represents the part of $X_i$ that is not explained by the common factors ($F_1, F_2, ..., F_k$). In EFA, the $u_i$ terms are assumed to be uncorrelated with each other and with the common factors, and have a mean of zero.
+
+Furthermore, the variance of $u_i$ (i.e., $Var(u_i)$) is commonly referred to as the *uniqueness* of $X_i$. Although it is sometimes denoted conventionally as $u_i^2$, a more precise notation is $\sigma^2(u_i)$. This term represents the proportion of variance in $X_i$ that is unique (idiosyncratic) and not explained by the underlying common factors.
+
+## Steps in the process of EFA
+
+-   **Prepare the Data:** Standardize the data. In practice, Likert scale data are typically not standardized, as the scale is generally considered consistent across items. (b) Address outliers in the data. Note that outliers in Likert data are often extreme values, such as respondents who consistently select the “0 = not at all stressful” or “5 = extremely stressful” option. (c) Additionally, it is important to reverse-score negatively worded items to ensure that all items are scaled in the same direction (though this step is not applicable in our example).
+
+-   **Evaluate Assumptions:** Assess the suitability of the data for EFA using diagnostic tests such as the Kaiser-Meyer-Olkin (KMO) measure of sampling adequacy and Bartlett’s test of sphericity. Additionally, examine the correlation matrix to ensure that variables are sufficiently correlated for factor analysis but without multicollinearity (extremely high correlations) or singularity (perfect correlations of 1 or -1). These tests determine whether the correlation matrix is appropriate for factor extraction.
+
+-   **Choose the Extraction Method:** Select an extraction method for factors (e.g., Principal Axis Factoring, Maximum Likelihood, or Maximum Residuals). Principal Axis Factoring is commonly used when we assume that underlying latent factors are driving correlations.
+
+-   **Determine the Number of Factors:** Identify how many factors to extract, guided by criteria such as eigenvalues greater than one, scree plot inspection, or parallel analysis. These factors often correspond to underlying subscales.
+
+-   **Factor Rotation:** Apply a rotation method to simplify the factor structure. Orthogonal rotation (e.g., Varimax) assumes factors are uncorrelated. Oblique rotation (e.g., Oblimin, Promax) assumes factors are correlated.
+
+-   **Interpret the Factors:** Examine the factor loadings to interpret each factor. Look for variables that load highly on each factor and assign meaningful labels to the factors.
+
+-   **Assess Factor Reliability:** Use Cronbach's Alpha to assess the internal consistency or reliability of the factors. A value above 0.7 indicates good reliability.
+
+-   **Refine the Model:** Based on the results, you may choose to drop items with low factor loadings or revise the number of factors. Ensure that any issues of singularity are addressed by removing highly correlated variables.
+
+-   **Finalize the Factor Solution:** Once the factors are interpretable and reliable, finalize the model and prepare the results for reporting.
+
+## EFA in R
+
+**EXAMPLE DATA**
+
+Our data analysis is based on the paper published by Lewis and Neville on the development of the *Gendered Racial Microaggressions Scale for Black Women* (GRMS). The study introduced a specialized psychometric tool designed to capture the unique, intersecting experiences of racism and sexism faced by Black women, a phenomenon referred to as gendered racism.
+
+Below is an outline of the 25 items included in the article by Lewis and Neville.
+
+-   Unattractive because of size of butt (Obj1)
+-   Negative comments about size of facial features (Obj2)
+-   Imitated the way they think Black women speak (Obj3)
+-   Someone made me feel unattractive (Obj4)
+-   Negative comment about skin tone (Obj5)
+-   Someone assumed I speak a certain way (Obj6)
+-   Objectified me based on physical features(Obj7)
+-   Someone assumed I have a certain body type (Obj8)
+-   Made a sexually inappropriate comment (Obj9)
+-   Negative comments about my hair when natural (Obj10)
+-   I have felt unheard (Marg1)
+-   My comments have been ignored (Marg2)
+-   Someone challenged my authority (Marg3)
+-   I have been disrespected in workplace (Marg4)
+-   Someone has tried to “put me in my place” (Marg5)
+-   Felt excluded from networking opportunities (Marg6)
+-   Assumed I did not have much to contribute to the conversation (Marg7)
+-   Someone assumed I was sassy and straightforward (Str1)
+-   I have been told that I am too independent (Str2)
+-   Someone made me feel exotic as a Black woman (Str3)
+-   I have been told that I am too assertive (Str4)
+-   Assumed to be a strong Black woman (Str5)
+-   Someone has told me to calm down (Ang1)
+-   Perceived to be “angry Black woman" (Ang2)
+-   Someone accused me of being angry when speaking calm (Ang3)
+
+### Import the dataset
+
+```{r}
+#| warning: false
+
+dat <- read_excel("data/GRMS.xlsx")
+dat
+```
+
+
+### Correlation matrix
+
+```{r}
+cor_matrix <- round(cor(dat, use = "complete.obs"), 2)
+cor_matrix
+```
+
+
+
+
+```{r}
+corrplot(cor(dat, use="complete.obs"), order = "original",
+         tl.col='black', tl.cex=.75) 
+```
+
+
+
+### Assumptions
+
+-   **Bartlett’s Test of Sphericity**
+
+This tests the null hypothesis that our correlation matrix is an identity matrix (a matrix where all diagonal values are 1 and all off-diagonal correlations are 0, meaning the variables are completely uncorrelated). A significant result ($p < 0.05$) indicates that the correlation matrix significantly differs from an identity matrix, confirming that our variables have enough shared correlation among variables to justify factor extraction.
+
+```{r}
+cortest.bartlett(cor(dat), n = nrow(dat))
+```
+
+Our Bartlett’s test is significant: $\chi^2= 1217$ (p\<0.001). This means that our sample correlation matrix is statistically significantly different than an identity matrix and, therefore, supports a component analytic approach for investigating the data.
+
+-   **Kaiser-Meyer-Olkin (MKO) index of Sampling Adequacy**
+
+The Kaiser-Meyer-Olkin index (KMO) is an index of sampling adequacy that varies between 0 and 1. Kaiser’s 1974 recommendations were:
+
+-   bare minimum of 0.5
+-   values between 0.5 and 0.7 as mediocre
+-   values between 0.7 and 0.8 as good
+-   values between 0.8 and 0.9 as great
+-   values above 0.9 are superb
+
+If the KMO is below the recommendations, we should probably collect more data to see if it can achieve a satisfactory value.
+
+```{r}
+KMO(cor(dat))
+```
+
+The Kaiser–Meyer–Olkin (KMO) measure verified the sampling adequacy for the analysis KMO = 0.85, which is considered “great”. Additionally, all individual KMO values were above 0.74 (well above the acceptable threshold of 0.50).
+
+-   **No multicollinearity and singularity**
+
+In Exploratory Factor Analysis, we are also particularly concerned with issues of multicollinearity and singularity in the data, as these can affect the reliability and interpretability of the factor model.
+
+One way to assess this is by examining the **determinant** of the correlation matrix. If the determinant is smaller than 0.00001, this may indicate that some variables are too highly correlated (multicollinearity), or some variables are perfectly correlated (singularity), which can distort factor extraction.
+
+In our example, the determinant of the correlation matrix (a 25 x 25 matrix with Pearson's correlations) can be calculated as follows:
+
+```{r}
+round(det(cor(dat)), 4) 
+```
+
+With a value of 0.0075, the determinant is comfortably above the 0.00001 threshold, indicating that our data is appropriate for factor analysis.
+
+If the determinant were below the threshold, we would need to identify and address problematic variables and then re-run the diagnostic checks.
+
+### Specify the Number of Factors
+
+A critical step in Exploratory Factor Analysis (EFA) is determining the appropriate number of factors to retain. Retaining too many factors may introduce noise and reduce interpretability, whereas retaining too few can oversimplify the underlying structure and omit meaningful dimensions.
+
+Several statistical criteria are commonly used to guide this decision, including eigenvalues greater than 1 (Kaiser criterion), scree plot inspection, parallel analysis, and the proportion of explained variance. Researchers typically combine these methods with theoretical interpretability to identify the most appropriate factor solution.
+
+-   **Cattell's scree plot**
+
+A scree plot is a two-dimensional line graph used in Exploratory Factor Analysis (EFA) to help researchers visually determine the optimal number of factors to retain.
+
+```{r}
+scree(cor(dat), factors = TRUE, pc = FALSE, hline = -1)
+```
+
+The scree plot displays each factor's variance contribution (eigen value) against factor number, in descending order. The elbow — where the curve transitions from steep decline to a flat plateau — marks the point beyond which additional factors account for little more than chance variation.
+
+Lewis and Neville (2015) examined models with two, three, four, and five factors. In this example, we will present a four-factor solution as the selected model.
+
+### Extraction of factors and rotation
+
+Lewis and Neville (2015) used parallel analysis as their extraction method. In this example, we demonstrate the use of **Principal Axis Factoring** (PAF) for extraction and **Oblimin** as the rotation method. Additionally, we hide loading below 0.23.
+
+**NOTE:** Rotation redistributes the variance among factors so that each item loads strongly on one factor and weakly on the others. There are two types of factor rotation: orthogonal, which constrains factors to be uncorrelated, and oblique, which allows factors to correlate freely. The choice should be guided by theory — oblique rotation is generally preferred in social science research, where latent constructs rarely meet the strict independence assumption imposed by orthogonal rotation.
+
+```{r}
+efa_result <- fa(dat, nfactors = 4, fm = "pa", rotate = "oblimin")
+
+print(efa_result, cut = 0.23, digits = 3)
+```
+
+<br>
+
+In the rotated factor matrix, a few items exhibit cross-loadings, meaning they load significantly on more than one factor:
+
+-   Obj6 loads on both Factor 1 and Factor 4, with loadings of 0.43 and 0.25, respectively. While the item shows some association with both factors, its stronger loading on Factor 1 suggests it aligns more closely with the Objectification construct.
+
+-   Marg6 also displays cross-loadings, with loadings of 0.31 on Factor 1 and 0.25 on Factor 2. Though both values are relatively low, the item may still require closer evaluation to determine its conceptual alignment.
+
+-   Ang1 loads on both Factor 3 and Factor 4, with loadings of 0.33 and 0.24, respectively. Although neither loading is particularly high, this item should be reviewed in the context of theoretical expectations.
+
+ 
+
+**Partitioning the variance in factor analysis**
+
+Factor analysis assumes that variance can be partitioned into two types of variance: common and unique.
+
+-   **Common variance** (communality), denoted usually as $h^2$, represents the proportion of an item's total variance accounted for by the common factors. It ranges from 0 to 1, where values closer to 1 indicate that the item is well-explained by the factor solution and values closer to 0 suggest the item shares little variance with the underlying factors.
+
+-   **Unique variance** (uniqueness), denoted usually as $u^2$ ($u^2=1-h^2$), represents the proportion of variance that is specific to the variable itself and not explained by the common factors. Higher uniqueness indicates lower relevance in the factor model. If a variable has high uniqueness (close to 1), it is poorly explained by the extracted factors and may warrant reconsideration.
+
+### Explained variance and model fit
+
+
+**Explained variance**
+
+```{r}
+#| echo: false
+
+data.frame(
+  Factor        = colnames(efa_result$loadings),
+  SS_Loadings   = round(efa_result$Vaccounted["SS loadings", ], 2),
+  "% of Var"  = round(efa_result$Vaccounted["Proportion Var", ] * 100, 1),
+  "Cum Var (%)"   = round(efa_result$Vaccounted["Cumulative Var", ] * 100, 1),
+  row.names     = NULL,
+  check.names   = FALSE
+)
+```
+
+
+Factor 1 explains 11.2% of the shared variance, Factor 2 explains an additional 8.1%, Factor 3 explains another 5.5%, and Factor 4 explains an additional 3.6%, resulting in a cumulative common variance of 28.4% explained by the first four factors.
+
+Although explaining about 30% of the common variance may seem modest, it is not uncommon in social science research, particularly when dealing with psychological or behavioral constructs. These constructs are often complex and difficult to measure precisely, which can lead to lower levels of explained variance.
+
+The Inter-Factor Correlation Matrix reveals that the four factors are positively correlated with each other, with correlations ranging from 0.17 to 0.46.
+
+
+```{r}
+#| echo: false
+
+as.data.frame(round(efa_result$Phi, 2)) |>
+  setNames(colnames(efa_result$loadings)) |>
+  tibble::rownames_to_column("Factor") |>
+  dplyr::mutate(Factor = colnames(efa_result$loadings))
+
+```
+
+
+ 
+
+**Model fit**
+
+The chi-square test can be used to assess whether the model fits the data. The null hypothesis for the chi-square test is that the model fits the data perfectly. Therefore, a non-significant chi-square value (e.g., p \> 0.05) indicates that the model fits the data reasonably well. However, the chi-square test is sensitive to sample size and non-normal variable distributions.
+
+In addition to the chi-square test, the root mean square error of approximation (RMSEA) serves as an absolute fit index that takes model complexity into account by incorporating a penalty for lack of parsimony. RMSEA values less than or equal to 0.08 are typically interpreted as good model fit.
+
+
+```{r}
+#| echo: false
+
+data.frame(
+  RMSEA = round(efa_result$RMSEA["RMSEA"], 2),
+  Lower = round(efa_result$RMSEA["lower"], 2),
+  Upper = round(efa_result$RMSEA["upper"], 2),
+  TLI   = round(efa_result$TLI, 2),
+  BIC   = round(efa_result$BIC, 2),
+  Chi2  = round(efa_result$STATISTIC, 2),
+  df    = round(efa_result$dof, 0),
+  p     = round(efa_result$PVAL, 3)
+)
+```
+
+
+
+In our model: $\chi^2(206)= 189.19$, p = 0.794, which is non-significant and suggests that the model fits the data well. Moreover, the RMSEA value is 0.00, indicating a close fit between the model and the observed data.
+
+These results suggest that the model structure is appropriate, even if the strength of the factors is modest.
+
+### Path diagram
+
+The path diagram for the four-factor, 25 items EFA, showing only the dominant loading per item (for clarity) follows:
+
+```{r}
+#| warning: false
+#| message: false
+
+colnames(efa_result$loadings) <- c("F1", "F2", "F3", "F4")
+
+psych::fa.diagram(efa_result, cut = 0, digits = 2, l.cex=0.8,
+                  marg=c(0.0, 0.5, 0.5, 0.1), sort = F)
+```
+
+This diagram illustrates how the observed variables can be grouped together, allowing us to identify the following common factors (latent variables). These factors can also be considered as the subscales of the questionnaire:
+
+-   **Factor 1:** Assumptions of Beauty and Sexual Objectification (11 items; Obj1-Obj10 and Marg6)
+-   **Factor 2:** Silenced and Marginalized (6 items; Marg1-Marg5, Marg7)
+-   **Factor 3:** Strong Woman Stereotype (6 items; Str1-Str5, Ang1)
+-   **Factor 4:** Angry Woman Stereotype (2 items; Ang2 and Ang3)
+
+It is important to note that the arrows point from the factor (oval) to the observed variables (items in squares) illustrating that the factor “explains” the item’s score. This represents a **reflective model**, in which the latent construct exists independently of the measures. Additionally, note that the path diagram includes links with numerical values between latent factors, representing the correlation coefficients among them.
+
+
+## Reliability analysis
+
+An important step in establishing the integrity of factors derived from a factor analysis (which will ultimately be presented as subscales of the scale) is to assess their internal consistency as an initial indicator of reliability.
+
+ 
+
+We have four derived factors, so we will run Cronbach’s reliability analyis four times-once for each subset of observed variables (items) grouped by the factor analysis.
+
+
+```{r}
+#| echo: false
+#| warning: false
+
+keys <- vector("list", 4)
+for (f in 1:4) {
+  keys[[f]] <- rownames(efa_result$loadings)[
+    apply(abs(efa_result$loadings), 1, which.max) == f
+  ]
+}
+names(keys) <- colnames(efa_result$loadings)
+
+reliability_table <- do.call(rbind, lapply(names(keys), function(f) {
+  a <- psych::alpha(dat[, keys[[f]]], warnings = FALSE)$total
+  data.frame(
+    Factor  = f,
+    Items   = length(keys[[f]]),
+    Alpha   = round(a$raw_alpha, 3)
+  )
+}))
+
+reliability_table
+```
+

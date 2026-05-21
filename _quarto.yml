@@ -21,6 +21,7 @@ book:
     - simplelinear.qmd
     - multiplelinear.qmd
     - path.qmd
+    - efa.qmd
     #- summary.qmd
     - presentations.qmd
     #- data.qmd

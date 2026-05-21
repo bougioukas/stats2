@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>10&nbsp; Exploratory Factor Analysis – Statistics II</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./presentations.html" rel="next">
+<link href="./path.html" rel="prev">
+<link href="./images/cover.avif" rel="icon">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-745db6197ef74dcdda39b41813071fb2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./efa.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Exploratory Factor Analysis</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Statistics II</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Basic data structures in R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./process.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data processing, transformation and ploting in R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nonparametric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Non-parametric statistical tests in R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./anovabetween.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">One-way between-subjects Analysis of Variance (One-way ANOVA) in R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./anovawithin.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">One-way within-subjects Analysis of Variance (Repeated one-way ANOVA) in R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./anova2factor.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Two-way between-subjects Analysis of Variance (Two-way ANOVA) in R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./simplelinear.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Simple Linear regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./multiplelinear.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multiple Linear regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./path.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Mediation and Path Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./efa.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Exploratory Factor Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./presentations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Presentations</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">10.1</span> Introduction</a></li>
+  <li><a href="#steps-in-the-process-of-efa" id="toc-steps-in-the-process-of-efa" class="nav-link" data-scroll-target="#steps-in-the-process-of-efa"><span class="header-section-number">10.2</span> Steps in the process of EFA</a></li>
+  <li><a href="#efa-in-r" id="toc-efa-in-r" class="nav-link" data-scroll-target="#efa-in-r"><span class="header-section-number">10.3</span> EFA in R</a>
+  <ul class="collapse">
+  <li><a href="#import-the-dataset" id="toc-import-the-dataset" class="nav-link" data-scroll-target="#import-the-dataset"><span class="header-section-number">10.3.1</span> Import the dataset</a></li>
+  <li><a href="#correlation-matrix" id="toc-correlation-matrix" class="nav-link" data-scroll-target="#correlation-matrix"><span class="header-section-number">10.3.2</span> Correlation matrix</a></li>
+  <li><a href="#assumptions" id="toc-assumptions" class="nav-link" data-scroll-target="#assumptions"><span class="header-section-number">10.3.3</span> Assumptions</a></li>
+  <li><a href="#specify-the-number-of-factors" id="toc-specify-the-number-of-factors" class="nav-link" data-scroll-target="#specify-the-number-of-factors"><span class="header-section-number">10.3.4</span> Specify the Number of Factors</a></li>
+  <li><a href="#extraction-of-factors-and-rotation" id="toc-extraction-of-factors-and-rotation" class="nav-link" data-scroll-target="#extraction-of-factors-and-rotation"><span class="header-section-number">10.3.5</span> Extraction of factors and rotation</a></li>
+  <li><a href="#explained-variance-and-model-fit" id="toc-explained-variance-and-model-fit" class="nav-link" data-scroll-target="#explained-variance-and-model-fit"><span class="header-section-number">10.3.6</span> Explained variance and model fit</a></li>
+  <li><a href="#path-diagram" id="toc-path-diagram" class="nav-link" data-scroll-target="#path-diagram"><span class="header-section-number">10.3.7</span> Path diagram</a></li>
+  </ul></li>
+  <li><a href="#reliability-analysis" id="toc-reliability-analysis" class="nav-link" data-scroll-target="#reliability-analysis"><span class="header-section-number">10.4</span> Reliability analysis</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-efa" class="quarto-section-identifier"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Exploratory Factor Analysis</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Get the Code
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can download the complete R script from here:</p>
+<p><a href="https://osf.io/download/n7eu8/" download="psy400_9.R"> <button type="button" class="btn btn-primary"> <i class="bi bi-download"></i> Download R Script </button> </a></p>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Get the Data GRMS
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can download the Excel dataset <strong>GRMS</strong> from here:</p>
+<p><a href="https://osf.io/download/y94kc/" download="GRMS.xlsx"> <button type="button" class="btn btn-success"> <i class="bi bi-file-earmark-excel"></i> Download Excel Data </button> </a></p>
+</div>
+</div>
+<p><br></p>
+<p>First, we load the following R packages in our R session:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Required packages for this R script</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GPArotation)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>&nbsp;</p>
+<section id="introduction" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">10.1</span> Introduction</h2>
+<p>Exploratory Factor Analysis (EFA) focuses on identifying unobserved <strong>latent variables</strong> (also known as common factors) that explain the correlations among observed variables, with the aim of uncovering the data’s underlying structure.</p>
+<ul>
+<li><p><strong>Observed variables</strong> (also called manifest variables) are the variables that we can directly measure or observe.</p></li>
+<li><p><strong>Latent variables</strong> are hidden or abstract concepts inferred from manifest variables.</p></li>
+</ul>
+<div class="content-box-blue">
+<p><strong>Exploratory Factor Analysis</strong></p>
+<p>Exploratory Factor Analysis (EFA) can be used to explore the dimensionality of a measurement instrument by identifying the smallest number of interpretable factors that explain the <strong>common variance</strong> among variables.</p>
+</div>
+<p>Let’s say we have <span class="math inline">\(p\)</span> observed variables, denoted as <span class="math inline">\(X_1, X_2, ..., X_p\)</span>. The factor model for the <span class="math inline">\(i\)</span>-th observed variable (<span class="math inline">\(X_i\)</span>) can be expressed as a regression on the common factors:</p>
+<p><span class="math display">\[X_i = l_{i1}F_1 + l_{i2}F_2 + ...+ l_{ij}F_j +... + l_{ik}F_k + u_i\]</span></p>
+<p>Where:</p>
+<ul>
+<li><span class="math inline">\(X_i\)</span> is the <span class="math inline">\(i\)</span>-th observed variable (often standardized to have a mean of 0 and a standard deviation of 1).</li>
+<li><span class="math inline">\(F_j\)</span> is the <span class="math inline">\(j\)</span>-th common factor (<span class="math inline">\(j = 1, 2, ..., k\)</span>), which are the latent constructs we’re trying to uncover.</li>
+<li><span class="math inline">\(l_{ij}\)</span> is the factor loading of the <span class="math inline">\(i\)</span>-th observed variable on the <span class="math inline">\(j\)</span>-th common factor. It represents the strength and direction of the association between the observed variable and the factor.</li>
+<li><span class="math inline">\(k\)</span> is the number of common factors (where <span class="math inline">\(k &lt; p\)</span>). This is a key parameter to determine in EFA.</li>
+<li><span class="math inline">\(u_i\)</span> is the unique factor associated with the observed variable <span class="math inline">\(X_i\)</span>. It represents the part of <span class="math inline">\(X_i\)</span> that is not explained by the common factors (<span class="math inline">\(F_1, F_2, ..., F_k\)</span>). In EFA, the <span class="math inline">\(u_i\)</span> terms are assumed to be uncorrelated with each other and with the common factors, and have a mean of zero.</li>
+</ul>
+<p>Furthermore, the variance of <span class="math inline">\(u_i\)</span> (i.e., <span class="math inline">\(Var(u_i)\)</span>) is commonly referred to as the <em>uniqueness</em> of <span class="math inline">\(X_i\)</span>. Although it is sometimes denoted conventionally as <span class="math inline">\(u_i^2\)</span>, a more precise notation is <span class="math inline">\(\sigma^2(u_i)\)</span>. This term represents the proportion of variance in <span class="math inline">\(X_i\)</span> that is unique (idiosyncratic) and not explained by the underlying common factors.</p>
+</section>
+<section id="steps-in-the-process-of-efa" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="steps-in-the-process-of-efa"><span class="header-section-number">10.2</span> Steps in the process of EFA</h2>
+<ul>
+<li><p><strong>Prepare the Data:</strong> Standardize the data. In practice, Likert scale data are typically not standardized, as the scale is generally considered consistent across items. (b) Address outliers in the data. Note that outliers in Likert data are often extreme values, such as respondents who consistently select the “0 = not at all stressful” or “5 = extremely stressful” option. (c) Additionally, it is important to reverse-score negatively worded items to ensure that all items are scaled in the same direction (though this step is not applicable in our example).</p></li>
+<li><p><strong>Evaluate Assumptions:</strong> Assess the suitability of the data for EFA using diagnostic tests such as the Kaiser-Meyer-Olkin (KMO) measure of sampling adequacy and Bartlett’s test of sphericity. Additionally, examine the correlation matrix to ensure that variables are sufficiently correlated for factor analysis but without multicollinearity (extremely high correlations) or singularity (perfect correlations of 1 or -1). These tests determine whether the correlation matrix is appropriate for factor extraction.</p></li>
+<li><p><strong>Choose the Extraction Method:</strong> Select an extraction method for factors (e.g., Principal Axis Factoring, Maximum Likelihood, or Maximum Residuals). Principal Axis Factoring is commonly used when we assume that underlying latent factors are driving correlations.</p></li>
+<li><p><strong>Determine the Number of Factors:</strong> Identify how many factors to extract, guided by criteria such as eigenvalues greater than one, scree plot inspection, or parallel analysis. These factors often correspond to underlying subscales.</p></li>
+<li><p><strong>Factor Rotation:</strong> Apply a rotation method to simplify the factor structure. Orthogonal rotation (e.g., Varimax) assumes factors are uncorrelated. Oblique rotation (e.g., Oblimin, Promax) assumes factors are correlated.</p></li>
+<li><p><strong>Interpret the Factors:</strong> Examine the factor loadings to interpret each factor. Look for variables that load highly on each factor and assign meaningful labels to the factors.</p></li>
+<li><p><strong>Assess Factor Reliability:</strong> Use Cronbach’s Alpha to assess the internal consistency or reliability of the factors. A value above 0.7 indicates good reliability.</p></li>
+<li><p><strong>Refine the Model:</strong> Based on the results, you may choose to drop items with low factor loadings or revise the number of factors. Ensure that any issues of singularity are addressed by removing highly correlated variables.</p></li>
+<li><p><strong>Finalize the Factor Solution:</strong> Once the factors are interpretable and reliable, finalize the model and prepare the results for reporting.</p></li>
+</ul>
+</section>
+<section id="efa-in-r" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="efa-in-r"><span class="header-section-number">10.3</span> EFA in R</h2>
+<p><strong>EXAMPLE DATA</strong></p>
+<p>Our data analysis is based on the paper published by Lewis and Neville on the development of the <em>Gendered Racial Microaggressions Scale for Black Women</em> (GRMS). The study introduced a specialized psychometric tool designed to capture the unique, intersecting experiences of racism and sexism faced by Black women, a phenomenon referred to as gendered racism.</p>
+<p>Below is an outline of the 25 items included in the article by Lewis and Neville.</p>
+<ul>
+<li>Unattractive because of size of butt (Obj1)</li>
+<li>Negative comments about size of facial features (Obj2)</li>
+<li>Imitated the way they think Black women speak (Obj3)</li>
+<li>Someone made me feel unattractive (Obj4)</li>
+<li>Negative comment about skin tone (Obj5)</li>
+<li>Someone assumed I speak a certain way (Obj6)</li>
+<li>Objectified me based on physical features(Obj7)</li>
+<li>Someone assumed I have a certain body type (Obj8)</li>
+<li>Made a sexually inappropriate comment (Obj9)</li>
+<li>Negative comments about my hair when natural (Obj10)</li>
+<li>I have felt unheard (Marg1)</li>
+<li>My comments have been ignored (Marg2)</li>
+<li>Someone challenged my authority (Marg3)</li>
+<li>I have been disrespected in workplace (Marg4)</li>
+<li>Someone has tried to “put me in my place” (Marg5)</li>
+<li>Felt excluded from networking opportunities (Marg6)</li>
+<li>Assumed I did not have much to contribute to the conversation (Marg7)</li>
+<li>Someone assumed I was sassy and straightforward (Str1)</li>
+<li>I have been told that I am too independent (Str2)</li>
+<li>Someone made me feel exotic as a Black woman (Str3)</li>
+<li>I have been told that I am too assertive (Str4)</li>
+<li>Assumed to be a strong Black woman (Str5)</li>
+<li>Someone has told me to calm down (Ang1)</li>
+<li>Perceived to be “angry Black woman” (Ang2)</li>
+<li>Someone accused me of being angry when speaking calm (Ang3)</li>
+</ul>
+<section id="import-the-dataset" class="level3" data-number="10.3.1">
+<h3 data-number="10.3.1" class="anchored" data-anchor-id="import-the-dataset"><span class="header-section-number">10.3.1</span> Import the dataset</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/GRMS.xlsx"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 259 × 25
+    Obj1  Obj2  Obj3  Obj4  Obj5  Obj6  Obj7  Obj8  Obj9 Obj10 Marg1 Marg2 Marg3
+   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     2     1     1     3     2     2     2     1     4     3     2     1     2
+ 2     4     3     2     3     2     3     3     2     2     3     2     2     2
+ 3     2     3     4     3     3     4     3     1     5     2     3     4     3
+ 4     4     3     2     2     3     0     1     1     2     1     2     1     3
+ 5     3     2     3     3     4     3     1     2     1     2     3     3     3
+ 6     2     3     2     2     1     2     4     2     2     3     3     3     3
+ 7     3     2     2     3     4     2     1     3     3     3     3     3     3
+ 8     2     1     2     1     2     1     3     3     1     2     2     3     0
+ 9     2     3     2     1     2     1     2     3     2     2     1     2     0
+10     3     1     3     4     1     4     2     2     3     3     2     3     3
+# ℹ 249 more rows
+# ℹ 12 more variables: Marg4 &lt;dbl&gt;, Marg5 &lt;dbl&gt;, Marg6 &lt;dbl&gt;, Marg7 &lt;dbl&gt;,
+#   Str1 &lt;dbl&gt;, Str2 &lt;dbl&gt;, Str3 &lt;dbl&gt;, Str4 &lt;dbl&gt;, Str5 &lt;dbl&gt;, Ang1 &lt;dbl&gt;,
+#   Ang2 &lt;dbl&gt;, Ang3 &lt;dbl&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="correlation-matrix" class="level3" data-number="10.3.2">
+<h3 data-number="10.3.2" class="anchored" data-anchor-id="correlation-matrix"><span class="header-section-number">10.3.2</span> Correlation matrix</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cor_matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(dat, <span class="at">use =</span> <span class="st">"complete.obs"</span>), <span class="dv">2</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cor_matrix</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Obj1 Obj2 Obj3 Obj4 Obj5 Obj6 Obj7  Obj8 Obj9 Obj10 Marg1 Marg2 Marg3
+Obj1  1.00 0.35 0.25 0.27 0.28 0.25 0.28  0.35 0.15  0.24  0.19  0.25  0.17
+Obj2  0.35 1.00 0.31 0.25 0.27 0.23 0.31  0.28 0.26  0.24  0.22  0.21  0.25
+Obj3  0.25 0.31 1.00 0.24 0.28 0.28 0.20  0.25 0.21  0.22  0.17  0.23  0.17
+Obj4  0.27 0.25 0.24 1.00 0.39 0.23 0.28  0.30 0.26  0.28  0.22  0.18  0.14
+Obj5  0.28 0.27 0.28 0.39 1.00 0.15 0.18  0.29 0.25  0.20  0.17  0.20  0.23
+Obj6  0.25 0.23 0.28 0.23 0.15 1.00 0.20  0.14 0.21  0.12  0.10  0.14  0.05
+Obj7  0.28 0.31 0.20 0.28 0.18 0.20 1.00  0.31 0.19  0.28  0.30  0.21  0.20
+Obj8  0.35 0.28 0.25 0.30 0.29 0.14 0.31  1.00 0.19  0.23  0.27  0.14  0.14
+Obj9  0.15 0.26 0.21 0.26 0.25 0.21 0.19  0.19 1.00  0.20  0.10  0.12  0.21
+Obj10 0.24 0.24 0.22 0.28 0.20 0.12 0.28  0.23 0.20  1.00  0.09  0.12  0.17
+Marg1 0.19 0.22 0.17 0.22 0.17 0.10 0.30  0.27 0.10  0.09  1.00  0.43  0.41
+Marg2 0.25 0.21 0.23 0.18 0.20 0.14 0.21  0.14 0.12  0.12  0.43  1.00  0.35
+Marg3 0.17 0.25 0.17 0.14 0.23 0.05 0.20  0.14 0.21  0.17  0.41  0.35  1.00
+Marg4 0.19 0.18 0.24 0.26 0.20 0.10 0.25  0.24 0.07  0.12  0.38  0.23  0.32
+Marg5 0.17 0.22 0.21 0.27 0.25 0.16 0.23  0.19 0.19  0.11  0.41  0.40  0.25
+Marg6 0.18 0.27 0.16 0.23 0.22 0.26 0.28  0.26 0.15  0.26  0.35  0.27  0.25
+Marg7 0.13 0.19 0.14 0.19 0.06 0.17 0.16  0.14 0.10  0.11  0.31  0.33  0.20
+Str1  0.22 0.18 0.14 0.06 0.23 0.07 0.25  0.17 0.19  0.10  0.19  0.25  0.20
+Str2  0.19 0.18 0.19 0.19 0.12 0.15 0.13  0.06 0.18  0.19  0.12  0.18  0.17
+Str3  0.10 0.09 0.09 0.08 0.11 0.09 0.19  0.05 0.12  0.10  0.13  0.18  0.10
+Str4  0.09 0.14 0.18 0.15 0.12 0.08 0.07  0.13 0.05  0.02  0.08  0.12  0.08
+Str5  0.20 0.15 0.15 0.08 0.19 0.11 0.15  0.04 0.07  0.09  0.10  0.23  0.12
+Ang1  0.06 0.07 0.07 0.09 0.12 0.04 0.15  0.07 0.17  0.06  0.16  0.23  0.18
+Ang2  0.06 0.15 0.08 0.06 0.09 0.20 0.13 -0.03 0.00  0.14  0.17  0.19  0.19
+Ang3  0.21 0.13 0.11 0.14 0.11 0.16 0.23  0.07 0.06  0.08  0.28  0.28  0.11
+      Marg4 Marg5 Marg6 Marg7 Str1 Str2 Str3 Str4 Str5 Ang1  Ang2 Ang3
+Obj1   0.19  0.17  0.18  0.13 0.22 0.19 0.10 0.09 0.20 0.06  0.06 0.21
+Obj2   0.18  0.22  0.27  0.19 0.18 0.18 0.09 0.14 0.15 0.07  0.15 0.13
+Obj3   0.24  0.21  0.16  0.14 0.14 0.19 0.09 0.18 0.15 0.07  0.08 0.11
+Obj4   0.26  0.27  0.23  0.19 0.06 0.19 0.08 0.15 0.08 0.09  0.06 0.14
+Obj5   0.20  0.25  0.22  0.06 0.23 0.12 0.11 0.12 0.19 0.12  0.09 0.11
+Obj6   0.10  0.16  0.26  0.17 0.07 0.15 0.09 0.08 0.11 0.04  0.20 0.16
+Obj7   0.25  0.23  0.28  0.16 0.25 0.13 0.19 0.07 0.15 0.15  0.13 0.23
+Obj8   0.24  0.19  0.26  0.14 0.17 0.06 0.05 0.13 0.04 0.07 -0.03 0.07
+Obj9   0.07  0.19  0.15  0.10 0.19 0.18 0.12 0.05 0.07 0.17  0.00 0.06
+Obj10  0.12  0.11  0.26  0.11 0.10 0.19 0.10 0.02 0.09 0.06  0.14 0.08
+Marg1  0.38  0.41  0.35  0.31 0.19 0.12 0.13 0.08 0.10 0.16  0.17 0.28
+Marg2  0.23  0.40  0.27  0.33 0.25 0.18 0.18 0.12 0.23 0.23  0.19 0.28
+Marg3  0.32  0.25  0.25  0.20 0.20 0.17 0.10 0.08 0.12 0.18  0.19 0.11
+Marg4  1.00  0.30  0.26  0.16 0.10 0.21 0.05 0.06 0.03 0.12  0.22 0.17
+Marg5  0.30  1.00  0.29  0.28 0.16 0.13 0.16 0.14 0.18 0.12  0.14 0.21
+Marg6  0.26  0.29  1.00  0.20 0.13 0.18 0.15 0.13 0.08 0.11  0.21 0.12
+Marg7  0.16  0.28  0.20  1.00 0.14 0.05 0.04 0.02 0.12 0.17  0.13 0.09
+Str1   0.10  0.16  0.13  0.14 1.00 0.21 0.30 0.23 0.23 0.18  0.05 0.10
+Str2   0.21  0.13  0.18  0.05 0.21 1.00 0.20 0.20 0.12 0.16  0.12 0.16
+Str3   0.05  0.16  0.15  0.04 0.30 0.20 1.00 0.27 0.18 0.20  0.07 0.15
+Str4   0.06  0.14  0.13  0.02 0.23 0.20 0.27 1.00 0.12 0.15  0.03 0.02
+Str5   0.03  0.18  0.08  0.12 0.23 0.12 0.18 0.12 1.00 0.22  0.15 0.11
+Ang1   0.12  0.12  0.11  0.17 0.18 0.16 0.20 0.15 0.22 1.00  0.24 0.23
+Ang2   0.22  0.14  0.21  0.13 0.05 0.12 0.07 0.03 0.15 0.24  1.00 0.25
+Ang3   0.17  0.21  0.12  0.09 0.10 0.16 0.15 0.02 0.11 0.23  0.25 1.00</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(<span class="fu">cor</span>(dat, <span class="at">use=</span><span class="st">"complete.obs"</span>), <span class="at">order =</span> <span class="st">"original"</span>,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">tl.col=</span><span class="st">'black'</span>, <span class="at">tl.cex=</span>.<span class="dv">75</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="efa_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="assumptions" class="level3" data-number="10.3.3">
+<h3 data-number="10.3.3" class="anchored" data-anchor-id="assumptions"><span class="header-section-number">10.3.3</span> Assumptions</h3>
+<ul>
+<li><strong>Bartlett’s Test of Sphericity</strong></li>
+</ul>
+<p>This tests the null hypothesis that our correlation matrix is an identity matrix (a matrix where all diagonal values are 1 and all off-diagonal correlations are 0, meaning the variables are completely uncorrelated). A significant result (<span class="math inline">\(p &lt; 0.05\)</span>) indicates that the correlation matrix significantly differs from an identity matrix, confirming that our variables have enough shared correlation among variables to justify factor extraction.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cortest.bartlett</span>(<span class="fu">cor</span>(dat), <span class="at">n =</span> <span class="fu">nrow</span>(dat))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$chisq
+[1] 1217.508
+
+$p.value
+[1] 1.107085e-110
+
+$df
+[1] 300</code></pre>
+</div>
+</div>
+<p>Our Bartlett’s test is significant: <span class="math inline">\(\chi^2= 1217\)</span> (p&lt;0.001). This means that our sample correlation matrix is statistically significantly different than an identity matrix and, therefore, supports a component analytic approach for investigating the data.</p>
+<ul>
+<li><strong>Kaiser-Meyer-Olkin (MKO) index of Sampling Adequacy</strong></li>
+</ul>
+<p>The Kaiser-Meyer-Olkin index (KMO) is an index of sampling adequacy that varies between 0 and 1. Kaiser’s 1974 recommendations were:</p>
+<ul>
+<li>bare minimum of 0.5</li>
+<li>values between 0.5 and 0.7 as mediocre</li>
+<li>values between 0.7 and 0.8 as good</li>
+<li>values between 0.8 and 0.9 as great</li>
+<li>values above 0.9 are superb</li>
+</ul>
+<p>If the KMO is below the recommendations, we should probably collect more data to see if it can achieve a satisfactory value.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">KMO</span>(<span class="fu">cor</span>(dat))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Kaiser-Meyer-Olkin factor adequacy
+Call: KMO(r = cor(dat))
+Overall MSA =  0.85
+MSA for each item = 
+ Obj1  Obj2  Obj3  Obj4  Obj5  Obj6  Obj7  Obj8  Obj9 Obj10 Marg1 Marg2 Marg3 
+ 0.87  0.91  0.88  0.85  0.85  0.80  0.90  0.85  0.81  0.85  0.86  0.89  0.86 
+Marg4 Marg5 Marg6 Marg7  Str1  Str2  Str3  Str4  Str5  Ang1  Ang2  Ang3 
+ 0.86  0.90  0.89  0.84  0.83  0.85  0.82  0.74  0.84  0.78  0.76  0.81 </code></pre>
+</div>
+</div>
+<p>The Kaiser–Meyer–Olkin (KMO) measure verified the sampling adequacy for the analysis KMO = 0.85, which is considered “great”. Additionally, all individual KMO values were above 0.74 (well above the acceptable threshold of 0.50).</p>
+<ul>
+<li><strong>No multicollinearity and singularity</strong></li>
+</ul>
+<p>In Exploratory Factor Analysis, we are also particularly concerned with issues of multicollinearity and singularity in the data, as these can affect the reliability and interpretability of the factor model.</p>
+<p>One way to assess this is by examining the <strong>determinant</strong> of the correlation matrix. If the determinant is smaller than 0.00001, this may indicate that some variables are too highly correlated (multicollinearity), or some variables are perfectly correlated (singularity), which can distort factor extraction.</p>
+<p>In our example, the determinant of the correlation matrix (a 25 x 25 matrix with Pearson’s correlations) can be calculated as follows:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">det</span>(<span class="fu">cor</span>(dat)), <span class="dv">4</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0075</code></pre>
+</div>
+</div>
+<p>With a value of 0.0075, the determinant is comfortably above the 0.00001 threshold, indicating that our data is appropriate for factor analysis.</p>
+<p>If the determinant were below the threshold, we would need to identify and address problematic variables and then re-run the diagnostic checks.</p>
+</section>
+<section id="specify-the-number-of-factors" class="level3" data-number="10.3.4">
+<h3 data-number="10.3.4" class="anchored" data-anchor-id="specify-the-number-of-factors"><span class="header-section-number">10.3.4</span> Specify the Number of Factors</h3>
+<p>A critical step in Exploratory Factor Analysis (EFA) is determining the appropriate number of factors to retain. Retaining too many factors may introduce noise and reduce interpretability, whereas retaining too few can oversimplify the underlying structure and omit meaningful dimensions.</p>
+<p>Several statistical criteria are commonly used to guide this decision, including eigenvalues greater than 1 (Kaiser criterion), scree plot inspection, parallel analysis, and the proportion of explained variance. Researchers typically combine these methods with theoretical interpretability to identify the most appropriate factor solution.</p>
+<ul>
+<li><strong>Cattell’s scree plot</strong></li>
+</ul>
+<p>A scree plot is a two-dimensional line graph used in Exploratory Factor Analysis (EFA) to help researchers visually determine the optimal number of factors to retain.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scree</span>(<span class="fu">cor</span>(dat), <span class="at">factors =</span> <span class="cn">TRUE</span>, <span class="at">pc =</span> <span class="cn">FALSE</span>, <span class="at">hline =</span> <span class="sc">-</span><span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="efa_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The scree plot displays each factor’s variance contribution (eigen value) against factor number, in descending order. The elbow — where the curve transitions from steep decline to a flat plateau — marks the point beyond which additional factors account for little more than chance variation.</p>
+<p>Lewis and Neville (2015) examined models with two, three, four, and five factors. In this example, we will present a four-factor solution as the selected model.</p>
+</section>
+<section id="extraction-of-factors-and-rotation" class="level3" data-number="10.3.5">
+<h3 data-number="10.3.5" class="anchored" data-anchor-id="extraction-of-factors-and-rotation"><span class="header-section-number">10.3.5</span> Extraction of factors and rotation</h3>
+<p>Lewis and Neville (2015) used parallel analysis as their extraction method. In this example, we demonstrate the use of <strong>Principal Axis Factoring</strong> (PAF) for extraction and <strong>Oblimin</strong> as the rotation method. Additionally, we hide loading below 0.23.</p>
+<p><strong>NOTE:</strong> Rotation redistributes the variance among factors so that each item loads strongly on one factor and weakly on the others. There are two types of factor rotation: orthogonal, which constrains factors to be uncorrelated, and oblique, which allows factors to correlate freely. The choice should be guided by theory — oblique rotation is generally preferred in social science research, where latent constructs rarely meet the strict independence assumption imposed by orthogonal rotation.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>efa_result <span class="ot">&lt;-</span> <span class="fu">fa</span>(dat, <span class="at">nfactors =</span> <span class="dv">4</span>, <span class="at">fm =</span> <span class="st">"pa"</span>, <span class="at">rotate =</span> <span class="st">"oblimin"</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(efa_result, <span class="at">cut =</span> <span class="fl">0.23</span>, <span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Factor Analysis using method =  pa
+Call: fa(r = dat, nfactors = 4, rotate = "oblimin", fm = "pa")
+Standardized loadings (pattern matrix) based upon correlation matrix
+         PA1    PA2    PA3    PA4    h2    u2  com
+Obj1   0.508                      0.293 0.707 1.06
+Obj2   0.526                      0.319 0.681 1.04
+Obj3   0.463                      0.250 0.750 1.07
+Obj4   0.563                      0.326 0.674 1.04
+Obj5   0.473                      0.280 0.720 1.17
+Obj6   0.426                0.246 0.225 0.775 1.77
+Obj7   0.385                      0.273 0.727 1.43
+Obj8   0.535                      0.353 0.647 1.52
+Obj9   0.391                      0.186 0.814 1.32
+Obj10  0.479                      0.217 0.783 1.15
+Marg1         0.811               0.619 0.381 1.01
+Marg2         0.492               0.411 0.589 1.52
+Marg3         0.429               0.277 0.723 1.19
+Marg4         0.400               0.281 0.719 1.82
+Marg5         0.451               0.326 0.674 1.26
+Marg6  0.310  0.250               0.271 0.729 2.31
+Marg7         0.356               0.181 0.819 1.20
+Str1                 0.558        0.363 0.637 1.16
+Str2                 0.266        0.179 0.821 2.51
+Str3                 0.526        0.276 0.724 1.01
+Str4                 0.388        0.167 0.833 1.19
+Str5                 0.348        0.178 0.822 1.40
+Ang1                 0.334  0.241 0.223 0.777 2.15
+Ang2                        0.635 0.431 0.569 1.03
+Ang3                        0.298 0.195 0.805 1.91
+
+                        PA1   PA2   PA3   PA4
+SS loadings           2.794 2.027 1.367 0.913
+Proportion Var        0.112 0.081 0.055 0.037
+Cumulative Var        0.112 0.193 0.248 0.284
+Proportion Explained  0.394 0.285 0.192 0.129
+Cumulative Proportion 0.394 0.679 0.871 1.000
+
+ With factor correlations of 
+      PA1   PA2   PA3   PA4
+PA1 1.000 0.464 0.342 0.173
+PA2 0.464 1.000 0.318 0.269
+PA3 0.342 0.318 1.000 0.195
+PA4 0.173 0.269 0.195 1.000
+
+Mean item complexity =  1.4
+Test of the hypothesis that 4 factors are sufficient.
+
+df null model =  300  with the objective function =  4.893 with Chi Square =  1217.508
+df of  the model are 206  and the objective function was  0.769 
+
+The root mean square of the residuals (RMSR) is  0.036 
+The df corrected root mean square of the residuals is  0.044 
+
+The harmonic n.obs is  259 with the empirical chi square  101.207  with prob &lt;  1 
+The total n.obs was  259  with Likelihood Chi Square =  189.189  with prob &lt;  0.794 
+
+Tucker Lewis Index of factoring reliability =  1.0271
+RMSEA index =  0  and the 90 % confidence intervals are  0 0.0185
+BIC =  -955.518
+Fit based upon off diagonal values = 0.965
+Measures of factor score adequacy             
+                                                    PA1   PA2   PA3   PA4
+Correlation of (regression) scores with factors   0.798 0.791 0.731 0.708
+Multiple R square of scores with factors          0.637 0.626 0.535 0.501
+Minimum correlation of possible factor scores     0.274 0.252 0.069 0.003</code></pre>
+</div>
+</div>
+<p><br></p>
+<p>In the rotated factor matrix, a few items exhibit cross-loadings, meaning they load significantly on more than one factor:</p>
+<ul>
+<li><p>Obj6 loads on both Factor 1 and Factor 4, with loadings of 0.43 and 0.25, respectively. While the item shows some association with both factors, its stronger loading on Factor 1 suggests it aligns more closely with the Objectification construct.</p></li>
+<li><p>Marg6 also displays cross-loadings, with loadings of 0.31 on Factor 1 and 0.25 on Factor 2. Though both values are relatively low, the item may still require closer evaluation to determine its conceptual alignment.</p></li>
+<li><p>Ang1 loads on both Factor 3 and Factor 4, with loadings of 0.33 and 0.24, respectively. Although neither loading is particularly high, this item should be reviewed in the context of theoretical expectations.</p></li>
+</ul>
+<p>&nbsp;</p>
+<p><strong>Partitioning the variance in factor analysis</strong></p>
+<p>Factor analysis assumes that variance can be partitioned into two types of variance: common and unique.</p>
+<ul>
+<li><p><strong>Common variance</strong> (communality), denoted usually as <span class="math inline">\(h^2\)</span>, represents the proportion of an item’s total variance accounted for by the common factors. It ranges from 0 to 1, where values closer to 1 indicate that the item is well-explained by the factor solution and values closer to 0 suggest the item shares little variance with the underlying factors.</p></li>
+<li><p><strong>Unique variance</strong> (uniqueness), denoted usually as <span class="math inline">\(u^2\)</span> (<span class="math inline">\(u^2=1-h^2\)</span>), represents the proportion of variance that is specific to the variable itself and not explained by the common factors. Higher uniqueness indicates lower relevance in the factor model. If a variable has high uniqueness (close to 1), it is poorly explained by the extracted factors and may warrant reconsideration.</p></li>
+</ul>
+</section>
+<section id="explained-variance-and-model-fit" class="level3" data-number="10.3.6">
+<h3 data-number="10.3.6" class="anchored" data-anchor-id="explained-variance-and-model-fit"><span class="header-section-number">10.3.6</span> Explained variance and model fit</h3>
+<p><strong>Explained variance</strong></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  Factor SS_Loadings % of Var Cum Var (%)
+1    PA1        2.79     11.2        11.2
+2    PA2        2.03      8.1        19.3
+3    PA3        1.37      5.5        24.8
+4    PA4        0.91      3.7        28.4</code></pre>
+</div>
+</div>
+<p>Factor 1 explains 11.2% of the shared variance, Factor 2 explains an additional 8.1%, Factor 3 explains another 5.5%, and Factor 4 explains an additional 3.6%, resulting in a cumulative common variance of 28.4% explained by the first four factors.</p>
+<p>Although explaining about 30% of the common variance may seem modest, it is not uncommon in social science research, particularly when dealing with psychological or behavioral constructs. These constructs are often complex and difficult to measure precisely, which can lead to lower levels of explained variance.</p>
+<p>The Inter-Factor Correlation Matrix reveals that the four factors are positively correlated with each other, with correlations ranging from 0.17 to 0.46.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  Factor  PA1  PA2  PA3  PA4
+1    PA1 1.00 0.46 0.34 0.17
+2    PA2 0.46 1.00 0.32 0.27
+3    PA3 0.34 0.32 1.00 0.19
+4    PA4 0.17 0.27 0.19 1.00</code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+<p><strong>Model fit</strong></p>
+<p>The chi-square test can be used to assess whether the model fits the data. The null hypothesis for the chi-square test is that the model fits the data perfectly. Therefore, a non-significant chi-square value (e.g., p &gt; 0.05) indicates that the model fits the data reasonably well. However, the chi-square test is sensitive to sample size and non-normal variable distributions.</p>
+<p>In addition to the chi-square test, the root mean square error of approximation (RMSEA) serves as an absolute fit index that takes model complexity into account by incorporating a penalty for lack of parsimony. RMSEA values less than or equal to 0.08 are typically interpreted as good model fit.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>      RMSEA Lower Upper  TLI     BIC   Chi2  df     p
+RMSEA     0     0  0.02 1.03 -955.52 189.19 206 0.794</code></pre>
+</div>
+</div>
+<p>In our model: <span class="math inline">\(\chi^2(206)= 189.19\)</span>, p = 0.794, which is non-significant and suggests that the model fits the data well. Moreover, the RMSEA value is 0.00, indicating a close fit between the model and the observed data.</p>
+<p>These results suggest that the model structure is appropriate, even if the strength of the factors is modest.</p>
+</section>
+<section id="path-diagram" class="level3" data-number="10.3.7">
+<h3 data-number="10.3.7" class="anchored" data-anchor-id="path-diagram"><span class="header-section-number">10.3.7</span> Path diagram</h3>
+<p>The path diagram for the four-factor, 25 items EFA, showing only the dominant loading per item (for clarity) follows:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(efa_result<span class="sc">$</span>loadings) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"F1"</span>, <span class="st">"F2"</span>, <span class="st">"F3"</span>, <span class="st">"F4"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">fa.diagram</span>(efa_result, <span class="at">cut =</span> <span class="dv">0</span>, <span class="at">digits =</span> <span class="dv">2</span>, <span class="at">l.cex=</span><span class="fl">0.8</span>,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">marg=</span><span class="fu">c</span>(<span class="fl">0.0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.1</span>), <span class="at">sort =</span> F)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="efa_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This diagram illustrates how the observed variables can be grouped together, allowing us to identify the following common factors (latent variables). These factors can also be considered as the subscales of the questionnaire:</p>
+<ul>
+<li><strong>Factor 1:</strong> Assumptions of Beauty and Sexual Objectification (11 items; Obj1-Obj10 and Marg6)</li>
+<li><strong>Factor 2:</strong> Silenced and Marginalized (6 items; Marg1-Marg5, Marg7)</li>
+<li><strong>Factor 3:</strong> Strong Woman Stereotype (6 items; Str1-Str5, Ang1)</li>
+<li><strong>Factor 4:</strong> Angry Woman Stereotype (2 items; Ang2 and Ang3)</li>
+</ul>
+<p>It is important to note that the arrows point from the factor (oval) to the observed variables (items in squares) illustrating that the factor “explains” the item’s score. This represents a <strong>reflective model</strong>, in which the latent construct exists independently of the measures. Additionally, note that the path diagram includes links with numerical values between latent factors, representing the correlation coefficients among them.</p>
+</section>
+</section>
+<section id="reliability-analysis" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="reliability-analysis"><span class="header-section-number">10.4</span> Reliability analysis</h2>
+<p>An important step in establishing the integrity of factors derived from a factor analysis (which will ultimately be presented as subscales of the scale) is to assess their internal consistency as an initial indicator of reliability.</p>
+<p>&nbsp;</p>
+<p>We have four derived factors, so we will run Cronbach’s reliability analyis four times-once for each subset of observed variables (items) grouped by the factor analysis.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  Factor Items Alpha
+1     F1    11 0.778
+2     F2     6 0.731
+3     F3     6 0.594
+4     F4     2 0.397</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./path.html" class="pagination-link" aria-label="Mediation and Path Analysis">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Mediation and Path Analysis</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./presentations.html" class="pagination-link" aria-label="Presentations">
+        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Presentations</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© Copyright 2025-26, Konstantinos I. Bougioukas. License: <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivs 4.0</a>.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Built with <a href="https://quarto.org/">Quarto</a><sup>®</sup></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
