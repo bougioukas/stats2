@@ -48,7 +48,6 @@
 
      
 
-
 -   **Lecture 10: Multiple Linear Regression**
 
 ![psy-400-9_linear2](presentations/psy-400-9_linear2.pdf){width="60%" height="400"}
@@ -56,3 +55,10 @@
      
 
 
+
+
+-   **Lectures 11 & 12: Mediation and Path Analysis**
+
+![psy-400-10_path](presentations/psy-400-10_path.pdf){width="60%" height="400"}
+
+     
