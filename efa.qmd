@@ -131,7 +131,6 @@ dat <- read_excel("data/GRMS.xlsx")
 dat
 ```
 
-
 ### Correlation matrix
 
 ```{r}
@@ -139,15 +138,10 @@ cor_matrix <- round(cor(dat, use = "complete.obs"), 2)
 cor_matrix
 ```
 
-
-
-
 ```{r}
 corrplot(cor(dat, use="complete.obs"), order = "original",
          tl.col='black', tl.cex=.75) 
 ```
-
-
 
 ### Assumptions
 
@@ -215,7 +209,7 @@ Lewis and Neville (2015) examined models with two, three, four, and five factors
 
 ### Extraction of factors and rotation
 
-Lewis and Neville (2015) used parallel analysis as their extraction method. In this example, we demonstrate the use of **Principal Axis Factoring** (PAF) for extraction and **Oblimin** as the rotation method. Additionally, we hide loading below 0.23.
+Lewis and Neville (2015) used parallel analysis as their extraction method. In this example, we demonstrate the use of **Principal Axis Factoring** (PAF) for extraction and **Oblimin** as the rotation method. Additionally, we hide loadings below 0.23.
 
 **NOTE:** Rotation redistributes the variance among factors so that each item loads strongly on one factor and weakly on the others. There are two types of factor rotation: orthogonal, which constrains factors to be uncorrelated, and oblique, which allows factors to correlate freely. The choice should be guided by theory — oblique rotation is generally preferred in social science research, where latent constructs rarely meet the strict independence assumption imposed by orthogonal rotation.
 
@@ -247,7 +241,6 @@ Factor analysis assumes that variance can be partitioned into two types of varia
 
 ### Explained variance and model fit
 
-
 **Explained variance**
 
 ```{r}
@@ -263,13 +256,11 @@ data.frame(
 )
 ```
 
-
 Factor 1 explains 11.2% of the shared variance, Factor 2 explains an additional 8.1%, Factor 3 explains another 5.5%, and Factor 4 explains an additional 3.6%, resulting in a cumulative common variance of 28.4% explained by the first four factors.
 
 Although explaining about 30% of the common variance may seem modest, it is not uncommon in social science research, particularly when dealing with psychological or behavioral constructs. These constructs are often complex and difficult to measure precisely, which can lead to lower levels of explained variance.
 
 The Inter-Factor Correlation Matrix reveals that the four factors are positively correlated with each other, with correlations ranging from 0.17 to 0.46.
-
 
 ```{r}
 #| echo: false
@@ -281,7 +272,6 @@ as.data.frame(round(efa_result$Phi, 2)) |>
 
 ```
 
-
  
 
 **Model fit**
@@ -289,7 +279,6 @@ as.data.frame(round(efa_result$Phi, 2)) |>
 The chi-square test can be used to assess whether the model fits the data. The null hypothesis for the chi-square test is that the model fits the data perfectly. Therefore, a non-significant chi-square value (e.g., p \> 0.05) indicates that the model fits the data reasonably well. However, the chi-square test is sensitive to sample size and non-normal variable distributions.
 
 In addition to the chi-square test, the root mean square error of approximation (RMSEA) serves as an absolute fit index that takes model complexity into account by incorporating a penalty for lack of parsimony. RMSEA values less than or equal to 0.08 are typically interpreted as good model fit.
-
 
 ```{r}
 #| echo: false
@@ -305,8 +294,6 @@ data.frame(
   p     = round(efa_result$PVAL, 3)
 )
 ```
-
-
 
 In our model: $\chi^2(206)= 189.19$, p = 0.794, which is non-significant and suggests that the model fits the data well. Moreover, the RMSEA value is 0.00, indicating a close fit between the model and the observed data.
 
@@ -335,7 +322,6 @@ This diagram illustrates how the observed variables can be grouped together, all
 
 It is important to note that the arrows point from the factor (oval) to the observed variables (items in squares) illustrating that the factor “explains” the item’s score. This represents a **reflective model**, in which the latent construct exists independently of the measures. Additionally, note that the path diagram includes links with numerical values between latent factors, representing the correlation coefficients among them.
 
-
 ## Reliability analysis
 
 An important step in establishing the integrity of factors derived from a factor analysis (which will ultimately be presented as subscales of the scale) is to assess their internal consistency as an initial indicator of reliability.
@@ -343,7 +329,6 @@ An important step in establishing the integrity of factors derived from a factor
  
 
 We have four derived factors, so we will run Cronbach’s reliability analyis four times-once for each subset of observed variables (items) grouped by the factor analysis.
-
 
 ```{r}
 #| echo: false
@@ -362,10 +347,9 @@ reliability_table <- do.call(rbind, lapply(names(keys), function(f) {
   data.frame(
     Factor  = f,
     Items   = length(keys[[f]]),
-    Alpha   = round(a$raw_alpha, 3)
+    Cronbach_alpha = round(a$raw_alpha, 3)
   )
 }))
 
 reliability_table
 ```
-

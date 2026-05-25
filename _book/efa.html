@@ -588,7 +588,7 @@ Marg4 Marg5 Marg6 Marg7  Str1  Str2  Str3  Str4  Str5  Ang1  Ang2  Ang3
 </section>
 <section id="extraction-of-factors-and-rotation" class="level3" data-number="10.3.5">
 <h3 data-number="10.3.5" class="anchored" data-anchor-id="extraction-of-factors-and-rotation"><span class="header-section-number">10.3.5</span> Extraction of factors and rotation</h3>
-<p>Lewis and Neville (2015) used parallel analysis as their extraction method. In this example, we demonstrate the use of <strong>Principal Axis Factoring</strong> (PAF) for extraction and <strong>Oblimin</strong> as the rotation method. Additionally, we hide loading below 0.23.</p>
+<p>Lewis and Neville (2015) used parallel analysis as their extraction method. In this example, we demonstrate the use of <strong>Principal Axis Factoring</strong> (PAF) for extraction and <strong>Oblimin</strong> as the rotation method. Additionally, we hide loadings below 0.23.</p>
 <p><strong>NOTE:</strong> Rotation redistributes the variance among factors so that each item loads strongly on one factor and weakly on the others. There are two types of factor rotation: orthogonal, which constrains factors to be uncorrelated, and oblique, which allows factors to correlate freely. The choice should be guided by theory — oblique rotation is generally preferred in social science research, where latent constructs rarely meet the strict independence assumption imposed by orthogonal rotation.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>efa_result <span class="ot">&lt;-</span> <span class="fu">fa</span>(dat, <span class="at">nfactors =</span> <span class="dv">4</span>, <span class="at">fm =</span> <span class="st">"pa"</span>, <span class="at">rotate =</span> <span class="st">"oblimin"</span>)</span>
@@ -747,11 +747,11 @@ RMSEA     0     0  0.02 1.03 -955.52 189.19 206 0.794</code></pre>
 <p>We have four derived factors, so we will run Cronbach’s reliability analyis four times-once for each subset of observed variables (items) grouped by the factor analysis.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>  Factor Items Alpha
-1     F1    11 0.778
-2     F2     6 0.731
-3     F3     6 0.594
-4     F4     2 0.397</code></pre>
+<pre><code>  Factor Items Cronbach_alpha
+1     F1    11          0.778
+2     F2     6          0.731
+3     F3     6          0.594
+4     F4     2          0.397</code></pre>
 </div>
 </div>
 

@@ -54,11 +54,16 @@
 
      
 
-
-
-
 -   **Lectures 11 & 12: Mediation and Path Analysis**
 
 ![psy-400-10_path](presentations/psy-400-10_path.pdf){width="60%" height="400"}
 
      
+
+
+-   **Lecture 13: Exploratory Factor Analysis (EFA)**
+
+![psy-400-11_efa](presentations/psy-400-11_efa.pdf){width="60%" height="400"}
+
+     
+
